@@ -22,4 +22,4 @@ knitr::opts_chunk$set(
 Netz is here to help setup bed nets in [malariasimulation](https://mrc-ide.github.io/malariasimulation/)
 
 
-<img src="inst/figures/infographic.png" />
+<img src="inst/figures/Infographic.png" />
