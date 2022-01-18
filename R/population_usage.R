@@ -48,6 +48,8 @@ get_correlation <- function(population, rho){
 
 #' Estimate the time series of population-level bed net usage from a vector of
 #' bed net distributions.
+#' 
+#' Note: This is stochastic output
 #'
 #' @param net_loss A vector of the probability of still having a net over time
 #' @param population Population size
