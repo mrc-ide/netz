@@ -31,6 +31,5 @@ population_usage(
 Usage time series vector
 }
 \description{
-Estimate the time series of population-level bed net usage from a vector of
-bed net distributions.
+Note: This is stochastic output
 }

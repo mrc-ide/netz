@@ -68,7 +68,7 @@ ggplot(pd, aes(x = t, y = usage)) +
 
 ```
 
-We can see that population usage initially rises with repeated distributions as nets build up in the population before reaching an equilibrium.
+We can see that population usage initially rises with the first distribution population before reaching an equilibrium as following distibutions replace the nets of those who already own one.
 
 In the simple case of regular distributions and exponential net loss and correlation we have the
 analytical solution for the average population level usage.
