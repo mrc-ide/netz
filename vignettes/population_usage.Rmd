@@ -1,0 +1,177 @@
+---
+title: "Estimating population usage from input distribution"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Estimating population usage from input distribution}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(netz)
+library(ggplot2)
+```
+
+In [malariasimulation](https://mrc-ide.github.io/malariasimulation/) we can implement the [bed net intervention](https://mrc-ide.github.io/malariasimulation/articles/VectorControl.html) by specifying
+the % of the population who are distributed a bed net (and assumed to use it) at
+given time points.
+
+Often it is helpful to understand the resulting population levels of bed net usage from a set of 
+bed net distributions over time. The 5 of individuals protected by a net at any time point is a 
+function of the cumulative distributions that have occurred, the durations of net retention and the
+correlation of recipients between rounds.
+
+In netz, we can simulate population usage and examine how varying distribution size and frequency,
+net retention and recipient correlation impacts our estimates.
+
+Let's start with a simple distribution model:
+
+* Distribution cycle: A mass distribution once every 3 years
+* Distribution size: 70% of the population covered
+* Net retention: Assume net retention decays exponentially with a half life of 5 years
+* Correlation: Recipients are correlated each round
+
+```{r, fig.width = 7, fig.height=4}
+year <- 365
+timesteps <- 30 * year
+population <- 5000
+
+distribution <- rep(0.3, 10)
+distribution_timesteps <- year * seq(1, 30, 3)
+
+net_hl <- 5 * year
+net_loss <- exp(-(1 / net_hl) * 1:timesteps)
+
+correlation <- 1
+
+pu <- population_usage(
+    net_loss = net_loss,
+    population = population,
+    timesteps = timesteps,
+    distribution = distribution,
+    distribution_timesteps = distribution_timesteps,
+    rho = correlation)
+
+pd <- data.frame(t = 1:timesteps, usage = pu)
+
+ggplot(pd, aes(x = t, y = usage)) +
+  geom_line() +
+  ylim(0, 0.5) +
+  theme_bw()
+
+```
+
+We can see that population usage initially rises with repeated distributions as nets build up in the population before reaching an equilibrium.
+
+In the simple case of regular distributions and exponential net loss and correlation we have the
+analytical solution for the average population level usage.
+
+```{r, fig.width = 7, fig.height=4}
+analytical <- exp_loss_equilibrium(distribution = 0.3, distribution_frequency = 3, net_loss_hl = 5)
+
+ggplot(pd, aes(x = t, y = usage)) +
+  geom_line() +
+  geom_hline(yintercept = analytical, lty = 2, col = "darkred") +
+  ylim(0, 0.5) +
+  theme_bw()
+```
+
+More frequent distribution will lead to net usage to build to higher levels
+
+```{r, fig.width = 7, fig.height=4}
+distribution2 <- rep(0.3, 30)
+distribution_timesteps2 <- year * seq(1, 30, 1)
+
+pu <- population_usage(
+    net_loss = net_loss,
+    population = population,
+    timesteps = timesteps,
+    distribution = distribution2,
+    distribution_timesteps = distribution_timesteps2,
+    rho = correlation)
+
+pd <- data.frame(t = 1:timesteps, usage = pu)
+
+analytical <- exp_loss_equilibrium(distribution = 0.3, distribution_frequency = 1, net_loss_hl = 5)
+
+ggplot(pd, aes(x = t, y = usage)) +
+  geom_line() +
+  geom_hline(yintercept = analytical, lty = 2, col = "darkred") +
+  ylim(0, 0.5) +
+  theme_bw()
+
+```
+Random recipients will lead to higher net usage as well as each additional distribution has the chance to reach an individual who has not received a net previously
+
+```{r, fig.width = 7, fig.height=4}
+correlation2 <- 0
+
+pu <- population_usage(
+    net_loss = net_loss,
+    population = population,
+    timesteps = timesteps,
+    distribution = distribution,
+    distribution_timesteps = distribution_timesteps,
+    rho = correlation2)
+
+pd <- data.frame(t = 1:timesteps, usage = pu)
+
+ggplot(pd, aes(x = t, y = usage)) +
+  geom_line() +
+  ylim(0, 0.5) +
+  theme_bw()
+```
+
+We may also need to estimate population usage when distributions are not regular
+
+```{r, fig.width = 7, fig.height=4}
+distribution3 <- c(0.1, 0.1, 0.35, 0.1, 0.23, 0.2, 0.32, 0.1, 0.01, 0.2)
+distribution_timesteps3 <- seq(1, 30, 3) * year
+  
+pu <- population_usage(
+    net_loss = net_loss,
+    population = population,
+    timesteps = timesteps,
+    distribution = distribution3,
+    distribution_timesteps = distribution_timesteps3,
+    rho = correlation)
+
+pd <- data.frame(t = 1:timesteps, usage = pu)
+
+ggplot(pd, aes(x = t, y = usage)) +
+  geom_line() +
+  ylim(0, 0.5) +
+  theme_bw()
+```
+
+Finally, it may be useful to explore other net-loss functions, for example a sigmoidal decay:
+
+```{r, fig.width = 7, fig.height=4}
+net_hl2 <- 5 * year
+k <- - 1/150
+t0 <- 365
+net_loss2 <- 1 / (1 + exp(-k * (1:timesteps - t0)))
+
+pu <- population_usage(
+    net_loss = net_loss2,
+    population = population,
+    timesteps = timesteps,
+    distribution = distribution,
+    distribution_timesteps = distribution_timesteps,
+    rho = correlation)
+
+pd <- data.frame(t = 1:timesteps, usage = pu)
+
+ggplot(pd, aes(x = t, y = usage)) +
+  geom_line() +
+  ylim(0, 0.5) +
+  theme_bw()
+
+```
