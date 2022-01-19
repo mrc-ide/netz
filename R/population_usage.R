@@ -12,10 +12,14 @@ exp_loss_equilibrium <- function(distribution, distribution_frequency, net_loss_
 }
 
 #' Sample those to receive an intervention with correlation
+#' 
+#' Code adapted from malariasimulation
 #'
 #' @param p Probability of receiving a bed net
 #' @param mvnorm A vector of multivariate normal (correlated) draws.
 #' @param sigma_squared Sigma squared
+#' 
+#' @importFrom stats qnorm rnorm
 #'
 #' @return A boolean vector denoting which individuals will receive the intervention
 sample_intervention <- function(p, mvnorm, sigma_squared) {
@@ -26,23 +30,24 @@ sample_intervention <- function(p, mvnorm, sigma_squared) {
 }
 
 #' Get correlation inputs for intervention sampling
-#'
+#' 
+#' Code adapted from malariasimulation
+#' 
 #' @param population Population size
 #' @param rho Correlation parameter
+#' 
+#' @importFrom MASS mvrnorm
 #'
 #' @return A names list with the multivariate random normal draw and sigma squared
 get_correlation <- function(population, rho){
-  cp <- malariasimulation::get_correlation_parameters(parameters = list(
-    human_population = population, 
-    bednets = TRUE,
-    rtss = FALSE,
-    mda = FALSE,
-    smc = FALSE,
-    tbv = FALSE,
-    spraying = FALSE))
-  cp$inter_round_rho("bednets", rho)
-  out <- list(mvnorm = cp$mvnorm(), 
-              sigma_squared = cp$sigma() ^ 2)
+  if(rho <0 | rho >=1){
+    stop("rho for bednets must be between 0 and 1")
+  }
+  sigma_squared <- rho / (1 - rho)
+  V <- matrix(sigma_squared)
+  mvnorm <- mvrnorm(population, 0, V)
+  out <- list(mvnorm = mvnorm, 
+              sigma_squared = sigma_squared)
   return(out)
 }
 

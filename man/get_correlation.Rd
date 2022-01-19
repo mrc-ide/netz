@@ -15,5 +15,5 @@ get_correlation(population, rho)
 A names list with the multivariate random normal draw and sigma squared
 }
 \description{
-Get correlation inputs for intervention sampling
+Code adapted from malariasimulation
 }

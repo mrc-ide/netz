@@ -13,10 +13,10 @@ test_that("sample_intervention", {
 test_that("get_correlation", {
   cor <- get_correlation(10, 0)
   expect_equal(cor$mvnorm[,1], rep(0, 10))
-  expect_equal(cor$sigma_squared[1], c(bednets = 0))
+  expect_equal(cor$sigma_squared[1], c(0))
   
-  expect_error(get_correlation(10, -1), "rho for bednetsmust be between 0 and 1")
-  expect_error(get_correlation(10, 2), "rho for bednetsmust be between 0 and 1")
+  expect_error(get_correlation(10, -1), "rho for bednets must be between 0 and 1")
+  expect_error(get_correlation(10, 2), "rho for bednets must be between 0 and 1")
 })
 
 test_that("population_usage", {
@@ -32,7 +32,7 @@ test_that("population_usage", {
     timesteps = timesteps,
     distribution = rep(c(0.5, 0, 0), 10),
     distribution_timesteps = 365 * (1:30),
-    rho = 1)
+    rho = 0.99)
   
   expect_equal(length(pu), timesteps)
   expect_equal(sum(pu[1:364]), 0)

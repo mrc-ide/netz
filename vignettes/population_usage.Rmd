@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(netz)
 library(ggplot2)
+set.seed(1234)
 ```
 
 In [malariasimulation](https://mrc-ide.github.io/malariasimulation/) we can implement the [bed net intervention](https://mrc-ide.github.io/malariasimulation/articles/VectorControl.html) by specifying
@@ -29,7 +30,8 @@ function of the cumulative distributions that have occurred, the durations of ne
 correlation of recipients between rounds.
 
 In netz, we can simulate population usage and examine how varying distribution size and frequency,
-net retention and recipient correlation impacts our estimates.
+net retention and recipient correlation impacts our estimates. Please note that simulations of usage
+are stochastic.
 
 Let's start with a simple distribution model:
 
@@ -38,7 +40,7 @@ Let's start with a simple distribution model:
 * Net retention: Assume net retention decays exponentially with a half life of 5 years
 * Correlation: Recipients are correlated each round
 
-```{r, fig.width = 7, fig.height=4}
+```{r, fig.width = 7, fig.height = 4}
 year <- 365
 timesteps <- 30 * year
 population <- 5000
@@ -49,7 +51,7 @@ distribution_timesteps <- year * seq(1, 30, 3)
 net_hl <- 5 * year
 net_loss <- exp(-(1 / net_hl) * 1:timesteps)
 
-correlation <- 1
+correlation <- 0.9999
 
 pu <- population_usage(
     net_loss = net_loss,
@@ -73,7 +75,7 @@ We can see that population usage initially rises with the first distribution pop
 In the simple case of regular distributions and exponential net loss and correlation we have the
 analytical solution for the average population level usage.
 
-```{r, fig.width = 7, fig.height=4}
+```{r, fig.width = 7, fig.height = 4}
 analytical <- exp_loss_equilibrium(distribution = 0.3, distribution_frequency = 3, net_loss_hl = 5)
 
 ggplot(pd, aes(x = t, y = usage)) +
@@ -85,7 +87,7 @@ ggplot(pd, aes(x = t, y = usage)) +
 
 More frequent distribution will lead to net usage to build to higher levels
 
-```{r, fig.width = 7, fig.height=4}
+```{r, fig.width = 7, fig.height = 4}
 distribution2 <- rep(0.3, 30)
 distribution_timesteps2 <- year * seq(1, 30, 1)
 
@@ -110,7 +112,7 @@ ggplot(pd, aes(x = t, y = usage)) +
 ```
 Random recipients will lead to higher net usage as well as each additional distribution has the chance to reach an individual who has not received a net previously
 
-```{r, fig.width = 7, fig.height=4}
+```{r, fig.width = 7, fig.height = 4}
 correlation2 <- 0
 
 pu <- population_usage(
@@ -131,7 +133,7 @@ ggplot(pd, aes(x = t, y = usage)) +
 
 We may also need to estimate population usage when distributions are not regular
 
-```{r, fig.width = 7, fig.height=4}
+```{r, fig.width = 7, fig.height = 4}
 distribution3 <- c(0.1, 0.1, 0.35, 0.1, 0.23, 0.2, 0.32, 0.1, 0.01, 0.2)
 distribution_timesteps3 <- seq(1, 30, 3) * year
   
@@ -151,9 +153,11 @@ ggplot(pd, aes(x = t, y = usage)) +
   theme_bw()
 ```
 
-Finally, it may be useful to explore other net-loss functions, for example a sigmoidal decay:
+### Non-exponential net-retention functions
 
-```{r, fig.width = 7, fig.height=4}
+It may be useful to explore other net-loss functions, for example a sigmoidal decay:
+
+```{r, fig.width = 7, fig.height = 4}
 net_hl2 <- 5 * year
 k <- - 1/150
 t0 <- 365
@@ -173,5 +177,41 @@ ggplot(pd, aes(x = t, y = usage)) +
   geom_line() +
   ylim(0, 0.5) +
   theme_bw()
+
+```
+
+### Fitting to target usage
+
+In many cases we might have a set of observed population level usage estimtes that we want to match to.
+We can use a non-linear optimiser to fit the distribution to these target usages:
+
+```{r, fig.width = 7, fig.height = 4}
+# Target usage associated time points
+target <- c(0.45, 0.33, 0.7)
+target_tt <- c(2, 5, 9) * 365
+# Timepoints at which distirbution will occur:
+distribution_tt <- c(1, 4, 8) * 365
+
+# Fit
+fit <- fit_usage(target_usage = target, target_usage_timesteps = target_tt,
+                 distribution_timesteps = distribution_tt)
+
+pu <- population_usage(
+  net_loss = net_loss,
+  population = population,
+  timesteps = timesteps,
+  distribution = fit$par,
+  distribution_timesteps =  distribution_tt,
+  rho = 0)
+
+pd <- data.frame(t = 1:timesteps, usage = pu)
+pd2 <- data.frame(target = target, target_tt = target_tt)
+
+ggplot() +
+  geom_line(data = pd, aes(x = t, y = usage)) +
+  geom_point(dat = pd2, aes(x = target_tt, y = target), col = "cornflowerblue", size = 3) +
+  ylim(0, 1) +
+  theme_bw()
+
 
 ```

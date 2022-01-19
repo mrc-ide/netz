@@ -17,5 +17,5 @@ sample_intervention(p, mvnorm, sigma_squared)
 A boolean vector denoting which individuals will receive the intervention
 }
 \description{
-Sample those to receive an intervention with correlation
+Code adapted from malariasimulation
 }
