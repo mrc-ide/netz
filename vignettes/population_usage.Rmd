@@ -25,7 +25,7 @@ the % of the population who are distributed a bed net (and assumed to use it) at
 given time points.
 
 Often it is helpful to understand the resulting population levels of bed net usage from a set of 
-bed net distributions over time. The 5 of individuals protected by a net at any time point is a 
+bed net distributions over time. The % of individuals protected by a net at any time point is a 
 function of the cumulative distributions that have occurred, the durations of net retention and the
 correlation of recipients between rounds.
 
@@ -189,7 +189,7 @@ We can use a non-linear optimiser to fit the distribution to these target usages
 # Target usage associated time points
 target <- c(0.45, 0.33, 0.7)
 target_tt <- c(2, 5, 9) * 365
-# Time points at which distribution will occur:
+# Time points at which distribution will occur
 distribution_tt <- c(1, 4, 8) * 365
 
 # Fit
@@ -225,7 +225,7 @@ timesteps <- 12 * 365
 # Target usage associated time points
 target <- seq(0.1, 0.8, length.out = 10) * c(1, 0.8, 0.5, 1, 0.8, 0.5, 1, 0.8, 0.5, 1)
 target_tt <- (1:10) * 365
-# Time points at which distribution will occur:
+# Time points at which distribution will occur
 distribution_tt <- ((0:9) * 365) + 1
 distribution_upper <- c(1, 0.3, 0.3, 1, 0.3, 0.3, 1, 0.3, 0.3, 1)
 
