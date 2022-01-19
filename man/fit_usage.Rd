@@ -34,6 +34,8 @@ fit_usage(
 
 \item{net_loss}{Net loss function}
 
+\item{rho}{betwen round correlation parameters}
+
 \item{seed}{Seed - the output of population_usage is stochastic.}
 }
 \value{

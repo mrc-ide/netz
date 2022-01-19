@@ -31,6 +31,8 @@ fit_usage_objective(
 
 \item{timesteps}{Timesteps}
 
+\item{rho}{betwen round correlation parameters}
+
 \item{seed}{Seed - the output of population_usage is stochastic.}
 }
 \value{

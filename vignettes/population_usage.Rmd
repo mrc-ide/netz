@@ -189,12 +189,51 @@ We can use a non-linear optimiser to fit the distribution to these target usages
 # Target usage associated time points
 target <- c(0.45, 0.33, 0.7)
 target_tt <- c(2, 5, 9) * 365
-# Timepoints at which distirbution will occur:
+# Time points at which distribution will occur:
 distribution_tt <- c(1, 4, 8) * 365
 
 # Fit
 fit <- fit_usage(target_usage = target, target_usage_timesteps = target_tt,
                  distribution_timesteps = distribution_tt)
+
+pu <- population_usage(
+  net_loss = net_loss,
+  population = population,
+  timesteps = timesteps,
+  distribution = fit$par,
+  distribution_timesteps =  distribution_tt,
+  rho = 0)
+
+pd <- data.frame(t = 1:timesteps, usage = pu)
+pd2 <- data.frame(target = target, target_tt = target_tt)
+
+ggplot() +
+  geom_line(data = pd, aes(x = t, y = usage)) +
+  geom_point(dat = pd2, aes(x = target_tt, y = target), col = "cornflowerblue", size = 3) +
+  ylim(0, 1) +
+  theme_bw()
+
+
+```
+
+Let's try a more complex fit, where we set the upper limits of the annual distribution to capture a
+3-year cycle with a mass distribution on year one followd by top-up distributions on the second and third year:
+
+
+```{r, fig.width = 7, fig.height = 4}
+timesteps <- 12 * 365
+# Target usage associated time points
+target <- seq(0.1, 0.8, length.out = 10) * c(1, 0.8, 0.5, 1, 0.8, 0.5, 1, 0.8, 0.5, 1)
+target_tt <- (1:10) * 365
+# Time points at which distribution will occur:
+distribution_tt <- ((0:9) * 365) + 1
+distribution_upper <- c(1, 0.3, 0.3, 1, 0.3, 0.3, 1, 0.3, 0.3, 1)
+
+# Fit
+fit <- fit_usage(target_usage = target, target_usage_timesteps = target_tt,
+                 distribution_timesteps = distribution_tt,
+                 distribution_upper = distribution_upper, 
+                 timesteps = timesteps)
 
 pu <- population_usage(
   net_loss = net_loss,
