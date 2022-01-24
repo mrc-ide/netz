@@ -65,16 +65,81 @@ find_npc <- function(target_usage, country_iso3="all", extrapolate_npc = "linear
     return(targets_dt[order(targets_dt$iso3),])
   })
   targets_all <- do.call("rbind", targets_all)
+  targets_all$target_access[targets_all$target_access>1] <- NA
+  # Set access to NA where it is over 1 and excluded from conversion
+  
   return(targets_all)
   
  }
 
 x <- find_npc(target_usage=seq(0.1,0.9,0.1))
+x
 
-####
+#### Convert from NPC to annual nets distributed per capita
+
+# Read in net half lives (median retention times) for each country
+half_life_data <- read.csv("https://raw.github.com/bertozzivill/map-itn-cube/publication-2021/paper_figures/figure_data/fig_5_llin_half_lives.csv")
+
+# Estimate time at which all nets are lost (l) based on net half life in each country
+estimate_l <- function(country_specific_half_life, k=20) {
+  l <- country_specific_half_life/sqrt(1 - k / (k - log(0.5)))
+  return(l)
+}
+
+half_life_data$l <- estimate_l(country_specific_half_life=half_life_data$half_life)
+half_life_data$l <- half_life_data$half_life/sqrt(1 - k / (k - log(0.5)))
+
+# Function of net loss returns the proportion of nets retained over time
+# k is a fixed rate from paper
+# l = country-specific time at which all nets = 0
+# Half life corresponds to prop_retained = 0.5
+net_loss <- function(t, k=20, l) {
+  prop_retained <- exp(k - k / (1 - (t / l) ^ 2))
+  prop_retained[t >= l] <- 0
+  return(prop_retained)
+}
+
+# Find number of nets distributed annually to maintain the equilibrium nets per capita
+# This is for the specific "smoothed" case where we assume that 1/3 of the population at risk
+# is distributed nets every 3 years (this is equivalent to a smoothed 3 yearly whole population distribution).
+find_annual_nets_distibuted <- function(npc_by_country, k=20){
+  # npc_by_country has target NPC for given target usage and country
+  
+  # Read in net half lives (median retention times) for each country
+  half_life_data <- read.csv("https://raw.github.com/bertozzivill/map-itn-cube/publication-2021/paper_figures/figure_data/fig_5_llin_half_lives.csv")
+  
+  # Estimate time at which all nets are lost (parameter l) based on net half life in each country
+  half_life_data$l <- half_life_data$half_life/sqrt(1 - k / (k - log(0.5)))
+  
+  # Merge this with target nets per capita by country and target usage
+  nets_distributed <- merge(x=npc_by_country, y=half_life_data[,c("iso3", "l")], 
+                            by = "iso3", all.x=TRUE, all.y=FALSE)
+  
+  # Function to integrate net loss function over 3 year period
+  # and function to vectorise this for application on multiple half-lives
+  integrate_net_loss <- function(k,l) {
+    stats::integrate(net_loss, lower = 0, upper = 3, k=k, l =l)$value
+  }
+  integrate_net_loss_vector <- Vectorize(integrate_net_loss)
+  
+  # Use this to calculate annual nets distributed per capita for different countries 
+  # and target usages
+  nets_distributed$annual_nets_distributed <- nets_distributed$target_percapita_nets * 
+    integrate_net_loss_vector(k=k, l = nets_distributed$l) * (1/3)
+
+  return(nets_distributed[order(nets_distributed$iso3, nets_distributed$target_use),])
+}
+
+npc_by_country <- find_npc(target_usage=seq(0.1,0.9,0.1))[, c("iso3", 
+                                                              "target_use",
+                                                              "target_access",
+                                                              "target_percapita_nets")]
+
+test <- find_annual_nets_distibuted(npc_by_country = npc_by_country)
+
 
 
 ### TO DO
 # Find updated use rate data for 2020
-# Convert nets per capita to net crop using pop. at risk?
+# Convert nets per capita to net crop or nets distributed per capita to total nets using pop. at risk?
 # Any further extrapolation options?
