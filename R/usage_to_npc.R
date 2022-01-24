@@ -20,7 +20,7 @@ find_npc <- function(target_usage, country_iso3="all", extrapolate_npc = "linear
   country_use_rate <- read.csv("data/use_rate_by_country.csv")
   loess_for_prediction <- read.csv("data/access_vs_npc_loess.csv") 
   
-  if(country_iso3=="all") {
+  if(country_iso3[1]=="all") {
     country_iso3 <- country_use_rate$iso3
   }
   
@@ -35,24 +35,17 @@ find_npc <- function(target_usage, country_iso3="all", extrapolate_npc = "linear
     print("No extrapolation beyond observed access-nets per capita relationship - return NA")
   }
   
-  if (any(target_usage<country_use_rate[country_use_rate$iso3 %in% country_iso3,"use_rate"])==FALSE) {
-    stop("Target usage(s) cannot be achieved with estimated use rate in any of the countries.")
-    
-  } else {
-    
-    max_usage <- country_use_rate[country_use_rate$iso3 %in% country_iso3,c("iso3","use_rate")]
-    
-    for (i in 1:length(target_usage)) {
-      countries_exceeded <- max_usage$iso3[max_usage$use_rate<target_usage[i]]
-      if(length(countries_exceeded)>=1) {
-        print(paste0("Target usage of ", target_usage[i], 
-                     " cannot be achieved with estimated use rate in ", 
-                     toString(countries_exceeded),
-                     " - return NA"))
-      }
-    }
-  }
+  max_usage <- country_use_rate[country_use_rate$iso3 %in% country_iso3,c("iso3","use_rate")]
+  names(max_usage)[names(max_usage)=="use_rate"] <- "maximum_usage"
   
+  if (any(target_usage<=max(country_use_rate[country_use_rate$iso3 %in% country_iso3,"use_rate"]))==FALSE) {
+    print(max_usage)
+    stop("Target usage(s) cannot be achieved with estimated use rate in any of the countries. Refer to maximum usage above.")
+  } else if(any(target_usage>min(country_use_rate[country_use_rate$iso3 %in% country_iso3,"use_rate"]))) {
+    print(max_usage)
+    print("Target usage(s) cannot be achieved with estimated use rate in some of the countries - return NA. Refer to maximum usage above.")
+  }
+
   targets_all <- lapply(target_usage, function(this_use) {
     targets_dt <- country_use_rate[country_use_rate$iso3 %in% country_iso3, 
                                    c("iso3", "year", "use_rate")]
@@ -71,14 +64,17 @@ find_npc <- function(target_usage, country_iso3="all", extrapolate_npc = "linear
     # but use rate to convert usage to access is country-specific (derived from spatiotemporal regression?)
     return(targets_dt[order(targets_dt$iso3),])
   })
-  targets_all <- rbindlist(targets_all)
+  targets_all <- do.call("rbind", targets_all)
   return(targets_all)
   
  }
 
 x <- find_npc(target_usage=seq(0.1,0.9,0.1))
 
+####
+
+
 ### TO DO
-# Mistake in any() checks
 # Find updated use rate data for 2020
 # Convert nets per capita to net crop using pop. at risk?
+# Any further extrapolation options?
