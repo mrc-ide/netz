@@ -1,14 +1,27 @@
-### Convert bednet usage to annual nets distributed per capita ###
-
-# For each country, what steady-state nets need to be distributed per capita
-# to attain a given net use?
-
-# Assumptions: 
-# - Net use rates stays at 2019 levels for all countries
-# - When converting from access to NPC, use the 2020 loess curve fit of access-NPC 
-#   at the country-month level.
-# - When determining the number of nets to distribute in each mass campaign, 
-#   assume mass campaigns occur every three years.
+#' Convert bednet usage to annual nets distributed per capita
+#' 
+#' Assumptions: 
+#' - Net use rates stays at 2019 levels for all countries
+#' - When converting from access to NPC, use the 2020 loess curve fit of access-NPC 
+#'   at the country-month level.
+#' - When determining the number of nets to distribute in each mass campaign, 
+#'   assume mass campaigns occur every three years.
+#' 
+#' @param target_usage A single value or vector of desired target usages to model.
+#' @param country_iso3 Vector of ISO3 codes of African countries for which to return results. 
+#' Default = "all".
+#' @param extrapolate_npc Option to extrapolate target nets per capita beyond fitted 
+#' Loess curve. Default = "linear" for linear extrapolation. For any other inputs,
+#' NA outputs are returned for any target usages exceeding currently observed levels.
+#' @param k Fixed rate parameter of the internal function of net loss, used to 
+#' estimate the median net retention times by country. Default = 20 from
+#' Bertozzi-Villa, Amelia, et al. Nature communications 12.1 (2021): 1-12.
+#'
+#' @return Dataframe of access, nets per capita and annual nets distributed per capita
+#' for the desired steady-state target usage by country
+#' 
+#' @importFrom stats 'approx' 'reshape' 'loess' 'predict'
+#' @export
 
 find_annual_nets_distributed <- function(target_usage, country_iso3="all", 
                                          extrapolate_npc = "linear", k=20) {
@@ -17,8 +30,9 @@ find_annual_nets_distributed <- function(target_usage, country_iso3="all",
   
   # Read in datasets of country-specific use rate and the Loess curve of 
   # access vs nets per capita
-  country_use_rate <- read.csv("data/use_rate_by_country.csv")
-  loess_for_prediction <- read.csv("data/access_vs_npc_loess.csv") 
+  data <- prepare_data()
+  country_use_rate <- data$use_rate_by_country
+  loess_for_prediction <- data$loess_for_prediction
   
   if(country_iso3[1]=="all") {
     country_iso3 <- country_use_rate$iso3
@@ -71,7 +85,7 @@ find_annual_nets_distributed <- function(target_usage, country_iso3="all",
   ### 2. Convert equilibrium nets per capita to annual nets distributed per capita ###
   
   # Read in net half lives (median retention times) for each country
-  half_life_data <- read.csv("https://raw.github.com/bertozzivill/map-itn-cube/publication-2021/paper_figures/figure_data/fig_5_llin_half_lives.csv")
+  half_life_data <- data$half_life_data
   
   # Estimate time at which all nets are lost (parameter l) based on net half life in each country
   half_life_data$l <- half_life_data$half_life/sqrt(1 - k / (k - log(0.5)))
@@ -101,19 +115,11 @@ find_annual_nets_distributed <- function(target_usage, country_iso3="all",
   # and target usages
   nets_distributed$annual_percapita_nets_distributed <- nets_distributed$target_percapita_nets * 
     integrate_net_loss_vector(k=k, l = nets_distributed$l) * (1/3)
-  nets_distributed <- subset(nets_distributed, select = -c(year,l) )
+  nets_distributed <- nets_distributed[,c("iso3", "use_rate", "target_use",
+                                          "target_access", "target_percapita_nets",
+                                          "annual_percapita_nets_distributed")]
   
   return(nets_distributed[order(nets_distributed$iso3, nets_distributed$target_use),])
   
 }
 
-
-nets <- find_annual_nets_distributed(target_usage=seq(0.1,0.9,0.1),
-                                     country_iso3 = c("AGO", "BEN"))
-
-
-### TO DO
-
-# Find updated use rate data for 2020?
-# Convert nets distributed per capita to total nets distributed using pop. at risk?
-# Add further extrapolation options?
