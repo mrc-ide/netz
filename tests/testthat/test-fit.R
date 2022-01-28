@@ -4,13 +4,13 @@ test_that("usage fitting works", {
   dt <- 365
   
   expect_error(fit_usage(tu, tut, dt, distribution_lower = -1),
-               "All distribution lower values must be bewteen 0 and 1")
+               "All distribution lower values must be between 0 and 1")
   expect_error(fit_usage(tu, tut, dt, distribution_lower = 6), 
-               "All distribution lower values must be bewteen 0 and 1")
+               "All distribution lower values must be between 0 and 1")
   expect_error(fit_usage(tu, tut, dt, distribution_upper = -1),
-               "All distribution upper values must be bewteen 0 and 1")
+               "All distribution upper values must be between 0 and 1")
   expect_error(fit_usage(tu, tut, dt, distribution_upper = 6),
-               "All distribution upper values must be bewteen 0 and 1")
+               "All distribution upper values must be between 0 and 1")
   
   
   expect_error(fit_usage(tu, tut, dt, distribution_lower = c(0.1, 0.1)),
