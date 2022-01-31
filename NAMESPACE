@@ -2,6 +2,10 @@
 
 export(add)
 export(find_annual_nets_distributed)
+export(find_usage)
+export(integrate_net_loss)
+export(integrate_net_loss_vector)
+export(net_loss)
 export(prepare_data)
 importFrom(stats,'approx')
 importFrom(stats,'loess')
