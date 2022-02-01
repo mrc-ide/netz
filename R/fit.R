@@ -20,7 +20,7 @@ fit_usage_objective <- function(distribution, distribution_timesteps,
   sum((pu[target_usage_timesteps] - target_usage) ^ 2)
 }
 
-#' Fit distibution to match target usage
+#' Fit distribution to match target usage using non-linear optimisation
 #'
 #' @param target_usage Target usage
 #' @param target_usage_timesteps Target usage time points
@@ -47,10 +47,10 @@ fit_usage <- function(target_usage, target_usage_timesteps,
                       seed = 1234){
   
   if(any(distribution_lower < 0) | any(distribution_lower > 1)){
-    stop("All distribution lower values must be bewteen 0 and 1")
+    stop("All distribution lower values must be between 0 and 1")
   }
   if(any(distribution_upper < 0) | any(distribution_upper > 1)){
-    stop("All distribution upper values must be bewteen 0 and 1")
+    stop("All distribution upper values must be between 0 and 1")
   }
   if(length(distribution_lower) != length(distribution_timesteps) | length(distribution_upper) != length(distribution_timesteps)){
     stop("distribution_timesteps, distribution_lower and distribution_upper must have equal lengths")

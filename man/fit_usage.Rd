@@ -2,7 +2,7 @@
 % Please edit documentation in R/fit.R
 \name{fit_usage}
 \alias{fit_usage}
-\title{Fit distibution to match target usage}
+\title{Fit distribution to match target usage using non-linear optimisation}
 \usage{
 fit_usage(
   target_usage,
@@ -42,5 +42,5 @@ fit_usage(
 Non-linear optimisation fit output
 }
 \description{
-Fit distibution to match target usage
+Fit distribution to match target usage using non-linear optimisation
 }

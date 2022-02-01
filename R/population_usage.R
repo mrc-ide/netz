@@ -19,13 +19,12 @@ exp_loss_equilibrium <- function(distribution, distribution_frequency, net_loss_
 #' @param mvnorm A vector of multivariate normal (correlated) draws.
 #' @param sigma_squared Sigma squared
 #' 
-#' @importFrom stats qnorm rnorm
 #'
 #' @return A boolean vector denoting which individuals will receive the intervention
 sample_intervention <- function(p, mvnorm, sigma_squared) {
   sd <- sqrt(1 + sigma_squared)
-  u0 <- -qnorm(p, 0) * sd
-  z <- rnorm(length(mvnorm))
+  u0 <- -stats::qnorm(p, 0) * sd
+  z <- stats::rnorm(length(mvnorm))
   u0 + mvnorm + z < 0
 }
 
@@ -36,7 +35,6 @@ sample_intervention <- function(p, mvnorm, sigma_squared) {
 #' @param population Population size
 #' @param rho Correlation parameter
 #' 
-#' @importFrom MASS mvrnorm
 #'
 #' @return A names list with the multivariate random normal draw and sigma squared
 get_correlation <- function(population, rho){
@@ -45,7 +43,7 @@ get_correlation <- function(population, rho){
   }
   sigma_squared <- rho / (1 - rho)
   V <- matrix(sigma_squared)
-  mvnorm <- mvrnorm(population, 0, V)
+  mvnorm <- MASS::mvrnorm(population, 0, V)
   out <- list(mvnorm = mvnorm, 
               sigma_squared = sigma_squared)
   return(out)
@@ -83,7 +81,7 @@ population_usage <- function(
       days_since_net[sample_intervention(distribution[d],correlation$mvnorm, correlation$sigma_squared)] <- 0
       d <- d + 1
     }
-    # Estimate avereage usage
+    # Estimate average usage
     nets <- net_loss[days_since_net + 1]
     nets[is.na(nets)] <- 0
     usage[t] <- mean(nets)

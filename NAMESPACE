@@ -3,6 +3,3 @@
 export(exp_loss_equilibrium)
 export(fit_usage)
 export(population_usage)
-importFrom(MASS,mvrnorm)
-importFrom(stats,qnorm)
-importFrom(stats,rnorm)
