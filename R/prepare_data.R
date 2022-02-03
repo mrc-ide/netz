@@ -1,7 +1,7 @@
 #' Function for reading in and formatting required datasets
 #'
 #' @return 3 datasets of use rate by country, Loess curve of access against nets 
-#' per capita, and estimated median net retention times by country
+#' per capita, and estimated median net retention times by country in days
 #' 
 #' @importFrom utils 'read.csv'
 #' @export
@@ -18,8 +18,9 @@ prepare_data <- function() {
   cube_nat_level <- read.csv("https://raw.github.com/bertozzivill/map-itn-cube/publication-2021/paper_figures/figure_data/fig_4_access_npc.csv")
   # 2020 data of access, use rate and npc
   
-  half_life_data <- read.csv("https://raw.github.com/bertozzivill/map-itn-cube/publication-2021/paper_figures/figure_data/fig_5_llin_half_lives.csv")
-  # 2020 estimates of net half lives (median retention times) 
+  half_life_data <- read.csv("https://raw.github.com/bertozzivill/map-itn-cube/publication-2021/paper_figures/figure_data/fig_5_llin_half_lives.csv")[,c("iso3", "half_life")]
+  # 2020 estimates of net half lives (median retention times)  in years
+  half_life_data$half_life <- half_life_data$half_life*365
   
   ### Data Prep ###
   

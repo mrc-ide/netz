@@ -8,7 +8,7 @@ prepare_data()
 }
 \value{
 3 datasets of use rate by country, Loess curve of access against nets
-per capita, and estimated median net retention times by country
+per capita, and estimated median net retention times by country in days
 }
 \description{
 Function for reading in and formatting required datasets
