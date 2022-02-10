@@ -1,0 +1,87 @@
+---
+title: "Estimate the annual bednets to distribute to achieve a given net usage"
+author: "Nora Schmit"
+date: "10/02/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(netz)
+library(ggplot2)
+library(knitr)
+library(kableExtra)
+```
+
+## Background
+
+In [malariasimulation](https://mrc-ide.github.io/malariasimulation/) we can implement the [bed net intervention](https://mrc-ide.github.io/malariasimulation/articles/VectorControl.html) by specifying the % of the population who are distributed a bed net (and assumed to use it) at given time points.
+
+Simulations frequently involve scenarios with a constant bednet usage. To quantify the cost associated with a given steady-state bednet usage, it is necessary to estimate
+the corresponding number of nets that need to be distributed to achieve the given usage. The % of individuals protected by a net at any time point depends on the cumulative net distributions that have occurred and the duration of net retention. The netz package
+additionally allows to account for observed non-linearities in the relationship between
+net distributions and net access in the population, based on the work and data in Bertozzi-Villa, Amelia, et al. Nature communications 12.1 (2021): 1-12.
+
+## Quick example of usage to annual nets distributed conversion for specific countries
+
+In its most simple form, only 2 steps are required: preparing the default datasets that inform country-specific net variables, and converting the desired usage to the annual nets distributed per capita.
+
+
+```{r}
+data <- prepare_data() 
+
+# Three datasets are returned: 
+# the country-specific net use rate
+# the Loess curve of access vs. nets per capita
+# the country-specific net half lives (median retention times) 
+
+country_use_rate <- data$use_rate_by_country
+access_vs_npc <- data$loess_for_prediction
+half_life_data <- data$half_life_data
+
+# Specify required inputs
+
+# Desired usages to convert (e.g. 10% to 90% in 10% steps):
+usage_vec <- seq(0.1,0.9,0.1)   
+
+# Net distribution frequency in days (e.g. the default of 3 years):
+distribution_frequency <- 3*365
+
+# The conversion can be limited to the countries of interest (their ISO codes):
+countries <- c("AGO", "BEN", "NGA")
+
+# Do the conversion
+# For further assumptions and options, see the detailed walk-through below
+output <- convert_usage_to_annual_nets_distributed(
+  target_usage = usage_vec,
+  distribution_freq = distribution_frequency, 
+  use_rate_data = subset(country_use_rate, iso3 %in% countries),
+  half_life_data = subset(half_life_data, iso3 %in% countries),
+  access_vs_npc_data = access_vs_npc)
+
+```
+Note that the usage that can be achieved in a given country depends on its use rate.
+Where a target_usage exceeds the country-specific use rate, a warning is printed 
+and NA is returned for the annual nets distributed.
+
+The output shown below contains the annual_percapita_nets_distributed for each country and input usage. Intermediate steps in the conversion (net access and nets per capita) are also shown. Nets distributed per capita are given for each year, but account for the specified net distribution frequency. For example, a 3 year distribution cycle would correspond to distributing the given output every year, or distributing 3 times the given output every 3 years. To calculate the costs of the distributed nets, the user additionally needs to convert the annual nets distributed per capita to the annual number of nets distributed by multiplying with the population at risk.
+
+```{r, echo = FALSE}
+kable(output) %>% kable_styling()
+```
+
+The following plot shows the non-linear relationship between net usage and the nets to be distributed (i.e. cost) to achieve this for high usages.
+
+```{r, message = FALSE}
+
+# Plot relationship between net usage and nets distributed for each country
+ggplot(output) +
+  geom_line(aes(x = target_use, y = annual_percapita_nets_distributed, 
+                colour = iso3)) +
+  labs(x = "Population net usage", y = "Nets distributed per person-year", colour = "Country") +
+  theme_classic()
+
+```
+
+## Quick example of usage to annual nets distributed conversion for a generic setting
+

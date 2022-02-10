@@ -41,7 +41,7 @@ convert_usage_to_annual_nets_distributed <- function(target_usage, distribution_
                                                      half_life_data = prepare_data()$half_life_data,
                                                      access_vs_npc_data = prepare_data()$loess_for_prediction,
                                                      extrapolate_npc = "loess",
-                                                     net_loss_function = net_loss_exp,
+                                                     net_loss_function = net_loss_map,
                                                      k = 20) {
 
   ### 1. Convert target usage to nets per capita ###
