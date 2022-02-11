@@ -22,11 +22,11 @@
 #' include all countries/ISO3 codes.
 #' @param extrapolate_npc Option to extrapolate target nets per capita beyond fitted
 #' Loess curve. Default = "loess" for continuation of Loess curve trend. Use option
-#' "linear" for linear extrapolation. For any other inputs, NA outputs are returned
+#' "linear" for linear extrapolation. Use option FALSE to return NA outputs
 #' for any target usages exceeding currently observed levels.
 #' @param net_loss_function Option to choose between exponential net loss (net_loss_exp) or
 #' the smooth-compact net loss function from Bertozzi-Villa, Amelia, et al.
-#' Nature communications 12.1 (2021): 1-12 (net_loss_map). Default = net_loss_exp.
+#' Nature communications 12.1 (2021): 1-12 (net_loss_map). Default = net_loss_map.
 #' @param k Fixed rate parameter of the MAP function of net loss (net_loss_map()), used to
 #' estimate the median net retention times by country. Default = 20 from
 #' Bertozzi-Villa, Amelia, et al. Nature communications 12.1 (2021): 1-12.
@@ -109,9 +109,11 @@ convert_usage_to_npc <- function(target_usage,
     extrapolate_access$loess_predicted_access <- predict(curve_fit, extrapolate_access$percapita_nets)
     loess_for_prediction <- rbind(access_vs_npc_data, extrapolate_access)
     print("Access-nets per capita curve is extrapolated beyond observed levels")
-  } else {
+  } else if (extrapolate_npc == FALSE) {
     loess_for_prediction <- access_vs_npc_data
     print("No extrapolation beyond observed access-nets per capita relationship - return NA")
+  } else {
+    stop("extrapolate_npc must be one of: loess, linear, FALSE")
   }
 
   max_usage <- use_rate_data[, c("iso3", "use_rate")]
@@ -163,7 +165,7 @@ convert_usage_to_npc <- function(target_usage,
 convert_npc_to_annual_nets_distributed <- function(usage_to_npc_output,
                                                    distribution_freq = 3 * 365,
                                                    half_life_data = prepare_data()$half_life_data,
-                                                   net_loss_function = net_loss_exp,
+                                                   net_loss_function = net_loss_map,
                                                    k = 20) {
 
 
@@ -202,6 +204,11 @@ convert_npc_to_annual_nets_distributed <- function(usage_to_npc_output,
     "target_access", "target_percapita_nets",
     "annual_percapita_nets_distributed"
   )]
-
+  
+  # Fill in output for a target usage of 0 (giving 0 on every metric)
+  nets_distributed[nets_distributed$target_use==0,c("target_access")] <- 0
+  nets_distributed[nets_distributed$target_use==0,c("target_percapita_nets")] <- 0
+  nets_distributed[nets_distributed$target_use==0,c("annual_percapita_nets_distributed")] <- 0
+  
   return(nets_distributed[order(nets_distributed$iso3, nets_distributed$target_use), ])
 }

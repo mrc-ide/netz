@@ -24,7 +24,7 @@ include all countries/ISO3 codes.}
 
 \item{extrapolate_npc}{Option to extrapolate target nets per capita beyond fitted
 Loess curve. Default = "loess" for continuation of Loess curve trend. Use option
-"linear" for linear extrapolation. For any other inputs, NA outputs are returned
+"linear" for linear extrapolation. Use option FALSE to return NA outputs
 for any target usages exceeding currently observed levels.}
 }
 \description{

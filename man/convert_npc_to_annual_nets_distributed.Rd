@@ -8,7 +8,7 @@ convert_npc_to_annual_nets_distributed(
   usage_to_npc_output,
   distribution_freq = 3 * 365,
   half_life_data = prepare_data()$half_life_data,
-  net_loss_function = net_loss_exp,
+  net_loss_function = net_loss_map,
   k = 20
 )
 }
@@ -23,7 +23,7 @@ be limited to specific ISO3 codes.}
 
 \item{net_loss_function}{Option to choose between exponential net loss (net_loss_exp) or
 the smooth-compact net loss function from Bertozzi-Villa, Amelia, et al.
-Nature communications 12.1 (2021): 1-12 (net_loss_map). Default = net_loss_exp.}
+Nature communications 12.1 (2021): 1-12 (net_loss_map). Default = net_loss_map.}
 
 \item{k}{Fixed rate parameter of the MAP function of net loss (net_loss_map()), used to
 estimate the median net retention times by country. Default = 20 from
