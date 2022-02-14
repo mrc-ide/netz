@@ -192,10 +192,8 @@ convert_npc_to_annual_nets_distributed <- function(usage_to_npc_output,
   }
 
   # Check use rate and half life data are in the same format
-  if (class(half_life_data) == "numeric" & !(is.na(usage_to_npc_output$iso3))) {
-    stop("Use rate and half lives need to be either both country-specific datasets (with ISO3) or both non-country-specific single values/vectors.")
-  }
-  if (class(half_life_data) != "numeric" & is.na(usage_to_npc_output$iso3)) {
+  if ((class(half_life_data) == "numeric" & !(is.na(usage_to_npc_output$iso3))) ||
+      class(half_life_data) != "numeric" & is.na(usage_to_npc_output$iso3)) {
     stop("Use rate and half lives need to be either both country-specific datasets (with ISO3) or both non-country-specific single values/vectors.")
   }
 
