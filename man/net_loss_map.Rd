@@ -6,7 +6,7 @@
 Net loss follows an S-shaped “smooth compact” curve.
 Used to estimate the median net retention times by country.}
 \usage{
-net_loss_map(t, k, half_life, ...)
+net_loss_map(t, k, half_life)
 }
 \arguments{
 \item{t}{Single value or vector of timesteps in days.}

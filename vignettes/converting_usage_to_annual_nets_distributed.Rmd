@@ -3,6 +3,10 @@ title: "Estimate the annual bednets to distribute to achieve a given net usage"
 author: "Nora Schmit"
 date: "10/02/2022"
 output: html_document
+vignette: >
+  %\VignetteIndexEntry{Estimate the annual bednets to distribute to achieve a given net usage}
+  %\VignetteEngine{knitr::knitr}
+  \usepackage[utf8]{inputenc}
 ---
 
 ```{r setup, include = FALSE}

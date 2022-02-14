@@ -82,8 +82,24 @@ convert_usage_to_npc <- function(target_usage,
 
   ### 1. Convert target usage to nets per capita ###
 
+  if (any(target_usage < 0) | any(target_usage > 1)) {
+    stop("All target usage values must be between 0 and 1")
+  }
+
+  if (any(access_vs_npc_data$access < 0) | any(access_vs_npc_data$access > 1)) {
+    stop("All access values in access_vs_npc_data must be between 0 and 1")
+  }
+
+  if (any(access_vs_npc_data$percapita_nets < 0)) {
+    stop("All per capita nets values in access_vs_npc_data must be positive")
+  }
+
   if (class(use_rate_data) == "numeric") {
     use_rate_data <- data.frame(iso3 = NA, year = NA, use_rate = use_rate_data)
+  }
+
+  if (any(use_rate_data$use_rate < 0) | any(use_rate_data$use_rate > 1)) {
+    stop("All use rate values must be between 0 and 1")
   }
 
   if (extrapolate_npc == "linear") {
@@ -171,13 +187,16 @@ convert_npc_to_annual_nets_distributed <- function(usage_to_npc_output,
 
   ### 2. Convert equilibrium nets per capita to annual nets distributed per capita ###
 
-  # half life class numeric and usage_to_npc iso = NA
-  # half life class NOT numeric and usage to npc iso NOT NA
+  if (length(distribution_freq) > 1L) {
+    stop("distribution_freq must be a single value (in days)")
+  }
+
   # Check use rate and half life data are in the same format
-  if ((class(half_life_data) == "numeric" & !(is.na(usage_to_npc_output$iso3))) ||
-    (class(half_life_data) != "numeric" & is.na(usage_to_npc_output$iso3))) {
-    stop("Use rate and half lives need to be either both country-specific
-    datasets (with ISO3) or both non-country-specific single values/vectors.")
+  if (class(half_life_data) == "numeric" & !(is.na(usage_to_npc_output$iso3))) {
+    stop("Use rate and half lives need to be either both country-specific datasets (with ISO3) or both non-country-specific single values/vectors.")
+  }
+  if (class(half_life_data) != "numeric" & is.na(usage_to_npc_output$iso3)) {
+    stop("Use rate and half lives need to be either both country-specific datasets (with ISO3) or both non-country-specific single values/vectors.")
   }
 
   if (class(half_life_data) == "numeric") {
@@ -204,11 +223,11 @@ convert_npc_to_annual_nets_distributed <- function(usage_to_npc_output,
     "target_access", "target_percapita_nets",
     "annual_percapita_nets_distributed"
   )]
-  
+
   # Fill in output for a target usage of 0 (giving 0 on every metric)
-  nets_distributed[nets_distributed$target_use==0,c("target_access")] <- 0
-  nets_distributed[nets_distributed$target_use==0,c("target_percapita_nets")] <- 0
-  nets_distributed[nets_distributed$target_use==0,c("annual_percapita_nets_distributed")] <- 0
-  
+  nets_distributed[nets_distributed$target_use == 0, c("target_access")] <- 0
+  nets_distributed[nets_distributed$target_use == 0, c("target_percapita_nets")] <- 0
+  nets_distributed[nets_distributed$target_use == 0, c("annual_percapita_nets_distributed")] <- 0
+
   return(nets_distributed[order(nets_distributed$iso3, nets_distributed$target_use), ])
 }
