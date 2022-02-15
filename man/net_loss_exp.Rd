@@ -11,6 +11,8 @@ net_loss_exp(t, half_life, ...)
 \item{t}{Single value or vector of timesteps in days.}
 
 \item{half_life}{(Country-specific) half-life of nets in days.}
+
+\item{...}{No further inputs to be added by the user.}
 }
 \value{
 The proportion of nets retained over time.
