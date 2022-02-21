@@ -27,7 +27,7 @@
 #' countries/ISO3 codes.
 #' @param extrapolate_npc Option to extrapolate target nets per capita beyond
 #' fitted Loess curve. Default = "loess" for continuation of Loess curve trend.
-#' Use option "linear" for linear extrapolation. For any other inputs, NA
+#' Use "FALSE" for no extrapolation. For any other inputs, NA
 #' outputs are returned for any target usages exceeding currently observed
 #' levels.
 #' @param net_loss_function Option to choose between exponential net loss
@@ -45,13 +45,13 @@
 #' @importFrom stats 'approx' 'reshape' 'loess' 'predict' 'loess.control'
 #' @export
 convert_nets_to_usage <- function(target_nets,
-                                   distribution_freq = 3 * 365,
-                                   use_rate_data = prepare_data()$use_rate_by_country,
-                                   half_life_data = prepare_data()$half_life_data,
-                                   access_vs_npc_data = prepare_data()$loess_for_prediction,
-                                   extrapolate_npc = "loess",
-                                   net_loss_function = net_loss_map,
-                                   k = 20) {
+                                  distribution_freq = 3 * 365,
+                                  use_rate_data = prepare_data()$use_rate_by_country,
+                                  half_life_data = prepare_data()$half_life_data,
+                                  access_vs_npc_data = prepare_data()$loess_for_prediction,
+                                  extrapolate_npc = "loess",
+                                  net_loss_function = net_loss_map,
+                                  k = 20) {
   if (class(target_nets) == "numeric" &
     class(use_rate_data) == "numeric" &
     class(half_life_data) == "numeric") {
@@ -95,13 +95,21 @@ convert_nets_to_usage <- function(target_nets,
 #' loss functions.
 #' @export
 convert_nets_to_npc <- function(nets_distributed,
-                                 distribution_freq = 3 * 365,
-                                 half_life_data = prepare_data()$half_life_data,
-                                 use_rate_data = prepare_data()$use_rate_by_country,
-                                 net_loss_function = net_loss_map,
-                                 k = 20) {
+                                distribution_freq = 3 * 365,
+                                half_life_data = prepare_data()$half_life_data,
+                                use_rate_data = prepare_data()$use_rate_by_country,
+                                net_loss_function = net_loss_map,
+                                k = 20) {
 
   ### 1. Convert annual nets distributed per capita to equilibrium nets per capita ###
+
+  if (any(nets_distributed < 0)) {
+    stop("All values for nets distributed must be between 0 and 1")
+  }
+
+  if (any(use_rate_data$use_rate < 0) | any(use_rate_data$use_rate > 1)) {
+    stop("All use rate values must be between 0 and 1")
+  }
 
   # If statements related to type of data.
   # If we do not have iso3 level data for nets distributed but we do for half
@@ -185,6 +193,18 @@ convert_npc_to_usage <- function(nets_to_npc_output,
 
   ### 2. Convert nets per capita to usage ###
 
+  if (any(nets_to_npc_output < 0)) {
+    stop("All nets per capita values must be positive")
+  }
+
+  if (any(access_vs_npc_data$access < 0) | any(access_vs_npc_data$access > 1)) {
+    stop("All access values in access_vs_npc_data must be between 0 and 1")
+  }
+
+  if (any(use_rate_data$use_rate < 0)) {
+    stop("All use rates must be between 0 and 1")
+  }
+
   if (class(use_rate_data) == "numeric") {
     use_rate_data <- data.frame(use_rate = rep(use_rate_data, nrow(nets_to_npc_output)))
   }
@@ -213,18 +233,20 @@ convert_npc_to_usage <- function(nets_to_npc_output,
     extrapolate_access$loess_predicted_access <- predict(curve_fit, extrapolate_access$percapita_nets)
     loess_for_prediction <- rbind(access_vs_npc_data, extrapolate_access)
     print("Access-nets per capita curve is extrapolated beyond observed levels")
-  } else {
+  } else if (extrapolate_npc == FALSE) {
     loess_for_prediction <- access_vs_npc_data
-    print("No extrapolation beyond observed access-nets per capita relationship - return NA")
+  } else {
+    stop("extrapolate_npc must be one of: loess, linear, FALSE")
   }
-  
+
   # Depending on whether given use rate is a single value or country specific,
   # use different methods to combine it with nets_to_npc_output.
-  if(ncol(use_rate_data)>1){
+  if (ncol(use_rate_data) > 1) {
     pred_usage <- merge(nets_to_npc_output, use_rate_data)
-  } else if(ncol(use_rate_data)==1){
-    pred_usage <- data.frame(nets_to_npc_output, 
-                             use_rate = use_rate_data$use_rate)
+  } else if (ncol(use_rate_data) == 1) {
+    pred_usage <- data.frame(nets_to_npc_output,
+      use_rate = use_rate_data$use_rate
+    )
   }
 
   loess_for_prediction <- loess_for_prediction[order(loess_for_prediction$iso3, loess_for_prediction$month), ]
@@ -252,4 +274,3 @@ convert_npc_to_usage <- function(nets_to_npc_output,
 
   return(pred_usage)
 }
-
