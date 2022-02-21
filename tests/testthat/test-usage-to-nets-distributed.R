@@ -183,14 +183,6 @@ test_that("npc to nets distributed conversion works", {
     k = 20
   ), "distribution_freq must be a single value (in days)", fixed = TRUE)
 
-  expect_error(convert_npc_to_annual_nets_distributed(
-    usage_to_npc_output = npc_out,
-    distribution_freq = 3 * 365,
-    half_life_data = prepare_data()$half_life_data,
-    net_loss_function = net_loss_map,
-    k = 20
-  ), "Use rate and half lives need to be either both country-specific datasets (with ISO3) or both non-country-specific single values/vectors.", fixed = TRUE)
-
   expect_equal(convert_npc_to_annual_nets_distributed(
     usage_to_npc_output = npc_out[1, ],
     distribution_freq = 3 * 365,
