@@ -127,7 +127,6 @@ convert_usage_to_npc <- function(target_usage,
     print("Access-nets per capita curve is extrapolated beyond observed levels")
   } else if (extrapolate_npc == FALSE) {
     loess_for_prediction <- access_vs_npc_data
-    print("No extrapolation beyond observed access-nets per capita relationship - return NA")
   } else {
     stop("extrapolate_npc must be one of: loess, linear, FALSE")
   }
@@ -193,7 +192,7 @@ convert_npc_to_annual_nets_distributed <- function(usage_to_npc_output,
 
   # Check use rate and half life data are in the same format
   if ((class(half_life_data) == "numeric" & !(is.na(usage_to_npc_output$iso3))) ||
-      class(half_life_data) != "numeric" & is.na(usage_to_npc_output$iso3)) {
+    class(half_life_data) != "numeric" & is.na(usage_to_npc_output$iso3)) {
     stop("Use rate and half lives need to be either both country-specific datasets (with ISO3) or both non-country-specific single values/vectors.")
   }
 
