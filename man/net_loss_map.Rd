@@ -2,9 +2,7 @@
 % Please edit documentation in R/net_loss.R
 \name{net_loss_map}
 \alias{net_loss_map}
-\title{Function of net loss over time from Bertozzi-Villa, Amelia, et al. Nature communications 12.1 (2021): 1-12.
-Net loss follows an S-shaped “smooth compact” curve.
-Used to estimate the median net retention times by country.}
+\title{Function of net loss over time from Malaria Atlas Project}
 \usage{
 net_loss_map(t, k, half_life)
 }
@@ -19,7 +17,7 @@ net_loss_map(t, k, half_life)
 The proportion of nets retained over time.
 }
 \description{
-Function of net loss over time from Bertozzi-Villa, Amelia, et al. Nature communications 12.1 (2021): 1-12.
-Net loss follows an S-shaped “smooth compact” curve.
+Function from Bertozzi-Villa, Amelia, et al. Nature communications 12.1 (2021): 1-12:
+net loss follows an S-shaped smooth compact curve.
 Used to estimate the median net retention times by country.
 }

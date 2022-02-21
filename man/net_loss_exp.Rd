@@ -2,8 +2,7 @@
 % Please edit documentation in R/net_loss.R
 \name{net_loss_exp}
 \alias{net_loss_exp}
-\title{Function of net loss over time from malariasimulation
-Net loss is exponential.}
+\title{Function of net loss over time from malariasimulation}
 \usage{
 net_loss_exp(t, half_life, ...)
 }
@@ -18,6 +17,5 @@ net_loss_exp(t, half_life, ...)
 The proportion of nets retained over time.
 }
 \description{
-Function of net loss over time from malariasimulation
 Net loss is exponential.
 }
