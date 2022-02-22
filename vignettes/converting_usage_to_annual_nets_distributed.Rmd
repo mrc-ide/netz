@@ -1,7 +1,5 @@
 ---
 title: "Estimate the annual bednets to distribute to achieve a given net usage"
-author: "Nora Schmit"
-date: "10/02/2022"
 output: html_document
 vignette: >
   %\VignetteIndexEntry{Estimate the annual bednets to distribute to achieve a given net usage}
@@ -12,6 +10,8 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(netz)
+library(tidyr)
+library(dplyr)
 library(ggplot2)
 library(knitr)
 library(kableExtra)
@@ -26,43 +26,38 @@ the corresponding number of nets that need to be distributed to achieve the give
 additionally allows to account for observed non-linearities in the relationship between
 net distributions and net access in the population, based on the work and data in Bertozzi-Villa, Amelia, et al. Nature communications 12.1 (2021): 1-12.
 
+### Conversion steps
+
+The conversion from net usage to annual nets distributed per capita occurs in the following steps:
+
+* convert net usage to net access using the observed (country-specific) use rate. By definition, net use rate = net usage/net access.
+* convert net access to nets per capita using a Loess curve fitted to the observed relationship between the two across Africa.
+* convert nets per capita to annual nets distributed per capita accounting for net distributions and net loss over time.
+
+For a full definition of metric relating to net coverage, refer to the original paper (Bertozzi-Villaet al., 2021). 
+
 ## Quick example: usage to annual nets distributed conversion for specific countries
 
 In its most simple form, only 2 steps are required: preparing the default datasets that inform country-specific net variables, and converting the desired usage to the annual nets distributed per capita.
 
 
 ```{r}
-data <- prepare_data()
+# First, we specify the coutry iso codes and target usages
+input <- expand_grid(iso3 = c("AGO", "BEN", "NGA"),
+                     usage = seq(0.1, 0.9, 0.1))
 
-# Three datasets are returned:
-# the country-specific net use rate
-# the Loess curve of access vs. nets per capita
-# the country-specific net half lives (median retention times)
+# We can link these to half life, usage rates and distribution frequencies
+input <- input %>%
+  left_join(get_halflife_data(), by = "iso3") %>%
+  left_join(get_usage_rate_data(), by = "iso3") %>%
+  mutate(distribution_freq = 365 * 3)
 
-country_use_rate <- data$use_rate_by_country
-access_vs_npc <- data$loess_for_prediction
-half_life_data <- data$half_life_data
+# Next we can follow the conversion chain to move between different bed net measures
+output <- input %>%
+  mutate(access = usage_to_access(usage, usage_rate),
+         npc = access_to_npc(access),
+         anpcd = npc_to_anpcd(npc, distribution_freq = distribution_freq, net_loss_function = net_loss_map, half_life = half_life))
 
-# Specify required inputs
-
-# Desired usages to convert (e.g. 10% to 90% in 10% steps):
-usage_vec <- seq(0.1, 0.9, 0.1)
-
-# Net distribution frequency in days (e.g. the default of 3 years):
-distribution_frequency <- 3 * 365
-
-# The conversion can be limited to the countries of interest (their ISO codes):
-countries <- c("AGO", "BEN", "NGA")
-
-# Do the conversion
-# For further assumptions and options, see the detailed walk-through below
-output <- convert_usage_to_annual_nets_distributed(
-  target_usage = usage_vec,
-  distribution_freq = distribution_frequency,
-  use_rate_data = subset(country_use_rate, iso3 %in% countries),
-  half_life_data = subset(half_life_data, iso3 %in% countries),
-  access_vs_npc_data = access_vs_npc
-)
 ```
 
 Note that the usage that can be achieved in a given country depends on its use rate.
@@ -82,7 +77,7 @@ The following plot shows the non-linear relationship between net usage and the n
 # Plot relationship between net usage and nets distributed for each country
 ggplot(output) +
   geom_line(aes(
-    x = target_use, y = annual_percapita_nets_distributed,
+    x = usage, y = anpcd,
     colour = iso3
   )) +
   labs(x = "Population net usage", y = "Nets distributed per person-year", colour = "Country") +
@@ -94,45 +89,25 @@ ggplot(output) +
 If no specific country is being modelled, it is possible to use the same functions to represent a generic or average setting accounting for the observed nets data. The following code starts with the same steps as previously, but now calculates the nets distributed for a setting with a net use rate and half life corresponding to the median use rate and median half life observed across Africa.
 
 ```{r}
-data <- prepare_data()
+# First, we specify the coutry iso codes and target usages
+input <- expand_grid(usage = seq(0.1, 0.9, 0.1))
 
-# Three datasets are returned:
-# the country-specific net use rate
-# the Loess curve of access vs. nets per capita
-# the country-specific net half lives (median retention times)
-
-country_use_rate <- data$use_rate_by_country
-access_vs_npc <- data$loess_for_prediction
-half_life_data <- data$half_life_data
-
-# Specify required inputs
-
-# Desired usages to convert (e.g. 10% to 90% in 10% steps):
-usage_vec <- seq(0.1, 0.9, 0.1)
-
-# Net distribution frequency in days (e.g. the default of 3 years):
-distribution_frequency <- 3 * 365
-
-# Assume net use rate and half life are median of those estimated across Africa
-net_use_rate <- median(country_use_rate$use_rate)
-net_half_life <- median(half_life_data$half_life)
+# We can link these to aggregate estimates of half life, usage rates and distribution frequencies
+input <- input %>%
+  mutate(half_life = median(get_halflife_data()$half_life),
+         usage_rate = median(get_usage_rate_data()$usage_rate)) %>%
+  mutate(distribution_freq = 365 * 3)
 
 # Do the conversion
-# For further assumptions and options, see the detailed walk-through below
-output <- convert_usage_to_annual_nets_distributed(
-  target_usage = usage_vec,
-  distribution_freq = distribution_frequency,
-  use_rate_data = net_use_rate,
-  half_life_data = net_half_life,
-  access_vs_npc_data = access_vs_npc
-)
+output <- input %>%
+  mutate(access = usage_to_access(usage, usage_rate),
+         npc = access_to_npc(access),
+         anpcd = npc_to_anpcd(npc, distribution_freq = distribution_freq, net_loss_function = net_loss_map, half_life = half_life))
 ```
 
 ```{r, echo = FALSE}
 kable(output) %>% kable_styling()
 ```
-
-The output dataframe looks the same, except that the iso3 column now is NA since the values don't relate to a specific country.
 
 ## Detailed example of further options and assumptions
 
@@ -143,26 +118,26 @@ The previous examples showed the quickest way to obtain the nets distributed for
 and about net loss
 * use different (e.g. more recent) datasets of net metrics
 
-### Conversion steps
-
-The conversion from net usage to annual nets distributed per capita occurs in the following steps:
-
-* convert net usage to net access using the observed (country-specific) use rate. By definition, net use rate = net usage/net access.
-* convert net access to nets per capita using a Loess curve fitted to the observed relationship between the two across Africa.
-* convert nets per capita to annual nets distributed per capita accounting for net distributions and net loss over time.
-
-For a full definition of metric relating to net coverage, refer to the original paper (Bertozzi-Villaet al., 2021). 
-
-The relationship between net access and nets per capita is derived from monthly data for the latest available year (2020) across African countries, and plotted below (corresponding to Figure 4 in paper).
+The relationship between net access and nets per capita is derived from monthly data for the latest available year (2020) across African countries, and plotted below (corresponding to Figure 4 in paper). There are three options in the `access_to_npc()` function
+one "loess" a loess smooth of the observed data, a second "loess_extrpolate" a loess smooth of the observed data witht the trend
+extrapolted to allow prediction for access values outside of the observed range and a third "linear" a linear fit to the lower (access < 0.5) set of observed values. This last model is very simple and does not fit the observed data well, so use with caution. 
 
 ```{r, warning = FALSE}
 # Read in access vs NPC data:
-loess <- prepare_data()$loess_for_prediction
+access_npc_data <- get_npc_data()
+
+access <- seq(0, 1, 0.01)
+npc_loess <- access_to_npc(access, type = "loess")
+npc_loess_extrapolate <- access_to_npc(access, type = "loess_extrapolate")
+npc_linear <- access_to_npc(access, type = "linear")
+model_data <- data.frame(access = rep(access, 3),
+                         model = rep(c("loess", "loess_extrapolate", "linear"), each = length(npc_loess)),
+                         npc = c(npc_loess, npc_loess_extrapolate, npc_linear))
 
 # Plot curve
-ggplot(loess) +
-  geom_point(aes(x = percapita_nets, y = access, colour = "Data from one country-month")) +
-  geom_line(aes(x = percapita_nets, y = loess_predicted_access, colour = "Fitted Loess curve"), size = 1.5) +
+ggplot() +
+  geom_point(data = access_npc_data, aes(x = percapita_nets_mean, y = access_mean), col = "black") +
+  geom_line(data = model_data, aes(x = npc, y = access, colour = model, lty = model), size = 1.5) +
   xlim(0, 1) +
   ylim(0, 1) +
   labs(x = "Nets per capita", y = "Access (proportion)", colour = "") +
@@ -189,130 +164,7 @@ ggplot() +
   theme_classic()
 ```
 
-The full steps in the conversion are illustrated below for a generic setting.
-
-```{r message = FALSE, warning = FALSE, results = FALSE}
-# Prepare data
-data <- prepare_data()
-
-## Step 1: Convert net usage to net access, then net access to nets per capita
-
-# Desired usages to convert (e.g. 10% to 90% in 10% steps):
-usage_vec <- seq(0.1, 0.9, 0.1)
-
-# Assume net use rate to be median of those estimated across Africa
-net_use_rate <- median(data$use_rate_by_country$use_rate)
-
-npc_output <- convert_usage_to_npc(
-  target_usage = usage_vec,
-  use_rate_data = net_use_rate,
-  access_vs_npc_data = data$loess_for_prediction
-)
-
-## Step 2: Convert nets per capita to annual nets distributed per capita
-
-# Net distribution frequency in days (e.g. the default of 3 years):
-distribution_frequency <- 3 * 365
-
-# Assume net half life to be median of those estimated across Africa
-net_half_life <- median(half_life_data$half_life)
-
-nets_distributed_output <- convert_npc_to_annual_nets_distributed(
-  usage_to_npc_output = npc_output,
-  distribution_freq = distribution_frequency,
-  half_life_data = net_half_life
-)
-```
-
-npc_output:
-
-```{r, echo = FALSE}
-## Print outputs
-kable(npc_output) %>% kable_styling()
-```
-nets_distributed_output:
-
-```{r, echo = FALSE}
-## Print outputs
-kable(nets_distributed_output) %>% kable_styling()
-```
-
-In these dataframes, target_access is calculated as target_use/use_rate. Since access is a proportion, it cannot exceed 1. Therefore, where the target usage is higher than the observed use rate, access = NA.
-
-### Assumptions about the relationship between nets per capita and net access
-
-The default option in the convert_usage_to_annual_nets_distributed() function assumes that, on the upper end, the trend in the access vs. nets per capita Loess curve is extrapolated (extrapolate_npc = "loess"). 
-
-Other options are a linear extrapolation beyond observed levels (extrapolate_npc = "linear"), which allows to reach a net access of 100%, but note that this suggests an increase in efficiency at very high access levels (>95%) which is unlikely in reality. Alternatively, the user can choose not to introduce any extrapolation of the curve and convert usages only for values falling within the observed range (extrapolate_npc = FALSE). All examples are visualised below for Benin, which has the highest observed net use rate.
-
-```{r message = FALSE, warning = FALSE, results = FALSE}
-# Prepare data
-data <- prepare_data()
-
-# Specify required inputs
-
-# Desired usages to convert:
-usage_vec <- seq(0, 1, 0.01)
-
-# Net distribution frequency in days:
-distribution_frequency <- 3 * 365
-
-extrapolate_loess <- convert_usage_to_annual_nets_distributed(
-  target_usage = usage_vec,
-  distribution_freq = distribution_frequency,
-  use_rate_data = subset(data$use_rate_by_country, iso3 == "BEN"),
-  half_life_data = subset(data$half_life_data, iso3 == "BEN"),
-  access_vs_npc_data = data$loess_for_prediction,
-  extrapolate_npc = "loess"
-)
-
-extrapolate_linear <- convert_usage_to_annual_nets_distributed(
-  target_usage = usage_vec,
-  distribution_freq = distribution_frequency,
-  use_rate_data = subset(data$use_rate_by_country, iso3 == "BEN"),
-  half_life_data = subset(data$half_life_data, iso3 == "BEN"),
-  access_vs_npc_data = data$loess_for_prediction,
-  extrapolate_npc = "linear"
-)
-
-extrapolate_no <- convert_usage_to_annual_nets_distributed(
-  target_usage = usage_vec,
-  distribution_freq = distribution_frequency,
-  use_rate_data = subset(data$use_rate_by_country, iso3 == "BEN"),
-  half_life_data = subset(data$half_life_data, iso3 == "BEN"),
-  access_vs_npc_data = data$loess_for_prediction,
-  extrapolate_npc = FALSE
-)
-```
-
-```{r warning = FALSE}
-# Plot relationship between net usage and nets distributed for the 3 extrapolation assumptions
-ggplot() +
-  geom_line(
-    data = extrapolate_loess,
-    aes(
-      x = target_use, y = annual_percapita_nets_distributed,
-      colour = "Loess"
-    )
-  ) +
-  geom_line(
-    data = extrapolate_linear,
-    aes(
-      x = target_use, y = annual_percapita_nets_distributed,
-      colour = "Linear"
-    )
-  ) +
-  geom_line(
-    data = extrapolate_no,
-    aes(
-      x = target_use, y = annual_percapita_nets_distributed,
-      colour = "No"
-    )
-  ) +
-  labs(x = "Population net usage", y = "Nets distributed per person-year", colour = "Extrapolate curve") +
-  theme_classic()
-```
-
+In these outputs, target_access is calculated as target_use/use_rate. Since access is a proportion, it cannot exceed 1. Therefore, where the target usage is higher than the observed use rate, access = NA.
 ### Assumptions about the net loss function
 
 The default option in the convert_usage_to_annual_nets_distributed() function assumes that nets are lost according to a smooth-compact function (net_loss_function = net_loss_map). The alternative option is to exponential net loss (net_loss_function = net_loss_exp), which corresponds to the assumption in malariasimulation. 
@@ -354,57 +206,37 @@ ggplot() +
 The effect of the net loss function on the relationship between net usage and annual nets distributed is shown below for a generic setting.
 
 ```{r message = FALSE, warning = FALSE, results = FALSE}
-# Prepare data
-data <- prepare_data()
+# First, we specify some general parameters
+input <- data.frame(usage = seq(0.1, 0.9, 0.1),
+                    half_life = median(get_halflife_data()$half_life),
+                    usage_rate = median(get_usage_rate_data()$usage_rate),
+                    distribution_freq = 365 * 3)
 
-# Specify required inputs
+# Next we can follow the conversion chain to move between different bed net measures
+output <- input %>%
+  mutate(access = usage_to_access(usage, usage_rate),
+         npc = access_to_npc(access),
+         anpcd_map = npc_to_anpcd(npc,
+                                  distribution_freq = distribution_freq,
+                                  net_loss_function = net_loss_map,
+                                  half_life = half_life),
+         anpcd_exp = npc_to_anpcd(npc,
+                                  distribution_freq = distribution_freq,
+                                  net_loss_function = net_loss_exp,
+                                  half_life = 5 * 365)) %>%
+  select(usage, anpcd_map, anpcd_exp) %>%
+  pivot_longer(cols = -usage, names_to = "model", values_to = "annual_percapita_nets_distributed", names_prefix = "anpcd_")
 
-# Desired usages to convert:
-usage_vec <- seq(0, 1, 0.01)
-
-# Net distribution frequency in days:
-distribution_frequency <- 3 * 365
-
-output_map <- convert_usage_to_annual_nets_distributed(
-  target_usage = usage_vec,
-  distribution_freq = distribution_frequency,
-  use_rate_data = median(data$use_rate_by_country$use_rate),
-  half_life_data = median(data$half_life_data$half_life),
-  access_vs_npc_data = data$loess_for_prediction,
-  net_loss_function = net_loss_map
-)
-
-output_exp <- convert_usage_to_annual_nets_distributed(
-  target_usage = usage_vec,
-  distribution_freq = distribution_frequency,
-  use_rate_data = median(data$use_rate_by_country$use_rate),
-  half_life_data = median(data$half_life_data$half_life),
-  access_vs_npc_data = data$loess_for_prediction,
-  net_loss_function = net_loss_exp
-)
 ```
 
 ```{r warning = FALSE}
 # Plot relationship between net usage and nets distributed for the 2 net loss assumptions
-ggplot() +
-  geom_line(
-    data = output_map,
-    aes(
-      x = target_use, y = annual_percapita_nets_distributed,
-      colour = "Smooth-compact net loss"
-    )
-  ) +
-  geom_line(
-    data = output_exp,
-    aes(
-      x = target_use, y = annual_percapita_nets_distributed,
-      colour = "Exponential net loss"
-    )
-  ) +
+ggplot(data = output, aes(x = usage, y = annual_percapita_nets_distributed, col = model)) +
+  geom_line() +
   labs(x = "Population net usage", y = "Nets distributed per person-year", colour = "Net loss function") +
   theme_classic()
 ```
 
 ### Use different datasets of net metrics
 
-Refer to the documentation for prepare_data() to see how more recent datasets can be used in the package.
+Refer to the documentation for `get_halflife_data()`, `get_usage_rate_data()` and `get_npc_data()` to see how more recent datasets can be used in the package.
