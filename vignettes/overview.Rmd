@@ -1,11 +1,18 @@
 ---
-title: "Estimate the annual bednets to distribute to achieve a given net usage"
-output: html_document
+title: "overview"
+output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Estimate the annual bednets to distribute to achieve a given net usage}
-  %\VignetteEngine{knitr::knitr}
-  \usepackage[utf8]{inputenc}
+  %\VignetteIndexEntry{overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
