@@ -39,11 +39,8 @@ Imports:
     dplyr,
     tidyr,
     knitr,
-    kableExtra
+    kableExtra,
     MASS,
-    ggplot2,
     nloptr,
     stats,
-    knitr,
-    rmarkdown,
-    testthat (>= 3.0.0)
+    knitr
