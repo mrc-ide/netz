@@ -16,4 +16,4 @@ status](https://codecov.io/gh/mrc-ide/peeps/branch/main/graph/badge.svg)](https:
 Netz is here to help setup bed nets in
 [malariasimulation](https://mrc-ide.github.io/malariasimulation/)
 
-<img src="inst/figures/Infographic.png" />
+<img src="inst/figures/Schematic.png" />
