@@ -6,14 +6,14 @@
 Net loss follows an S-shaped “smooth compact” curve.
 Used to estimate the median net retention times by country.}
 \usage{
-net_loss_map(t, k, half_life)
+net_loss_map(t, half_life, k = 20)
 }
 \arguments{
 \item{t}{Single value or vector of timesteps in days.}
 
-\item{k}{Fixed rate. Default = 20 from Bertozzi-Villa, Amelia, et al. Nature communications 12.1 (2021): 1-12.}
-
 \item{half_life}{(Country-specific) half-life of nets in days.}
+
+\item{k}{Fixed rate. Default = 20 from Bertozzi-Villa, Amelia, et al. Nature communications 12.1 (2021): 1-12.}
 }
 \value{
 The proportion of nets retained over time.
