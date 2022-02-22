@@ -7,7 +7,7 @@
 #'
 #' @return The proportion of nets retained over time.
 #' @export
-net_loss_map <- function(t, k, half_life) {
+net_loss_map <- function(t, half_life, k = 20) {
 
   # Convert half life into the time at which no nets are retained (nets=0) in days:
   l <- half_life / sqrt(1 - k / (k - log(0.5)))
@@ -21,11 +21,10 @@ net_loss_map <- function(t, k, half_life) {
 #' Net loss is exponential.
 #' @param t Single value or vector of timesteps in days.
 #' @param half_life (Country-specific) half-life of nets in days.
-#' @param ... No further inputs to be added by the user.
 #'
 #' @return The proportion of nets retained over time.
 #' @export
-net_loss_exp <- function(t, half_life, ...) {
+net_loss_exp <- function(t, half_life) {
   prop_retained <- exp(-(1 / half_life) * t)
   return(prop_retained)
 }
