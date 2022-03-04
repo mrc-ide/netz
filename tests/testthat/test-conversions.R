@@ -13,34 +13,34 @@ test_that("access_to_usage works", {
   expect_error(access_to_usage(2), "access must be between 0 and 1")
 })
 
-test_that("npc_to_anpcd works", {
-  expect_equal(npc_to_anpcd(c(1, 0.5, 0), 365 * 3, 1000), c(1, 0.5, 0) * mean(net_loss_map(0:(365*3), 1000)))
-  expect_equal(npc_to_anpcd(c(1, 0.5, 0), 365 * 3, 1000, net_loss_exp), c(1, 0.5, 0) * mean(net_loss_exp(0:(365*3), 1000)))
+test_that("nets_per_capita_to_annual_nets_distributed_per_capita works", {
+  expect_equal(nets_per_capita_to_annual_nets_distributed_per_capita(c(1, 0.5, 0), 365 * 3, 1000), c(1, 0.5, 0) * mean(net_loss_map(0:(365*3), 1000)))
+  expect_equal(nets_per_capita_to_annual_nets_distributed_per_capita(c(1, 0.5, 0), 365 * 3, 1000, net_loss_exp), c(1, 0.5, 0) * mean(net_loss_exp(0:(365*3), 1000)))
   
-  expect_error(npc_to_anpcd(-1, 365 * 3, 1000), "npc must be > 0")
-  expect_error(npc_to_anpcd(0.5, -1, 1000), "distribution_freq must be > 0")
-  expect_error(npc_to_anpcd(0.5, 200, -1), "half_life must be > 0")
+  expect_error(nets_per_capita_to_annual_nets_distributed_per_capita(-1, 365 * 3, 1000), "nets_per_capita must be > 0")
+  expect_error(nets_per_capita_to_annual_nets_distributed_per_capita(0.5, -1, 1000), "distribution_freq must be > 0")
+  expect_error(nets_per_capita_to_annual_nets_distributed_per_capita(0.5, 200, -1), "half_life must be > 0")
 })
 
-test_that("anpcd_to_npc works", {
-  expect_equal(anpcd_to_npc(c(1, 0.5, 0), 365 * 3, 1000), c(1, 0.5, 0) / mean(net_loss_map(0:(365*3), 1000)))
-  expect_equal(anpcd_to_npc(c(1, 0.5, 0), 365 * 3, 1000, net_loss_exp), c(1, 0.5, 0) / mean(net_loss_exp(0:(365*3), 1000)))
+test_that("annual_nets_distributed_per_capita_to_nets_per_capita works", {
+  expect_equal(annual_nets_distributed_per_capita_to_nets_per_capita(c(1, 0.5, 0), 365 * 3, 1000), c(1, 0.5, 0) / mean(net_loss_map(0:(365*3), 1000)))
+  expect_equal(annual_nets_distributed_per_capita_to_nets_per_capita(c(1, 0.5, 0), 365 * 3, 1000, net_loss_exp), c(1, 0.5, 0) / mean(net_loss_exp(0:(365*3), 1000)))
   
-  expect_error(anpcd_to_npc(-1, 365 * 3, 1000), "anpcd must be > 0")
-  expect_error(anpcd_to_npc(0.5, -1, 1000), "distribution_freq must be > 0")
-  expect_error(anpcd_to_npc(0.5, 200, -1), "half_life must be > 0")
+  expect_error(annual_nets_distributed_per_capita_to_nets_per_capita(-1, 365 * 3, 1000), "annual_nets_distributed_per_capita must be > 0")
+  expect_error(annual_nets_distributed_per_capita_to_nets_per_capita(0.5, -1, 1000), "distribution_freq must be > 0")
+  expect_error(annual_nets_distributed_per_capita_to_nets_per_capita(0.5, 200, -1), "half_life must be > 0")
 })
 
-test_that("access_to_npc works", {
-  expect_equal(access_to_npc(1), NA_real_)
-  expect_equal(access_to_npc(0), NA_real_)
+test_that("access_to_nets_per_capita works", {
+  expect_equal(access_to_nets_per_capita(1), NA_real_)
+  expect_equal(access_to_nets_per_capita(0), NA_real_)
   
-  expect_error(access_to_npc(-1), "access must be between 0 and 1")
-  expect_error(access_to_npc(2), "access must be between 0 and 1")
+  expect_error(access_to_nets_per_capita(-1), "access must be between 0 and 1")
+  expect_error(access_to_nets_per_capita(2), "access must be between 0 and 1")
   
-  expect_error(access_to_npc(0.5, "wrong"), "type must be one of: loess, loess_extrapolate or linear")
+  expect_error(access_to_nets_per_capita(0.5, "wrong"), "type must be one of: loess, loess_extrapolate or linear")
 })
 
-test_that("npc_to_access works", {
-  expect_error(npc_to_access(0.5, "wrong"), "type must be one of: loess, loess_extrapolate or linear")
+test_that("nets_per_capita_to_access works", {
+  expect_error(nets_per_capita_to_access(0.5, "wrong"), "type must be one of: loess, loess_extrapolate or linear")
 })

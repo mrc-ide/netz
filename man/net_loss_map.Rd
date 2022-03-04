@@ -17,5 +17,5 @@ net_loss_map(t, half_life, k = 20)
 The proportion of nets retained over time.
 }
 \description{
-Net loss follows an S-shaped smooth compact curve, from from Bertozzi-Villa, Amelia, et al. Nature communications 12.1 (2021): 1-12.
+Net loss follows an S-shaped smooth compact curve, from Bertozzi-Villa, Amelia, et al. Nature communications 12.1 (2021): 1-12.
 }

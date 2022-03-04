@@ -62,8 +62,8 @@ input <- input %>%
 # Next we can follow the conversion chain to move between different bed net measures
 output <- input %>%
   mutate(access = usage_to_access(usage, usage_rate),
-         npc = access_to_npc(access),
-         anpcd = npc_to_anpcd(npc, distribution_freq = distribution_freq, net_loss_function = net_loss_map, half_life = half_life))
+         npc = access_to_nets_per_capita(access),
+         anpcd = nets_per_capita_to_annual_nets_distributed_per_capita(npc, distribution_freq = distribution_freq, net_loss_function = net_loss_map, half_life = half_life))
 
 ```
 
@@ -108,8 +108,8 @@ input <- input %>%
 # Do the conversion
 output <- input %>%
   mutate(access = usage_to_access(usage, usage_rate),
-         npc = access_to_npc(access),
-         anpcd = npc_to_anpcd(npc, distribution_freq = distribution_freq, net_loss_function = net_loss_map, half_life = half_life))
+         npc = access_to_nets_per_capita(access),
+         anpcd = nets_per_capita_to_annual_nets_distributed_per_capita(npc, distribution_freq = distribution_freq, net_loss_function = net_loss_map, half_life = half_life))
 ```
 
 ```{r, echo = FALSE}
@@ -125,7 +125,7 @@ The previous examples showed the quickest way to obtain the nets distributed for
 and about net loss
 * use different (e.g. more recent) datasets of net metrics
 
-The relationship between net access and nets per capita is derived from monthly data for the latest available year (2020) across African countries, and plotted below (corresponding to Figure 4 in paper). There are three options in the `access_to_npc()` function
+The relationship between net access and nets per capita is derived from monthly data for the latest available year (2020) across African countries, and plotted below (corresponding to Figure 4 in paper). There are three options in the `access_to_nets_per_capita()` function
 one "loess" a loess smooth of the observed data, a second "loess_extrapolate" a loess smooth of the observed data with the trend
 extrapolated to allow prediction for access values outside of the observed range and a third, "linear", a linear fit to the lower (access < 0.5) set of observed values. This last model is very simple and does not fit the observed data well, so use with caution. 
 
@@ -134,9 +134,9 @@ extrapolated to allow prediction for access values outside of the observed range
 access_npc_data <- get_npc_data()
 
 access <- seq(0, 1, 0.01)
-npc_loess <- access_to_npc(access, type = "loess")
-npc_loess_extrapolate <- access_to_npc(access, type = "loess_extrapolate")
-npc_linear <- access_to_npc(access, type = "linear")
+npc_loess <- access_to_nets_per_capita(access, type = "loess")
+npc_loess_extrapolate <- access_to_nets_per_capita(access, type = "loess_extrapolate")
+npc_linear <- access_to_nets_per_capita(access, type = "linear")
 model_data <- data.frame(access = rep(access, 3),
                          model = rep(c("loess", "loess_extrapolate", "linear"), each = length(npc_loess)),
                          npc = c(npc_loess, npc_loess_extrapolate, npc_linear))
@@ -222,12 +222,12 @@ input <- data.frame(usage = seq(0.1, 0.9, 0.1),
 # Next we can follow the conversion chain to move between different bed net measures
 output <- input %>%
   mutate(access = usage_to_access(usage, usage_rate),
-         npc = access_to_npc(access),
-         anpcd_map = npc_to_anpcd(npc,
+         npc = access_to_nets_per_capita(access),
+         anpcd_map = nets_per_capita_to_annual_nets_distributed_per_capita(npc,
                                   distribution_freq = distribution_freq,
                                   net_loss_function = net_loss_map,
                                   half_life = half_life),
-         anpcd_exp = npc_to_anpcd(npc,
+         anpcd_exp = nets_per_capita_to_annual_nets_distributed_per_capita(npc,
                                   distribution_freq = distribution_freq,
                                   net_loss_function = net_loss_exp,
                                   half_life = 5 * 365)) %>%
