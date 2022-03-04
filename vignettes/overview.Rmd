@@ -79,7 +79,7 @@ kable(output) %>% kable_styling()
 
 The following plot shows the non-linear relationship between net usage and the nets to be distributed (i.e. cost) to achieve this for high usages.
 
-```{r, warning = FALSE}
+```{r, warning = FALSE, , fig.width=5}
 
 # Plot relationship between net usage and nets distributed for each country
 ggplot(output) +
@@ -129,7 +129,8 @@ The relationship between net access and nets per capita is derived from monthly 
 one "loess" a loess smooth of the observed data, a second "loess_extrapolate" a loess smooth of the observed data with the trend
 extrapolated to allow prediction for access values outside of the observed range and a third, "linear", a linear fit to the lower (access < 0.5) set of observed values. This last model is very simple and does not fit the observed data well, so use with caution. 
 
-```{r, warning = FALSE}
+
+```{r, warning = FALSE, , fig.width=5}
 # Read in access vs NPC data:
 access_npc_data <- get_npc_data()
 
@@ -153,7 +154,8 @@ ggplot() +
 
 Under default assumptions, nets are assumed to be lost according to a smooth-compact function, which depends on the estimated net half life. The proportion of nets retained over a 3-year distribution cycle with a median retention time / half-life of 1.64 years is shown below. 
 
-```{r, warning = FALSE}
+
+```{r, warning = FALSE, , fig.width=5}
 # Calculate proportion of nets retained over a given distribution cycle
 distribution_cycle_timesteps <- seq(0, 3 * 365, 1)
 nets_retained <- net_loss_map(
@@ -172,13 +174,14 @@ ggplot() +
 ```
 
 In these outputs, target_access is calculated as target_use/use_rate. Since access is a proportion, it cannot exceed 1. Therefore, where the target usage is higher than the observed use rate, access = NA.
+
 ### Assumptions about the net loss function
 
 The default option in the convert_usage_to_annual_nets_distributed() function assumes that nets are lost according to a smooth-compact function (net_loss_function = net_loss_map). The alternative option is to assume exponential net loss (`net_loss_function = net_loss_exp`), which corresponds to the assumption in malariasimulation. 
 
 The proportion of nets retained over time are visualised for both options below, for a 3 year distribution cycle and a net half life of 1.64 years.
 
-```{r message = FALSE, warning = FALSE}
+```{r message = FALSE, warning = FALSE, , fig.width=5}
 distribution_cycle_timesteps <- seq(0, 3 * 365, 1)
 
 # Calculate proportion of nets retained assuming smooth-compact net loss
@@ -236,7 +239,7 @@ output <- input %>%
 
 ```
 
-```{r warning = FALSE}
+```{r warning = FALSE, , fig.width=5}
 # Plot relationship between net usage and nets distributed for the 2 net loss assumptions
 ggplot(data = output, aes(x = usage, y = annual_percapita_nets_distributed, col = model)) +
   geom_line() +
