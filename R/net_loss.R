@@ -1,6 +1,6 @@
-#' Function of net loss over time from Bertozzi-Villa, Amelia, et al. Nature communications 12.1 (2021): 1-12.
-#' Net loss follows an S-shaped “smooth compact” curve.
-#' Used to estimate the median net retention times by country.
+#' Function of net loss over time.
+#' 
+#' Net loss follows an S-shaped smooth compact curve, from Bertozzi-Villa, Amelia, et al. Nature communications 12.1 (2021): 1-12.
 #' @param t Single value or vector of timesteps in days.
 #' @param k Fixed rate. Default = 20 from Bertozzi-Villa, Amelia, et al. Nature communications 12.1 (2021): 1-12.
 #' @param half_life (Country-specific) half-life of nets in days.

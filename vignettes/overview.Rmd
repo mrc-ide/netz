@@ -126,8 +126,8 @@ and about net loss
 * use different (e.g. more recent) datasets of net metrics
 
 The relationship between net access and nets per capita is derived from monthly data for the latest available year (2020) across African countries, and plotted below (corresponding to Figure 4 in paper). There are three options in the `access_to_npc()` function
-one "loess" a loess smooth of the observed data, a second "loess_extrpolate" a loess smooth of the observed data witht the trend
-extrapolted to allow prediction for access values outside of the observed range and a third "linear" a linear fit to the lower (access < 0.5) set of observed values. This last model is very simple and does not fit the observed data well, so use with caution. 
+one "loess" a loess smooth of the observed data, a second "loess_extrapolate" a loess smooth of the observed data with the trend
+extrapolated to allow prediction for access values outside of the observed range and a third, "linear", a linear fit to the lower (access < 0.5) set of observed values. This last model is very simple and does not fit the observed data well, so use with caution. 
 
 ```{r, warning = FALSE}
 # Read in access vs NPC data:
@@ -151,7 +151,7 @@ ggplot() +
   theme_classic()
 ```
 
-Under default assumptions, after distribution nets are assumed to be lost according to a smooth-compact function, which depends on the estimated net half life. The proportion of nets retained over a 3-year distribution cycle with a median retention time / half-life of 1.64 years is shown below. 
+Under default assumptions, nets are assumed to be lost according to a smooth-compact function, which depends on the estimated net half life. The proportion of nets retained over a 3-year distribution cycle with a median retention time / half-life of 1.64 years is shown below. 
 
 ```{r, warning = FALSE}
 # Calculate proportion of nets retained over a given distribution cycle
@@ -174,7 +174,7 @@ ggplot() +
 In these outputs, target_access is calculated as target_use/use_rate. Since access is a proportion, it cannot exceed 1. Therefore, where the target usage is higher than the observed use rate, access = NA.
 ### Assumptions about the net loss function
 
-The default option in the convert_usage_to_annual_nets_distributed() function assumes that nets are lost according to a smooth-compact function (net_loss_function = net_loss_map). The alternative option is to exponential net loss (net_loss_function = net_loss_exp), which corresponds to the assumption in malariasimulation. 
+The default option in the convert_usage_to_annual_nets_distributed() function assumes that nets are lost according to a smooth-compact function (net_loss_function = net_loss_map). The alternative option is to assume exponential net loss (`net_loss_function = net_loss_exp`), which corresponds to the assumption in malariasimulation. 
 
 The proportion of nets retained over time are visualised for both options below, for a 3 year distribution cycle and a net half life of 1.64 years.
 
