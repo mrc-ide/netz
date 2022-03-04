@@ -70,9 +70,9 @@ ggplot(pd, aes(x = t, y = usage)) +
 
 ```
 
-We can see that population usage initially rises with the first distribution population before reaching an equilibrium as following distibutions replace the nets of those who already own one.
+We can see that population usage initially rises with the first distribution population before reaching an equilibrium as following distributions replace the nets of those who already own one.
 
-In the simple case of regular distributions and exponential net loss and correlation we have the
+In the simple case of regular distributions, exponential net loss, and correlation we have the
 analytical solution for the average population level usage.
 
 ```{r, fig.width = 7, fig.height = 4}
@@ -182,7 +182,7 @@ ggplot(pd, aes(x = t, y = usage)) +
 
 ### Fitting to target usage
 
-In many cases we might have a set of observed population level usage estimtes that we want to match to.
+In many cases we might have a set of observed population level usage estimates that we want to match to.
 We can use a non-linear optimiser to fit the distribution to these target usages:
 
 ```{r, fig.width = 7, fig.height = 4}
@@ -217,7 +217,7 @@ ggplot() +
 ```
 
 Let's try a more complex fit, where we set the upper limits of the annual distribution to capture a
-3-year cycle with a mass distribution on year one followd by top-up distributions on the second and third year:
+3-year cycle with a mass distribution on year one followed by top-up distributions on the second and third year:
 
 
 ```{r, fig.width = 7, fig.height = 4}
