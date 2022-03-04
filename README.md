@@ -14,6 +14,10 @@ status](https://codecov.io/gh/mrc-ide/peeps/branch/main/graph/badge.svg)](https:
 <!-- badges: end -->
 
 Netz is here to help setup bed nets in
-[malariasimulation](https://mrc-ide.github.io/malariasimulation/)
+[malariasimulation](https://mrc-ide.github.io/malariasimulation/).
+
+Much of the functionality within this package is based on the excellent
+bed net model by [Bertozzi-Villa, Amelia, et al. Nature communications
+12.1 (2021): 1-12](https://www.nature.com/articles/s41467-021-23707-7).
 
 <img src="inst/figures/Schematic.png" />
