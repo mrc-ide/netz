@@ -5,8 +5,8 @@
 \title{Reading in and formatting half life datasets}
 \usage{
 get_halflife_data(
- 
-    path = "https://raw.github.com/bertozzivill/map-itn-cube/publication-2021/paper_figures/figure_data/fig_5_llin_half_lives.csv"
+  path = paste0("https://raw.github.com/", "bertozzivill/map-itn-cube/",
+    "publication-2021/paper_figures/", "figure_data/fig_5_llin_half_lives.csv")
 )
 }
 \arguments{

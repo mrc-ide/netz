@@ -5,8 +5,8 @@
 \title{Function for reading in and access and npc data}
 \usage{
 get_npc_data(
- 
-    path = "https://raw.github.com/bertozzivill/map-itn-cube/publication-2021/paper_figures/figure_data/fig_4_access_npc.csv"
+  path = paste0("https://raw.github.com/", "bertozzivill/map-itn-cube/",
+    "publication-2021/paper_figures/", "figure_data/fig_4_access_npc.csv")
 )
 }
 \arguments{
