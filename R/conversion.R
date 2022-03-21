@@ -11,7 +11,7 @@
 #'
 #' @return Predicted nets per capita
 #' @export
-access_to_nets_per_capita <- function(access, type = "loess"){
+access_to_crop <- function(access, type = "loess"){
   if(any(access < 0 | access > 1, na.rm = TRUE)){
     stop("access must be between 0 and 1")
   }
@@ -26,20 +26,20 @@ access_to_nets_per_capita <- function(access, type = "loess"){
 
 #' Predict the access nets associated with a given nets per capita
 #'
-#' @param nets_per_capita A single or vector of nets per capita
-#' @inheritParams access_to_nets_per_capita
+#' @param crop A single or vector of nets per capita
+#' @inheritParams access_to_crop
 #'
 #' @return Predicted access
 #' @export
-nets_per_capita_to_access <- function(nets_per_capita, type = "loess"){
+crop_to_access <- function(crop, type = "loess"){
   if(!type %in% c("loess", "loess_extrapolate", "linear")){
     stop("type must be one of: loess, loess_extrapolate or linear")
   }
   npc_fits <- get("npc_fits")
   smooth <- npc_fits[[type]]
   access <- seq(0, 1, 0.001)
-  pred <- access_to_nets_per_capita(access, type)
-  access_out <- stats::approx(x = pred, y = access, xout = nets_per_capita)$y
+  pred <- access_to_crop(access, type)
+  access_out <- stats::approx(x = pred, y = access, xout = crop)$y
   access_out
 }
 
@@ -81,7 +81,7 @@ access_to_usage <- function(access, use_rate){
 
 #' Convert nets per capita to annual nets per capital delivered
 #'
-#' @param nets_per_capita Nets per capita
+#' @param crop Nets per capita
 #' @param distribution_freq A single distribution frequency of nets in days. Default = 3*365 (3 years).
 #' @param half_life Net loss half life (days)
 #' @param net_loss_function Option to choose between exponential net loss (net_loss_exp) or
@@ -91,9 +91,9 @@ access_to_usage <- function(access, use_rate){
 #' 
 #' @return Annual nets per capita delivered
 #' @export
-nets_per_capita_to_annual_nets_distributed_per_capita <- function(nets_per_capita, distribution_freq, half_life, net_loss_function = net_loss_map, ...){
-  if(any(nets_per_capita < 0, na.rm = TRUE)){
-    stop("nets_per_capita must be > 0")
+crop_to_distribution <- function(crop, distribution_freq, half_life, net_loss_function = net_loss_map, ...){
+  if(any(crop < 0, na.rm = TRUE)){
+    stop("crop must be > 0")
   }
   if(any(distribution_freq < 0, na.rm = TRUE)){
     stop("distribution_freq must be > 0")
@@ -102,21 +102,21 @@ nets_per_capita_to_annual_nets_distributed_per_capita <- function(nets_per_capit
     stop("half_life must be > 0")
   }
   
-  nets_per_capita * mapply(function(distribution_freq, half_life){
+  crop * mapply(function(distribution_freq, half_life){
     mean(net_loss_function(t = seq(0, distribution_freq, 1), half_life = half_life, ...))
   }, distribution_freq = distribution_freq, half_life = half_life)
 }
 
 #' Convert annual nets per capital delivered to nets per capita
 #'
-#' @param annual_nets_distributed_per_capita Annual nets per capital delivered
-#' @inheritParams nets_per_capita_to_annual_nets_distributed_per_capita
+#' @param distribution Annual nets per capital delivered
+#' @inheritParams crop_to_distribution
 #' 
 #' @return Nets per capita
 #' @export
-annual_nets_distributed_per_capita_to_nets_per_capita <- function(annual_nets_distributed_per_capita, distribution_freq, half_life, net_loss_function = net_loss_map, ...){
-  if(any(annual_nets_distributed_per_capita < 0, na.rm = TRUE)){
-    stop("annual_nets_distributed_per_capita must be > 0")
+distribution_to_crop <- function(distribution, distribution_freq, half_life, net_loss_function = net_loss_map, ...){
+  if(any(distribution < 0, na.rm = TRUE)){
+    stop("distribution must be > 0")
   }
   if(any(distribution_freq < 0, na.rm = TRUE)){
     stop("distribution_freq must be > 0")
@@ -125,7 +125,7 @@ annual_nets_distributed_per_capita_to_nets_per_capita <- function(annual_nets_di
     stop("half_life must be > 0")
   }
   
-  annual_nets_distributed_per_capita / mapply(function(distribution_freq, half_life){
+  distribution / mapply(function(distribution_freq, half_life){
     mean(net_loss_function(t = seq(0, distribution_freq, 1), half_life = half_life, ...))
   }, distribution_freq = distribution_freq, half_life = half_life)
 }

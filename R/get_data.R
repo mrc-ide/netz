@@ -4,7 +4,10 @@
 #'
 #' @export
 #' @return Half life dataset
-get_halflife_data <- function(path = "https://raw.github.com/bertozzivill/map-itn-cube/publication-2021/paper_figures/figure_data/fig_5_llin_half_lives.csv"){
+get_halflife_data <- function(path = paste0("https://raw.github.com/",
+                                            "bertozzivill/map-itn-cube/",
+                                            "publication-2021/paper_figures/",
+                                            "figure_data/fig_5_llin_half_lives.csv")){
   # estimates of net half lives (median retention times) in years
   halflife_data <- utils::read.csv(path)
   
@@ -21,7 +24,10 @@ get_halflife_data <- function(path = "https://raw.github.com/bertozzivill/map-it
 #' 
 #' @export
 #' @return Dataset of use rate by country
-get_usage_rate_data <- function(path = "https://raw.github.com/bertozzivill/map-itn-gts/master/data/coverage_metrics/aggregated_predictions_2019.csv"){
+get_usage_rate_data <- function(path = paste0("https://raw.github.com/",
+                                             "bertozzivill/map-itn-gts/",
+                                             "master/data/coverage_metrics/",
+                                             "aggregated_predictions_2019.csv")){
   # estimates of net half lives (median retention times) in years
   usage_rate_data <- utils::read.csv(path)
   
@@ -41,6 +47,9 @@ get_usage_rate_data <- function(path = "https://raw.github.com/bertozzivill/map-
 #' 
 #' @export
 #' @return Dataset of use rate by country
-get_npc_data <- function(path = "https://raw.github.com/bertozzivill/map-itn-cube/publication-2021/paper_figures/figure_data/fig_4_access_npc.csv"){
+get_npc_data <- function(path = paste0("https://raw.github.com/",
+                                       "bertozzivill/map-itn-cube/",
+                                       "publication-2021/paper_figures/",
+                                       "figure_data/fig_4_access_npc.csv")){
   utils::read.csv(path)
 }

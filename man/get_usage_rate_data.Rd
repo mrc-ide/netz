@@ -5,8 +5,8 @@
 \title{Function for reading in and formatting usage rate datasets}
 \usage{
 get_usage_rate_data(
- 
-    path = "https://raw.github.com/bertozzivill/map-itn-gts/master/data/coverage_metrics/aggregated_predictions_2019.csv"
+  path = paste0("https://raw.github.com/", "bertozzivill/map-itn-gts/",
+    "master/data/coverage_metrics/", "aggregated_predictions_2019.csv")
 )
 }
 \arguments{
