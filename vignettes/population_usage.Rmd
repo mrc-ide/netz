@@ -26,7 +26,7 @@ given time points.
 
 Often it is helpful to understand the resulting population levels of bed net usage from a set of 
 bed net distributions over time. The % of individuals protected by a net at any time point is a 
-function of the cumulative distributions that have occurred, the durations of net retention and the
+function of the cumulative distributions that have occurred, the duration of net retention and the
 correlation of recipients between rounds.
 
 In netz, we can simulate population usage and examine how varying distribution size and frequency,
@@ -70,7 +70,7 @@ ggplot(pd, aes(x = t, y = usage)) +
 
 ```
 
-We can see that population usage initially rises with the first distribution population before reaching an equilibrium as following distributions replace the nets of those who already own one.
+We can see that population usage initially rises with the first distribution  before reaching an equilibrium as following distributions replace the nets of those who already own one.
 
 In the simple case of regular distributions, exponential net loss, and correlation we have the
 analytical solution for the average population level usage.

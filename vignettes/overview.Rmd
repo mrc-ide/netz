@@ -71,13 +71,14 @@ Note that the usage that can be achieved in a given country depends on its use r
 Where a target_usage exceeds the country-specific use rate, a warning is printed 
 and NA is returned for the annual nets distributed.
 
-The output shown below contains the annual_percapita_nets_distributed for each country and input usage. Intermediate steps in the conversion (net access and nets per capita) are also shown. Nets distributed per capita are given for each year, but account for the specified net distribution frequency. For example, a 3 year distribution cycle would correspond to distributing the given output every year, or distributing 3 times the given output every 3 years. To calculate the costs of the distributed nets, the user additionally needs to convert the annual nets distributed per capita to the annual number of nets distributed by multiplying with the population at risk.
+The output shown below contains the distribution for each country and input usage. Intermediate steps in the conversion (access and crop) are also shown. The
+distribution is annual, but accounts for the specified net distribution frequency. For example, a 3 year distribution cycle would correspond to distributing the given output every year, or distributing 3 times the given output every 3 years. To calculate the costs of the distributed nets, the user additionally needs to convert the distribution to the annual number of nets distributed by multiplying with the target population at risk.
 
 ```{r, echo = FALSE}
 kable(output) %>% kable_styling()
 ```
 
-The following plot shows the non-linear relationship between net usage and the nets to be distributed (i.e. cost) to achieve this for high usages.
+The following plot shows the non-linear relationship between usage and distribution (i.e. cost) to achieve this for high usages.
 
 ```{r, warning = FALSE, , fig.width=5}
 
@@ -91,9 +92,9 @@ ggplot(output) +
   theme_classic()
 ```
 
-## Quick example: usage to annual nets distributed conversion for a generic setting
+## Quick example: usage to distribution conversion for a generic setting
 
-If no specific country is being modelled, it is possible to use the same functions to represent a generic or average setting accounting for the observed nets data. The following code starts with the same steps as previously, but now calculates the nets distributed for a setting with a net use rate and half life corresponding to the median use rate and median half life observed across Africa.
+If no specific country is being modelled, it is possible to use the same functions to represent a generic or average setting accounting for the observed nets data. The following code starts with the same steps as previously, but now calculates the distribution for a setting with a net use rate and half life corresponding to the median use rate and median half life observed across Africa.
 
 ```{r}
 # First, we specify the coutry iso codes and target usages
@@ -118,14 +119,13 @@ kable(output) %>% kable_styling()
 
 ## Detailed example of further options and assumptions
 
-The previous examples showed the quickest way to obtain the nets distributed for a given net usage, but users can also: 
+The previous examples showed the quickest way to obtain the distribution for a given usage, but users can also: 
 
 * break down the conversion into its separate steps
-* vary assumptions about the relationship between nets per capita and net access,
-and about net loss
+* vary assumptions about the relationship crop and access, and about net loss
 * use different (e.g. more recent) datasets of net metrics
 
-The relationship between net access and nets per capita is derived from monthly data for the latest available year (2020) across African countries, and plotted below (corresponding to Figure 4 in paper). There are three options in the `access_to_crop()` function
+The relationship between access and crop is derived from monthly data for the latest available year (2020) across African countries, and plotted below (corresponding to Figure 4 in the [paper by Bertozzi-Villa  et al](https://www.nature.com/articles/s41467-021-23707-7)). There are three options in the `access_to_crop()` function
 one "loess" a loess smooth of the observed data, a second "loess_extrapolate" a loess smooth of the observed data with the trend
 extrapolated to allow prediction for access values outside of the observed range and a third, "linear", a linear fit to the lower (access < 0.5) set of observed values. This last model is very simple and does not fit the observed data well, so use with caution. 
 
@@ -177,7 +177,7 @@ In these outputs, target_access is calculated as target_use/use_rate. Since acce
 
 ### Assumptions about the net loss function
 
-The default option in the convert_usage_to_annual_nets_distributed() function assumes that nets are lost according to a smooth-compact function (net_loss_function = net_loss_map). The alternative option is to assume exponential net loss (`net_loss_function = net_loss_exp`), which corresponds to the assumption in malariasimulation. 
+The default option in the `usage_to_distribution()` function assumes that nets are lost according to a smooth-compact function (net_loss_function = net_loss_map). The alternative option is to assume exponential net loss (`net_loss_function = net_loss_exp`), which corresponds to the assumption in malariasimulation. 
 
 The proportion of nets retained over time are visualised for both options below, for a 3 year distribution cycle and a net half life of 1.64 years.
 
@@ -213,7 +213,7 @@ ggplot() +
   theme_classic()
 ```
 
-The effect of the net loss function on the relationship between net usage and annual nets distributed is shown below for a generic setting.
+The effect of the net loss function on the relationship between net usage and distribution is shown below for a generic setting.
 
 ```{r message = FALSE, warning = FALSE, results = FALSE}
 # First, we specify some general parameters
