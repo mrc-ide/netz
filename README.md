@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# netz <img src="inst/figures/hex.png" align="right" width=30% height=30% />
+# netz <img src="man/figures/hex.png" align="right" width=30% height=30% />
 
 <!-- badges: start -->
 
@@ -42,9 +42,9 @@ Broadly, distribution will relate to the cost of the programme and usage
 the impact.
 
 Not all of the metrics above are modelled within
-[malariasimulaion](https://mrc-ide.github.io/malariasimulation/). We
+[malariasimulation](https://mrc-ide.github.io/malariasimulation/). We
 therefore need to be careful that out model inputs match our desired
 target usage when specifying bed nets. The schematic below will help in
 understanding how each of these elements relate to one another
 
-<img src="inst/figures/Schematic.png" />
+<img src="man/figures/Schematic.png" />
