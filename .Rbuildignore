@@ -3,3 +3,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ignore/
+^data-raw$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
