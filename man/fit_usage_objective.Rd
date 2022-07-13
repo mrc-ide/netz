@@ -27,7 +27,7 @@ fit_usage_objective(
 
 \item{population}{Population}
 
-\item{net_loss}{Net loss function}
+\item{net_loss}{Net loss vector}
 
 \item{timesteps}{Timesteps}
 

@@ -28,23 +28,26 @@ fit_usage_objective <- function(distribution, distribution_timesteps,
 #' @param distribution_lower Lower bound on distributions (default = 0)
 #' @param distribution_upper Upper bound on distribution (default = 1)
 #' @param population Population
-#' @param net_loss Net loss function
+#' @param net_loss Net loss vector
 #' @param timesteps Timesteps
 #' @param rho betwen round correlation parameters
 #' @param seed Seed - the output of population_usage is stochastic.
+#' @param ... Further arguments to pass to the \link[nloptr]{cobyla}
 #' 
 #' 
 #' @return Non-linear optimisation fit output
 #' @export
 fit_usage <- function(target_usage, target_usage_timesteps,
                       distribution_timesteps,
+                      distribution_init = rep(0, length(distribution_timesteps)),
                       distribution_lower = rep(0, length(distribution_timesteps)),
                       distribution_upper = rep(1, length(distribution_timesteps)),
                       population = 500,
-                      timesteps = 365 * 10,
-                      net_loss = exp(- (1 / (5 * 365)) * 1:timesteps), 
+                      timesteps = max(c(target_usage_timesteps, distribution_timesteps)),
+                      net_loss = net_loss_exp(1:timesteps, half_life = 5 * 365),
                       rho = 0,
-                      seed = 1234){
+                      seed = 1234,
+                      ...){
   
   if(any(distribution_lower < 0) | any(distribution_lower > 1)){
     stop("All distribution lower values must be between 0 and 1")
@@ -55,14 +58,11 @@ fit_usage <- function(target_usage, target_usage_timesteps,
   if(length(distribution_lower) != length(distribution_timesteps) | length(distribution_upper) != length(distribution_timesteps)){
     stop("distribution_timesteps, distribution_lower and distribution_upper must have equal lengths")
   }
-  if(timesteps < max(target_usage_timesteps) | timesteps < max(distribution_timesteps)){
-    stop("Set timesteps to simulate to be greater than the maximum target usage timestep and distribution_timestep")
-  }
   if(length(target_usage) != length(target_usage_timesteps)){
     stop("Target usage and target usage timesteps must be the same length")
   }
-  
-  nloptr::cobyla(x0 = rep(0, length(distribution_timesteps)),
+
+  nloptr::cobyla(x0 = distribution_init,
                  fn = fit_usage_objective,
                  lower = distribution_lower,
                  upper = distribution_upper,
@@ -73,6 +73,7 @@ fit_usage <- function(target_usage, target_usage_timesteps,
                  population = population,
                  timesteps = timesteps,
                  rho = rho,
-                 seed = seed)
+                 seed = seed,
+                 ...)
   
 }

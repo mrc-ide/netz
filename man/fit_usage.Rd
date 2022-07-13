@@ -8,13 +8,15 @@ fit_usage(
   target_usage,
   target_usage_timesteps,
   distribution_timesteps,
+  distribution_init = rep(0.1, length(distribution_timesteps)),
   distribution_lower = rep(0, length(distribution_timesteps)),
   distribution_upper = rep(1, length(distribution_timesteps)),
   population = 500,
-  timesteps = 365 * 10,
-  net_loss = exp(-(1/(5 * 365)) * 1:timesteps),
+  timesteps = 1:max(c(target_usage_timesteps, distribution_timesteps)),
+  net_loss = net_loss_exp(1:timesteps, half_life = 5 * 365),
   rho = 0,
-  seed = 1234
+  seed = 1234,
+  ...
 )
 }
 \arguments{
@@ -32,11 +34,13 @@ fit_usage(
 
 \item{timesteps}{Timesteps}
 
-\item{net_loss}{Net loss function}
+\item{net_loss}{Net loss vector}
 
 \item{rho}{betwen round correlation parameters}
 
 \item{seed}{Seed - the output of population_usage is stochastic.}
+
+\item{...}{Further arguments to pass to the \link[nloptr]{cobyla}}
 }
 \value{
 Non-linear optimisation fit output
