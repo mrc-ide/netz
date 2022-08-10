@@ -9,9 +9,9 @@ exp_loss_equilibrium(distribution, distribution_frequency, net_loss_hl)
 \arguments{
 \item{distribution}{The \% of the population who are distributed a net}
 
-\item{distribution_frequency}{The frequency of the distribution cycle (years)}
+\item{distribution_frequency}{The frequency of the distribution cycle (days)}
 
-\item{net_loss_hl}{The half life of the exponentially decaying net loss function (years)}
+\item{net_loss_hl}{The half life of the exponentially decaying net loss function (days)}
 }
 \value{
 The equilibrium population-level net usage

@@ -6,32 +6,28 @@
 #' @return Sum of squared difference between proposed usage and target usage
 fit_usage_objective <- function(distribution, distribution_timesteps,
                                 target_usage, target_usage_timesteps,
-                                population, net_loss, timesteps, rho,
-                                seed){
-  set.seed(seed)
+                                half_life, timesteps){
   pu <- population_usage(
-    net_loss = net_loss,
-    population = population,
-    timesteps = timesteps,
     distribution = distribution,
-    distribution_timesteps =  distribution_timesteps,
-    rho = rho)
+    distribution_timesteps = distribution_timesteps,
+    timesteps = timesteps,
+    half_life = half_life)
   
   sum((pu[target_usage_timesteps] - target_usage) ^ 2)
 }
 
-#' Fit distribution to match target usage using non-linear optimisation
+#' Fit distribution to match target usage using non-linear optimisation. This 
+#' assumes an exponentially distributed net loss function and randomly 
+#' correlated net distribution. 
 #'
 #' @param target_usage Target usage
 #' @param target_usage_timesteps Target usage time points
 #' @param distribution_timesteps A vector of distribution time steps
+#' @param distribution_init Starting distribution for optimiation
 #' @param distribution_lower Lower bound on distributions (default = 0)
 #' @param distribution_upper Upper bound on distribution (default = 1)
-#' @param population Population
-#' @param net_loss Net loss vector
-#' @param timesteps Timesteps
-#' @param rho betwen round correlation parameters
-#' @param seed Seed - the output of population_usage is stochastic.
+#' @param timesteps Net loss vector
+#' @param half_life Net retention half life
 #' @param ... Further arguments to pass to the \link[nloptr]{cobyla}
 #' 
 #' 
@@ -42,11 +38,8 @@ fit_usage <- function(target_usage, target_usage_timesteps,
                       distribution_init = rep(0, length(distribution_timesteps)),
                       distribution_lower = rep(0, length(distribution_timesteps)),
                       distribution_upper = rep(1, length(distribution_timesteps)),
-                      population = 500,
                       timesteps = max(c(target_usage_timesteps, distribution_timesteps)),
-                      net_loss = net_loss_exp(1:timesteps, half_life = 5 * 365),
-                      rho = 0,
-                      seed = 1234,
+                      half_life = 5 * 365,
                       ...){
   
   if(any(distribution_lower < 0) | any(distribution_lower > 1)){
@@ -69,11 +62,8 @@ fit_usage <- function(target_usage, target_usage_timesteps,
                  distribution_timesteps = distribution_timesteps,
                  target_usage = target_usage, 
                  target_usage_timesteps = target_usage_timesteps,
-                 net_loss = net_loss,
-                 population = population,
                  timesteps = timesteps,
-                 rho = rho,
-                 seed = seed,
+                 half_life = half_life,
                  ...)
   
 }
