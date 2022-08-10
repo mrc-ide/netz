@@ -8,8 +8,8 @@
 <meta name="description" content="netz">
 <title>Estimating population usage from input distribution • netz</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Estimating population usage from input distribution">
 <meta property="og:description" content="netz">
@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">netz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@
 
 
 <script src="population_usage_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Estimating population usage from input distribution</h1>
             
       
@@ -71,210 +71,161 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">netz</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">netz</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span></code></pre></div>
 <p>In <a href="https://mrc-ide.github.io/malariasimulation/" class="external-link">malariasimulation</a> we can implement the <a href="https://mrc-ide.github.io/malariasimulation/articles/VectorControl.html" class="external-link">bed net intervention</a> by specifying the % of the population who are distributed a bed net (and assumed to use it) at given time points.</p>
 <p>Often it is helpful to understand the resulting population levels of bed net usage from a set of bed net distributions over time. The % of individuals protected by a net at any time point is a function of the cumulative distributions that have occurred, the duration of net retention and the correlation of recipients between rounds.</p>
-<p>In netz, we can simulate population usage and examine how varying distribution size and frequency, net retention and recipient correlation impacts our estimates. Please note that simulations of usage are stochastic.</p>
+<p>In netz, we can simulate population usage and examine how varying distribution size and frequency, and net retention impacts our estimates. For these estimates, we assume that net distributions are randomly correlated and net rentention is exponentially distributed.</p>
 <p>Let’s start with a simple distribution model:</p>
 <ul>
 <li>Distribution cycle: A mass distribution once every 3 years</li>
 <li>Distribution size: 70% of the population covered</li>
 <li>Net retention: Assume net retention decays exponentially with a half life of 5 years</li>
-<li>Correlation: Recipients are correlated each round</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">year</span> <span class="op">&lt;-</span> <span class="fl">365</span>
-<span class="va">timesteps</span> <span class="op">&lt;-</span> <span class="fl">30</span> <span class="op">*</span> <span class="va">year</span>
-<span class="va">population</span> <span class="op">&lt;-</span> <span class="fl">5000</span>
-
-<span class="va">distribution</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">10</span><span class="op">)</span>
-<span class="va">distribution_timesteps</span> <span class="op">&lt;-</span> <span class="va">year</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">30</span>, <span class="fl">3</span><span class="op">)</span>
-
-<span class="va">net_hl</span> <span class="op">&lt;-</span> <span class="fl">5</span> <span class="op">*</span> <span class="va">year</span>
-<span class="va">net_loss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="va">net_hl</span><span class="op">)</span> <span class="op">*</span> <span class="fl">1</span><span class="op">:</span><span class="va">timesteps</span><span class="op">)</span>
-
-<span class="va">correlation</span> <span class="op">&lt;-</span> <span class="fl">0.9999</span>
-
-<span class="va">pu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/population_usage.html">population_usage</a></span><span class="op">(</span>
-    net_loss <span class="op">=</span> <span class="va">net_loss</span>,
-    population <span class="op">=</span> <span class="va">population</span>,
-    timesteps <span class="op">=</span> <span class="va">timesteps</span>,
-    distribution <span class="op">=</span> <span class="va">distribution</span>,
-    distribution_timesteps <span class="op">=</span> <span class="va">distribution_timesteps</span>,
-    rho <span class="op">=</span> <span class="va">correlation</span><span class="op">)</span>
-
-<span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">timesteps</span>, usage <span class="op">=</span> <span class="va">pu</span><span class="op">)</span>
-
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pd</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">usage</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">year</span> <span class="op">&lt;-</span> <span class="fl">365</span></span>
+<span><span class="va">timesteps</span> <span class="op">&lt;-</span> <span class="fl">30</span> <span class="op">*</span> <span class="va">year</span></span>
+<span><span class="va">population</span> <span class="op">&lt;-</span> <span class="fl">5000</span></span>
+<span></span>
+<span><span class="va">distribution</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="va">distribution_timesteps</span> <span class="op">&lt;-</span> <span class="va">year</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">30</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">net_hl</span> <span class="op">&lt;-</span> <span class="fl">5</span> <span class="op">*</span> <span class="va">year</span></span>
+<span></span>
+<span><span class="va">pu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/population_usage.html">population_usage</a></span><span class="op">(</span></span>
+<span>    timesteps <span class="op">=</span> <span class="va">timesteps</span>,</span>
+<span>    distribution <span class="op">=</span> <span class="va">distribution</span>,</span>
+<span>    distribution_timesteps <span class="op">=</span> <span class="va">distribution_timesteps</span>,</span>
+<span>    half_life <span class="op">=</span> <span class="va">net_hl</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">timesteps</span>, usage <span class="op">=</span> <span class="va">pu</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pd</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">usage</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="population_usage_files/figure-html/unnamed-chunk-2-1.png" width="672"></p>
-<p>We can see that population usage initially rises with the first distribution before reaching an equilibrium as following distributions replace the nets of those who already own one.</p>
-<p>In the simple case of regular distributions, exponential net loss, and correlation we have the analytical solution for the average population level usage.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">analytical</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/exp_loss_equilibrium.html">exp_loss_equilibrium</a></span><span class="op">(</span>distribution <span class="op">=</span> <span class="fl">0.3</span>, distribution_frequency <span class="op">=</span> <span class="fl">3</span>, net_loss_hl <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
-
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pd</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">usage</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="va">analytical</span>, lty <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"darkred"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p><img src="population_usage_files/figure-html/unnamed-chunk-3-1.png" width="672"></p>
+<p>We can see that population usage initially rises with the first distribution and keeps on rising with additional distributions as some of those who did not receive a net previously get one. Eventually the system reaches an an equilibrium.</p>
 <p>More frequent distribution will lead to net usage to build to higher levels:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">distribution2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">30</span><span class="op">)</span></span>
+<span><span class="va">distribution_timesteps2</span> <span class="op">&lt;-</span> <span class="va">year</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">30</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/population_usage.html">population_usage</a></span><span class="op">(</span></span>
+<span>    timesteps <span class="op">=</span> <span class="va">timesteps</span>,</span>
+<span>    distribution <span class="op">=</span> <span class="va">distribution2</span>,</span>
+<span>    distribution_timesteps <span class="op">=</span> <span class="va">distribution_timesteps2</span>,</span>
+<span>    half_life <span class="op">=</span> <span class="va">net_hl</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">timesteps</span>, usage <span class="op">=</span> <span class="va">pu</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pd</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">usage</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="population_usage_files/figure-html/unnamed-chunk-3-1.png" width="672"></p>
+<p>As will larger distributions:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">distribution2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">30</span><span class="op">)</span>
-<span class="va">distribution_timesteps2</span> <span class="op">&lt;-</span> <span class="va">year</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">30</span>, <span class="fl">1</span><span class="op">)</span>
-
-<span class="va">pu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/population_usage.html">population_usage</a></span><span class="op">(</span>
-    net_loss <span class="op">=</span> <span class="va">net_loss</span>,
-    population <span class="op">=</span> <span class="va">population</span>,
-    timesteps <span class="op">=</span> <span class="va">timesteps</span>,
-    distribution <span class="op">=</span> <span class="va">distribution2</span>,
-    distribution_timesteps <span class="op">=</span> <span class="va">distribution_timesteps2</span>,
-    rho <span class="op">=</span> <span class="va">correlation</span><span class="op">)</span>
-
-<span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">timesteps</span>, usage <span class="op">=</span> <span class="va">pu</span><span class="op">)</span>
-
-<span class="va">analytical</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/exp_loss_equilibrium.html">exp_loss_equilibrium</a></span><span class="op">(</span>distribution <span class="op">=</span> <span class="fl">0.3</span>, distribution_frequency <span class="op">=</span> <span class="fl">1</span>, net_loss_hl <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
-
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pd</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">usage</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="va">analytical</span>, lty <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"darkred"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p><img src="population_usage_files/figure-html/unnamed-chunk-4-1.png" width="672"> Random recipients will lead to higher net usage as well as each additional distribution has the chance to reach an individual who has not received a net previously:</p>
+<code class="sourceCode R"><span><span class="va">distribution3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/population_usage.html">population_usage</a></span><span class="op">(</span></span>
+<span>    timesteps <span class="op">=</span> <span class="va">timesteps</span>,</span>
+<span>    distribution <span class="op">=</span> <span class="va">distribution3</span>,</span>
+<span>    distribution_timesteps <span class="op">=</span> <span class="va">distribution_timesteps</span>,</span>
+<span>    half_life <span class="op">=</span> <span class="va">net_hl</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">timesteps</span>, usage <span class="op">=</span> <span class="va">pu</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pd</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">usage</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="population_usage_files/figure-html/unnamed-chunk-4-1.png" width="672"></p>
+<p>We do not currently account for correlation in the net usage functions. However, in the simple case of regular distributions, exponential net loss, and correlation we have the analytical solution for the average population level usage.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">correlation2</span> <span class="op">&lt;-</span> <span class="fl">0</span>
-
-<span class="va">pu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/population_usage.html">population_usage</a></span><span class="op">(</span>
-    net_loss <span class="op">=</span> <span class="va">net_loss</span>,
-    population <span class="op">=</span> <span class="va">population</span>,
-    timesteps <span class="op">=</span> <span class="va">timesteps</span>,
-    distribution <span class="op">=</span> <span class="va">distribution</span>,
-    distribution_timesteps <span class="op">=</span> <span class="va">distribution_timesteps</span>,
-    rho <span class="op">=</span> <span class="va">correlation2</span><span class="op">)</span>
-
-<span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">timesteps</span>, usage <span class="op">=</span> <span class="va">pu</span><span class="op">)</span>
-
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pd</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">usage</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p><img src="population_usage_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
+<code class="sourceCode R"><span><span class="va">analytical</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/exp_loss_equilibrium.html">exp_loss_equilibrium</a></span><span class="op">(</span>distribution <span class="op">=</span> <span class="fl">0.3</span>, distribution_frequency <span class="op">=</span> <span class="fl">3</span>, net_loss_hl <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">analytical</span></span>
+<span><span class="co">#&gt; [1] 0.2255942</span></span></code></pre></div>
 <p>We may also need to estimate population usage when distributions are not regular:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">distribution3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.35</span>, <span class="fl">0.1</span>, <span class="fl">0.23</span>, <span class="fl">0.2</span>, <span class="fl">0.32</span>, <span class="fl">0.1</span>, <span class="fl">0.01</span>, <span class="fl">0.2</span><span class="op">)</span>
-<span class="va">distribution_timesteps3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">30</span>, <span class="fl">3</span><span class="op">)</span> <span class="op">*</span> <span class="va">year</span>
-  
-<span class="va">pu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/population_usage.html">population_usage</a></span><span class="op">(</span>
-    net_loss <span class="op">=</span> <span class="va">net_loss</span>,
-    population <span class="op">=</span> <span class="va">population</span>,
-    timesteps <span class="op">=</span> <span class="va">timesteps</span>,
-    distribution <span class="op">=</span> <span class="va">distribution3</span>,
-    distribution_timesteps <span class="op">=</span> <span class="va">distribution_timesteps3</span>,
-    rho <span class="op">=</span> <span class="va">correlation</span><span class="op">)</span>
-
-<span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">timesteps</span>, usage <span class="op">=</span> <span class="va">pu</span><span class="op">)</span>
-
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pd</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">usage</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">distribution4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.35</span>, <span class="fl">0.1</span>, <span class="fl">0.23</span>, <span class="fl">0.2</span>, <span class="fl">0.32</span>, <span class="fl">0.1</span>, <span class="fl">0.01</span>, <span class="fl">0.2</span><span class="op">)</span></span>
+<span><span class="va">distribution_timesteps4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">30</span>, <span class="fl">3</span><span class="op">)</span> <span class="op">*</span> <span class="va">year</span></span>
+<span>  </span>
+<span><span class="va">pu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/population_usage.html">population_usage</a></span><span class="op">(</span></span>
+<span>    timesteps <span class="op">=</span> <span class="va">timesteps</span>,</span>
+<span>    distribution <span class="op">=</span> <span class="va">distribution4</span>,</span>
+<span>    distribution_timesteps <span class="op">=</span> <span class="va">distribution_timesteps4</span>,</span>
+<span>    half_life <span class="op">=</span> <span class="va">net_hl</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">timesteps</span>, usage <span class="op">=</span> <span class="va">pu</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pd</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">usage</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="population_usage_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
-<div class="section level3">
-<h3 id="non-exponential-net-retention-functions">Non-exponential net-retention functions<a class="anchor" aria-label="anchor" href="#non-exponential-net-retention-functions"></a>
-</h3>
-<p>It may be useful to explore other net-loss functions, for example a sigmoidal decay:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">net_hl2</span> <span class="op">&lt;-</span> <span class="fl">5</span> <span class="op">*</span> <span class="va">year</span>
-<span class="va">k</span> <span class="op">&lt;-</span> <span class="op">-</span> <span class="fl">1</span><span class="op">/</span><span class="fl">150</span>
-<span class="va">t0</span> <span class="op">&lt;-</span> <span class="fl">365</span>
-<span class="va">net_loss2</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">k</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">timesteps</span> <span class="op">-</span> <span class="va">t0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">pu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/population_usage.html">population_usage</a></span><span class="op">(</span>
-    net_loss <span class="op">=</span> <span class="va">net_loss2</span>,
-    population <span class="op">=</span> <span class="va">population</span>,
-    timesteps <span class="op">=</span> <span class="va">timesteps</span>,
-    distribution <span class="op">=</span> <span class="va">distribution</span>,
-    distribution_timesteps <span class="op">=</span> <span class="va">distribution_timesteps</span>,
-    rho <span class="op">=</span> <span class="va">correlation</span><span class="op">)</span>
-
-<span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">timesteps</span>, usage <span class="op">=</span> <span class="va">pu</span><span class="op">)</span>
-
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pd</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">usage</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p><img src="population_usage_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
-</div>
 <div class="section level3">
 <h3 id="fitting-to-target-usage">Fitting to target usage<a class="anchor" aria-label="anchor" href="#fitting-to-target-usage"></a>
 </h3>
 <p>In many cases we might have a set of observed population level usage estimates that we want to match to. We can use a non-linear optimiser to fit the distribution to these target usages:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Target usage associated time points</span>
-<span class="va">target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.45</span>, <span class="fl">0.33</span>, <span class="fl">0.7</span><span class="op">)</span>
-<span class="va">target_tt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">9</span><span class="op">)</span> <span class="op">*</span> <span class="fl">365</span>
-<span class="co"># Time points at which distribution will occur</span>
-<span class="va">distribution_tt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">8</span><span class="op">)</span> <span class="op">*</span> <span class="fl">365</span>
-
-<span class="co"># Fit</span>
-<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_usage.html">fit_usage</a></span><span class="op">(</span>target_usage <span class="op">=</span> <span class="va">target</span>, target_usage_timesteps <span class="op">=</span> <span class="va">target_tt</span>,
-                 distribution_timesteps <span class="op">=</span> <span class="va">distribution_tt</span><span class="op">)</span>
-
-<span class="va">pu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/population_usage.html">population_usage</a></span><span class="op">(</span>
-  net_loss <span class="op">=</span> <span class="va">net_loss</span>,
-  population <span class="op">=</span> <span class="va">population</span>,
-  timesteps <span class="op">=</span> <span class="va">timesteps</span>,
-  distribution <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">par</span>,
-  distribution_timesteps <span class="op">=</span>  <span class="va">distribution_tt</span>,
-  rho <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
-
-<span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">timesteps</span>, usage <span class="op">=</span> <span class="va">pu</span><span class="op">)</span>
-<span class="va">pd2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>target <span class="op">=</span> <span class="va">target</span>, target_tt <span class="op">=</span> <span class="va">target_tt</span><span class="op">)</span>
-
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pd</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">usage</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>dat <span class="op">=</span> <span class="va">pd2</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">target_tt</span>, y <span class="op">=</span> <span class="va">target</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"cornflowerblue"</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p><img src="population_usage_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Target usage associated time points</span></span>
+<span><span class="va">target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.45</span>, <span class="fl">0.33</span>, <span class="fl">0.7</span><span class="op">)</span></span>
+<span><span class="va">target_tt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">9</span><span class="op">)</span> <span class="op">*</span> <span class="fl">365</span></span>
+<span><span class="co"># Time points at which distribution will occur</span></span>
+<span><span class="va">distribution_tt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">8</span><span class="op">)</span> <span class="op">*</span> <span class="fl">365</span></span>
+<span></span>
+<span><span class="co"># Fit</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_usage.html">fit_usage</a></span><span class="op">(</span>target_usage <span class="op">=</span> <span class="va">target</span>, target_usage_timesteps <span class="op">=</span> <span class="va">target_tt</span>,</span>
+<span>                 distribution_timesteps <span class="op">=</span> <span class="va">distribution_tt</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/population_usage.html">population_usage</a></span><span class="op">(</span></span>
+<span>    timesteps <span class="op">=</span> <span class="va">timesteps</span>,</span>
+<span>    distribution <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">par</span>,</span>
+<span>    distribution_timesteps <span class="op">=</span> <span class="va">distribution_tt</span>,</span>
+<span>    half_life <span class="op">=</span> <span class="va">net_hl</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">timesteps</span>, usage <span class="op">=</span> <span class="va">pu</span><span class="op">)</span></span>
+<span><span class="va">pd2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>target <span class="op">=</span> <span class="va">target</span>, target_tt <span class="op">=</span> <span class="va">target_tt</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pd</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">usage</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>dat <span class="op">=</span> <span class="va">pd2</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">target_tt</span>, y <span class="op">=</span> <span class="va">target</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"cornflowerblue"</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="population_usage_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
 <p>Let’s try a more complex fit, where we set the upper limits of the annual distribution to capture a 3-year cycle with a mass distribution on year one followed by top-up distributions on the second and third year:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">timesteps</span> <span class="op">&lt;-</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">365</span>
-<span class="co"># Target usage associated time points</span>
-<span class="va">target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.8</span>, length.out <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.8</span>, <span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">0.8</span>, <span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">0.8</span>, <span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span>
-<span class="va">target_tt</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">*</span> <span class="fl">365</span>
-<span class="co"># Time points at which distribution will occur</span>
-<span class="va">distribution_tt</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">9</span><span class="op">)</span> <span class="op">*</span> <span class="fl">365</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span>
-<span class="va">distribution_upper</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.3</span>, <span class="fl">0.3</span>, <span class="fl">1</span>, <span class="fl">0.3</span>, <span class="fl">0.3</span>, <span class="fl">1</span>, <span class="fl">0.3</span>, <span class="fl">0.3</span>, <span class="fl">1</span><span class="op">)</span>
-
-<span class="co"># Fit</span>
-<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_usage.html">fit_usage</a></span><span class="op">(</span>target_usage <span class="op">=</span> <span class="va">target</span>, target_usage_timesteps <span class="op">=</span> <span class="va">target_tt</span>,
-                 distribution_timesteps <span class="op">=</span> <span class="va">distribution_tt</span>,
-                 distribution_upper <span class="op">=</span> <span class="va">distribution_upper</span>, 
-                 timesteps <span class="op">=</span> <span class="va">timesteps</span><span class="op">)</span>
-
-<span class="va">pu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/population_usage.html">population_usage</a></span><span class="op">(</span>
-  net_loss <span class="op">=</span> <span class="va">net_loss</span>,
-  population <span class="op">=</span> <span class="va">population</span>,
-  timesteps <span class="op">=</span> <span class="va">timesteps</span>,
-  distribution <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">par</span>,
-  distribution_timesteps <span class="op">=</span>  <span class="va">distribution_tt</span>,
-  rho <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
-
-<span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">timesteps</span>, usage <span class="op">=</span> <span class="va">pu</span><span class="op">)</span>
-<span class="va">pd2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>target <span class="op">=</span> <span class="va">target</span>, target_tt <span class="op">=</span> <span class="va">target_tt</span><span class="op">)</span>
-
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pd</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">usage</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>dat <span class="op">=</span> <span class="va">pd2</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">target_tt</span>, y <span class="op">=</span> <span class="va">target</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"cornflowerblue"</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p><img src="population_usage_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">timesteps</span> <span class="op">&lt;-</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">365</span></span>
+<span><span class="co"># Target usage associated time points</span></span>
+<span><span class="va">target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.8</span>, length.out <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.8</span>, <span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">0.8</span>, <span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">0.8</span>, <span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">target_tt</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">*</span> <span class="fl">365</span></span>
+<span><span class="co"># Time points at which distribution will occur</span></span>
+<span><span class="va">distribution_tt</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">9</span><span class="op">)</span> <span class="op">*</span> <span class="fl">365</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span></span>
+<span><span class="va">distribution_upper</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.3</span>, <span class="fl">0.3</span>, <span class="fl">1</span>, <span class="fl">0.3</span>, <span class="fl">0.3</span>, <span class="fl">1</span>, <span class="fl">0.3</span>, <span class="fl">0.3</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Fit</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_usage.html">fit_usage</a></span><span class="op">(</span>target_usage <span class="op">=</span> <span class="va">target</span>, target_usage_timesteps <span class="op">=</span> <span class="va">target_tt</span>,</span>
+<span>                 distribution_timesteps <span class="op">=</span> <span class="va">distribution_tt</span>,</span>
+<span>                 distribution_upper <span class="op">=</span> <span class="va">distribution_upper</span>, </span>
+<span>                 timesteps <span class="op">=</span> <span class="va">timesteps</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/population_usage.html">population_usage</a></span><span class="op">(</span></span>
+<span>    timesteps <span class="op">=</span> <span class="va">timesteps</span>,</span>
+<span>    distribution <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">par</span>,</span>
+<span>    distribution_timesteps <span class="op">=</span> <span class="va">distribution_tt</span>,</span>
+<span>    half_life <span class="op">=</span> <span class="va">net_hl</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">timesteps</span>, usage <span class="op">=</span> <span class="va">pu</span><span class="op">)</span></span>
+<span><span class="va">pd2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>target <span class="op">=</span> <span class="va">target</span>, target_tt <span class="op">=</span> <span class="va">target_tt</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pd</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">usage</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>dat <span class="op">=</span> <span class="va">pd2</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">target_tt</span>, y <span class="op">=</span> <span class="va">target</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"cornflowerblue"</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="population_usage_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
 </div>
   </main>
 </div>
@@ -288,7 +239,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer>

@@ -8,8 +8,8 @@
 <meta name="description" content="netz">
 <title>Converting measures of net coverage and number • netz</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Converting measures of net coverage and number">
 <meta property="og:description" content="netz">
@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">netz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,7 @@
 
 <script src="overview_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="overview_files/kePrint-0.0.1/kePrint.js"></script><link href="overview_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Converting measures of net coverage and number</h1>
             
       
@@ -93,23 +93,23 @@
 </h2>
 <p>In its most simple form, only 2 steps are required: preparing the default datasets that inform country-specific net variables, and converting the desired usage to the annual nets distributed per capita.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># First, we specify the coutry iso codes and target usages</span>
-<span class="va">input</span> <span class="op">&lt;-</span> <span class="fu">expand_grid</span><span class="op">(</span>iso3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGO"</span>, <span class="st">"BEN"</span>, <span class="st">"NGA"</span><span class="op">)</span>,
-                     usage <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># We can link these to half life, usage rates and distribution frequencies</span>
-<span class="va">input</span> <span class="op">&lt;-</span> <span class="va">input</span> <span class="op">%&gt;%</span>
-  <span class="fu">left_join</span><span class="op">(</span><span class="fu"><a href="../reference/get_halflife_data.html">get_halflife_data</a></span><span class="op">(</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"iso3"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">left_join</span><span class="op">(</span><span class="fu"><a href="../reference/get_usage_rate_data.html">get_usage_rate_data</a></span><span class="op">(</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"iso3"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">mutate</span><span class="op">(</span>distribution_freq <span class="op">=</span> <span class="fl">365</span> <span class="op">*</span> <span class="fl">3</span><span class="op">)</span>
-
-<span class="co"># Next we can follow the conversion chain to move between different bed net measures</span>
-<span class="va">output</span> <span class="op">&lt;-</span> <span class="va">input</span> <span class="op">%&gt;%</span>
-  <span class="fu">mutate</span><span class="op">(</span>access <span class="op">=</span> <span class="fu"><a href="../reference/usage_to_access.html">usage_to_access</a></span><span class="op">(</span><span class="va">usage</span>, <span class="va">usage_rate</span><span class="op">)</span>,
-         npc <span class="op">=</span> <span class="fu"><a href="../reference/access_to_crop.html">access_to_crop</a></span><span class="op">(</span><span class="va">access</span><span class="op">)</span>,
-         anpcd <span class="op">=</span> <span class="fu"><a href="../reference/crop_to_distribution.html">crop_to_distribution</a></span><span class="op">(</span><span class="va">npc</span>, distribution_freq <span class="op">=</span> <span class="va">distribution_freq</span>, net_loss_function <span class="op">=</span> <span class="va">net_loss_map</span>, half_life <span class="op">=</span> <span class="va">half_life</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; Warning in usage_to_access(usage, usage_rate): Target usage(s) cannot be</span>
-<span class="co">#&gt; achieved with input usage_rates - return NA</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># First, we specify the coutry iso codes and target usages</span></span>
+<span><span class="va">input</span> <span class="op">&lt;-</span> <span class="fu">expand_grid</span><span class="op">(</span>iso3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGO"</span>, <span class="st">"BEN"</span>, <span class="st">"NGA"</span><span class="op">)</span>,</span>
+<span>                     usage <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># We can link these to half life, usage rates and distribution frequencies</span></span>
+<span><span class="va">input</span> <span class="op">&lt;-</span> <span class="va">input</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">left_join</span><span class="op">(</span><span class="fu"><a href="../reference/get_halflife_data.html">get_halflife_data</a></span><span class="op">(</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"iso3"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">left_join</span><span class="op">(</span><span class="fu"><a href="../reference/get_usage_rate_data.html">get_usage_rate_data</a></span><span class="op">(</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"iso3"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>distribution_freq <span class="op">=</span> <span class="fl">365</span> <span class="op">*</span> <span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Next we can follow the conversion chain to move between different bed net measures</span></span>
+<span><span class="va">output</span> <span class="op">&lt;-</span> <span class="va">input</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>access <span class="op">=</span> <span class="fu"><a href="../reference/usage_to_access.html">usage_to_access</a></span><span class="op">(</span><span class="va">usage</span>, <span class="va">usage_rate</span><span class="op">)</span>,</span>
+<span>         npc <span class="op">=</span> <span class="fu"><a href="../reference/access_to_crop.html">access_to_crop</a></span><span class="op">(</span><span class="va">access</span><span class="op">)</span>,</span>
+<span>         anpcd <span class="op">=</span> <span class="fu"><a href="../reference/crop_to_distribution.html">crop_to_distribution</a></span><span class="op">(</span><span class="va">npc</span>, distribution_freq <span class="op">=</span> <span class="va">distribution_freq</span>, net_loss_function <span class="op">=</span> <span class="va">net_loss_map</span>, half_life <span class="op">=</span> <span class="va">half_life</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in usage_to_access(usage, usage_rate): Target usage(s) cannot be</span></span>
+<span><span class="co">#&gt; achieved with input usage_rates - return NA</span></span></code></pre></div>
 <p>Note that the usage that can be achieved in a given country depends on its use rate. Where a target_usage exceeds the country-specific use rate, a warning is printed and NA is returned for the annual nets distributed.</p>
 <p>The output shown below contains the distribution for each country and input usage. Intermediate steps in the conversion (access and crop) are also shown. The distribution is annual, but accounts for the specified net distribution frequency. For example, a 3 year distribution cycle would correspond to distributing the given output every year, or distributing 3 times the given output every 3 years. To calculate the costs of the distributed nets, the user additionally needs to convert the distribution to the annual number of nets distributed by multiplying with the target population at risk.</p>
 <table class="table table" style="margin-left: auto; margin-right: auto;">
@@ -846,15 +846,15 @@ NA
 </table>
 <p>The following plot shows the non-linear relationship between usage and distribution (i.e. cost) to achieve this for high usages.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="co"># Plot relationship between net usage and nets distributed for each country</span>
-<span class="fu">ggplot</span><span class="op">(</span><span class="va">output</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>
-    x <span class="op">=</span> <span class="va">usage</span>, y <span class="op">=</span> <span class="va">anpcd</span>,
-    colour <span class="op">=</span> <span class="va">iso3</span>
-  <span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Population net usage"</span>, y <span class="op">=</span> <span class="st">"Nets distributed per person-year"</span>, colour <span class="op">=</span> <span class="st">"Country"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme_classic</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Plot relationship between net usage and nets distributed for each country</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">output</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="va">usage</span>, y <span class="op">=</span> <span class="va">anpcd</span>,</span>
+<span>    colour <span class="op">=</span> <span class="va">iso3</span></span>
+<span>  <span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Population net usage"</span>, y <span class="op">=</span> <span class="st">"Nets distributed per person-year"</span>, colour <span class="op">=</span> <span class="st">"Country"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme_classic</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="overview_files/figure-html/unnamed-chunk-4-1.png" width="480"></p>
 </div>
 <div class="section level2">
@@ -862,22 +862,22 @@ NA
 </h2>
 <p>If no specific country is being modelled, it is possible to use the same functions to represent a generic or average setting accounting for the observed nets data. The following code starts with the same steps as previously, but now calculates the distribution for a setting with a net use rate and half life corresponding to the median use rate and median half life observed across Africa.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># First, we specify the coutry iso codes and target usages</span>
-<span class="va">input</span> <span class="op">&lt;-</span> <span class="fu">expand_grid</span><span class="op">(</span>usage <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># We can link these to aggregate estimates of half life, usage rates and distribution frequencies</span>
-<span class="va">input</span> <span class="op">&lt;-</span> <span class="va">input</span> <span class="op">%&gt;%</span>
-  <span class="fu">mutate</span><span class="op">(</span>half_life <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_halflife_data.html">get_halflife_data</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">half_life</span><span class="op">)</span>,
-         usage_rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_usage_rate_data.html">get_usage_rate_data</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">usage_rate</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">mutate</span><span class="op">(</span>distribution_freq <span class="op">=</span> <span class="fl">365</span> <span class="op">*</span> <span class="fl">3</span><span class="op">)</span>
-
-<span class="co"># Do the conversion</span>
-<span class="va">output</span> <span class="op">&lt;-</span> <span class="va">input</span> <span class="op">%&gt;%</span>
-  <span class="fu">mutate</span><span class="op">(</span>access <span class="op">=</span> <span class="fu"><a href="../reference/usage_to_access.html">usage_to_access</a></span><span class="op">(</span><span class="va">usage</span>, <span class="va">usage_rate</span><span class="op">)</span>,
-         npc <span class="op">=</span> <span class="fu"><a href="../reference/access_to_crop.html">access_to_crop</a></span><span class="op">(</span><span class="va">access</span><span class="op">)</span>,
-         anpcd <span class="op">=</span> <span class="fu"><a href="../reference/crop_to_distribution.html">crop_to_distribution</a></span><span class="op">(</span><span class="va">npc</span>, distribution_freq <span class="op">=</span> <span class="va">distribution_freq</span>, net_loss_function <span class="op">=</span> <span class="va">net_loss_map</span>, half_life <span class="op">=</span> <span class="va">half_life</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; Warning in usage_to_access(usage, usage_rate): Target usage(s) cannot be</span>
-<span class="co">#&gt; achieved with input usage_rates - return NA</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># First, we specify the coutry iso codes and target usages</span></span>
+<span><span class="va">input</span> <span class="op">&lt;-</span> <span class="fu">expand_grid</span><span class="op">(</span>usage <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># We can link these to aggregate estimates of half life, usage rates and distribution frequencies</span></span>
+<span><span class="va">input</span> <span class="op">&lt;-</span> <span class="va">input</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>half_life <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_halflife_data.html">get_halflife_data</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">half_life</span><span class="op">)</span>,</span>
+<span>         usage_rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_usage_rate_data.html">get_usage_rate_data</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">usage_rate</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>distribution_freq <span class="op">=</span> <span class="fl">365</span> <span class="op">*</span> <span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Do the conversion</span></span>
+<span><span class="va">output</span> <span class="op">&lt;-</span> <span class="va">input</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>access <span class="op">=</span> <span class="fu"><a href="../reference/usage_to_access.html">usage_to_access</a></span><span class="op">(</span><span class="va">usage</span>, <span class="va">usage_rate</span><span class="op">)</span>,</span>
+<span>         npc <span class="op">=</span> <span class="fu"><a href="../reference/access_to_crop.html">access_to_crop</a></span><span class="op">(</span><span class="va">access</span><span class="op">)</span>,</span>
+<span>         anpcd <span class="op">=</span> <span class="fu"><a href="../reference/crop_to_distribution.html">crop_to_distribution</a></span><span class="op">(</span><span class="va">npc</span>, distribution_freq <span class="op">=</span> <span class="va">distribution_freq</span>, net_loss_function <span class="op">=</span> <span class="va">net_loss_map</span>, half_life <span class="op">=</span> <span class="va">half_life</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in usage_to_access(usage, usage_rate): Target usage(s) cannot be</span></span>
+<span><span class="co">#&gt; achieved with input usage_rates - return NA</span></span></code></pre></div>
 <table class="table table" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:right;">
@@ -1124,43 +1124,43 @@ NA
 </ul>
 <p>The relationship between access and crop is derived from monthly data for the latest available year (2020) across African countries, and plotted below (corresponding to Figure 4 in the <a href="https://www.nature.com/articles/s41467-021-23707-7" class="external-link">paper by Bertozzi-Villa et al</a>). There are three options in the <code><a href="../reference/access_to_crop.html">access_to_crop()</a></code> function one “loess” a loess smooth of the observed data, a second “loess_extrapolate” a loess smooth of the observed data with the trend extrapolated to allow prediction for access values outside of the observed range and a third, “linear”, a linear fit to the lower (access &lt; 0.5) set of observed values. This last model is very simple and does not fit the observed data well, so use with caution.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Read in access vs NPC data:</span>
-<span class="va">access_npc_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_npc_data.html">get_npc_data</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">access</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0.01</span><span class="op">)</span>
-<span class="va">npc_loess</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/access_to_crop.html">access_to_crop</a></span><span class="op">(</span><span class="va">access</span>, type <span class="op">=</span> <span class="st">"loess"</span><span class="op">)</span>
-<span class="va">npc_loess_extrapolate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/access_to_crop.html">access_to_crop</a></span><span class="op">(</span><span class="va">access</span>, type <span class="op">=</span> <span class="st">"loess_extrapolate"</span><span class="op">)</span>
-<span class="va">npc_linear</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/access_to_crop.html">access_to_crop</a></span><span class="op">(</span><span class="va">access</span>, type <span class="op">=</span> <span class="st">"linear"</span><span class="op">)</span>
-<span class="va">model_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>access <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">access</span>, <span class="fl">3</span><span class="op">)</span>,
-                         model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loess"</span>, <span class="st">"loess_extrapolate"</span>, <span class="st">"linear"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">npc_loess</span><span class="op">)</span><span class="op">)</span>,
-                         npc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">npc_loess</span>, <span class="va">npc_loess_extrapolate</span>, <span class="va">npc_linear</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># Plot curve</span>
-<span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_point</span><span class="op">(</span>data <span class="op">=</span> <span class="va">access_npc_data</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">percapita_nets_mean</span>, y <span class="op">=</span> <span class="va">access_mean</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_line</span><span class="op">(</span>data <span class="op">=</span> <span class="va">model_data</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">npc</span>, y <span class="op">=</span> <span class="va">access</span>, colour <span class="op">=</span> <span class="va">model</span>, lty <span class="op">=</span> <span class="va">model</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.window.html" class="external-link">xlim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.window.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Nets per capita"</span>, y <span class="op">=</span> <span class="st">"Access (proportion)"</span>, colour <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme_classic</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Read in access vs NPC data:</span></span>
+<span><span class="va">access_npc_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_npc_data.html">get_npc_data</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">access</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0.01</span><span class="op">)</span></span>
+<span><span class="va">npc_loess</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/access_to_crop.html">access_to_crop</a></span><span class="op">(</span><span class="va">access</span>, type <span class="op">=</span> <span class="st">"loess"</span><span class="op">)</span></span>
+<span><span class="va">npc_loess_extrapolate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/access_to_crop.html">access_to_crop</a></span><span class="op">(</span><span class="va">access</span>, type <span class="op">=</span> <span class="st">"loess_extrapolate"</span><span class="op">)</span></span>
+<span><span class="va">npc_linear</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/access_to_crop.html">access_to_crop</a></span><span class="op">(</span><span class="va">access</span>, type <span class="op">=</span> <span class="st">"linear"</span><span class="op">)</span></span>
+<span><span class="va">model_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>access <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">access</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>                         model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loess"</span>, <span class="st">"loess_extrapolate"</span>, <span class="st">"linear"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">npc_loess</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                         npc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">npc_loess</span>, <span class="va">npc_loess_extrapolate</span>, <span class="va">npc_linear</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Plot curve</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span>data <span class="op">=</span> <span class="va">access_npc_data</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">percapita_nets_mean</span>, y <span class="op">=</span> <span class="va">access_mean</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span>data <span class="op">=</span> <span class="va">model_data</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">npc</span>, y <span class="op">=</span> <span class="va">access</span>, colour <span class="op">=</span> <span class="va">model</span>, lty <span class="op">=</span> <span class="va">model</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">xlim</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ylim</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Nets per capita"</span>, y <span class="op">=</span> <span class="st">"Access (proportion)"</span>, colour <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme_classic</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="overview_files/figure-html/unnamed-chunk-7-1.png" width="480"></p>
 <p>Under default assumptions, nets are assumed to be lost according to a smooth-compact function, which depends on the estimated net half life. The proportion of nets retained over a 3-year distribution cycle with a median retention time / half-life of 1.64 years is shown below.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Calculate proportion of nets retained over a given distribution cycle</span>
-<span class="va">distribution_cycle_timesteps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span> <span class="op">*</span> <span class="fl">365</span>, <span class="fl">1</span><span class="op">)</span>
-<span class="va">nets_retained</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/net_loss_map.html">net_loss_map</a></span><span class="op">(</span>
-  t <span class="op">=</span> <span class="va">distribution_cycle_timesteps</span>,
-  k <span class="op">=</span> <span class="fl">20</span>,
-  half_life <span class="op">=</span> <span class="fl">1.64</span> <span class="op">*</span> <span class="fl">365</span>
-<span class="op">)</span>
-<span class="co"># k is a fixed rate parameter based on which net half lives were estimated in the paper</span>
-
-<span class="co"># Plot curve</span>
-<span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">distribution_cycle_timesteps</span> <span class="op">/</span> <span class="fl">365</span>, y <span class="op">=</span> <span class="va">nets_retained</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.window.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Years"</span>, y <span class="op">=</span> <span class="st">"Proportion of bednets retained"</span>, colour <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme_classic</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Calculate proportion of nets retained over a given distribution cycle</span></span>
+<span><span class="va">distribution_cycle_timesteps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span> <span class="op">*</span> <span class="fl">365</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">nets_retained</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/net_loss_map.html">net_loss_map</a></span><span class="op">(</span></span>
+<span>  t <span class="op">=</span> <span class="va">distribution_cycle_timesteps</span>,</span>
+<span>  k <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>  half_life <span class="op">=</span> <span class="fl">1.64</span> <span class="op">*</span> <span class="fl">365</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># k is a fixed rate parameter based on which net half lives were estimated in the paper</span></span>
+<span></span>
+<span><span class="co"># Plot curve</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">distribution_cycle_timesteps</span> <span class="op">/</span> <span class="fl">365</span>, y <span class="op">=</span> <span class="va">nets_retained</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ylim</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Years"</span>, y <span class="op">=</span> <span class="st">"Proportion of bednets retained"</span>, colour <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme_classic</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="overview_files/figure-html/unnamed-chunk-8-1.png" width="480"></p>
 <p>In these outputs, target_access is calculated as target_use/use_rate. Since access is a proportion, it cannot exceed 1. Therefore, where the target usage is higher than the observed use rate, access = NA.</p>
 <div class="section level3">
@@ -1169,64 +1169,64 @@ NA
 <p>The default option in the <code>usage_to_distribution()</code> function assumes that nets are lost according to a smooth-compact function (net_loss_function = net_loss_map). The alternative option is to assume exponential net loss (<code>net_loss_function = net_loss_exp</code>), which corresponds to the assumption in malariasimulation.</p>
 <p>The proportion of nets retained over time are visualised for both options below, for a 3 year distribution cycle and a net half life of 1.64 years.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">distribution_cycle_timesteps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span> <span class="op">*</span> <span class="fl">365</span>, <span class="fl">1</span><span class="op">)</span>
-
-<span class="co"># Calculate proportion of nets retained assuming smooth-compact net loss</span>
-<span class="va">nets_retained_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/net_loss_map.html">net_loss_map</a></span><span class="op">(</span>
-  t <span class="op">=</span> <span class="va">distribution_cycle_timesteps</span>,
-  k <span class="op">=</span> <span class="fl">20</span>,
-  half_life <span class="op">=</span> <span class="fl">1.64</span> <span class="op">*</span> <span class="fl">365</span>
-<span class="op">)</span>
-<span class="co"># k is a fixed rate parameter based on which net half lives were estimated in the paper</span>
-
-<span class="co"># Calculate proportion of nets retained assuming exponential net loss</span>
-<span class="va">nets_retained_exp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/net_loss_exp.html">net_loss_exp</a></span><span class="op">(</span>
-  t <span class="op">=</span> <span class="va">distribution_cycle_timesteps</span>,
-  half_life <span class="op">=</span> <span class="fl">1.64</span> <span class="op">*</span> <span class="fl">365</span>
-<span class="op">)</span>
-
-<span class="co"># Plot curve</span>
-<span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>
-    x <span class="op">=</span> <span class="va">distribution_cycle_timesteps</span> <span class="op">/</span> <span class="fl">365</span>, y <span class="op">=</span> <span class="va">nets_retained_map</span>,
-    colour <span class="op">=</span> <span class="st">"Smooth-compact"</span>
-  <span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>
-    x <span class="op">=</span> <span class="va">distribution_cycle_timesteps</span> <span class="op">/</span> <span class="fl">365</span>, y <span class="op">=</span> <span class="va">nets_retained_exp</span>,
-    colour <span class="op">=</span> <span class="st">"Exponential"</span>
-  <span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.window.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Years"</span>, y <span class="op">=</span> <span class="st">"Proportion of bednets retained"</span>, colour <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme_classic</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">distribution_cycle_timesteps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span> <span class="op">*</span> <span class="fl">365</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Calculate proportion of nets retained assuming smooth-compact net loss</span></span>
+<span><span class="va">nets_retained_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/net_loss_map.html">net_loss_map</a></span><span class="op">(</span></span>
+<span>  t <span class="op">=</span> <span class="va">distribution_cycle_timesteps</span>,</span>
+<span>  k <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>  half_life <span class="op">=</span> <span class="fl">1.64</span> <span class="op">*</span> <span class="fl">365</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># k is a fixed rate parameter based on which net half lives were estimated in the paper</span></span>
+<span></span>
+<span><span class="co"># Calculate proportion of nets retained assuming exponential net loss</span></span>
+<span><span class="va">nets_retained_exp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/net_loss_exp.html">net_loss_exp</a></span><span class="op">(</span></span>
+<span>  t <span class="op">=</span> <span class="va">distribution_cycle_timesteps</span>,</span>
+<span>  half_life <span class="op">=</span> <span class="fl">1.64</span> <span class="op">*</span> <span class="fl">365</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Plot curve</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="va">distribution_cycle_timesteps</span> <span class="op">/</span> <span class="fl">365</span>, y <span class="op">=</span> <span class="va">nets_retained_map</span>,</span>
+<span>    colour <span class="op">=</span> <span class="st">"Smooth-compact"</span></span>
+<span>  <span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="va">distribution_cycle_timesteps</span> <span class="op">/</span> <span class="fl">365</span>, y <span class="op">=</span> <span class="va">nets_retained_exp</span>,</span>
+<span>    colour <span class="op">=</span> <span class="st">"Exponential"</span></span>
+<span>  <span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ylim</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Years"</span>, y <span class="op">=</span> <span class="st">"Proportion of bednets retained"</span>, colour <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme_classic</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="overview_files/figure-html/unnamed-chunk-9-1.png" width="480"></p>
 <p>The effect of the net loss function on the relationship between net usage and distribution is shown below for a generic setting.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># First, we specify some general parameters</span>
-<span class="va">input</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>usage <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="fl">0.1</span><span class="op">)</span>,
-                    half_life <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_halflife_data.html">get_halflife_data</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">half_life</span><span class="op">)</span>,
-                    usage_rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_usage_rate_data.html">get_usage_rate_data</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">usage_rate</span><span class="op">)</span>,
-                    distribution_freq <span class="op">=</span> <span class="fl">365</span> <span class="op">*</span> <span class="fl">3</span><span class="op">)</span>
-
-<span class="co"># Next we can follow the conversion chain to move between different bed net measures</span>
-<span class="va">output</span> <span class="op">&lt;-</span> <span class="va">input</span> <span class="op">%&gt;%</span>
-  <span class="fu">mutate</span><span class="op">(</span>access <span class="op">=</span> <span class="fu"><a href="../reference/usage_to_access.html">usage_to_access</a></span><span class="op">(</span><span class="va">usage</span>, <span class="va">usage_rate</span><span class="op">)</span>,
-         npc <span class="op">=</span> <span class="fu"><a href="../reference/access_to_crop.html">access_to_crop</a></span><span class="op">(</span><span class="va">access</span><span class="op">)</span>,
-         anpcd_map <span class="op">=</span> <span class="fu"><a href="../reference/crop_to_distribution.html">crop_to_distribution</a></span><span class="op">(</span><span class="va">npc</span>,
-                                  distribution_freq <span class="op">=</span> <span class="va">distribution_freq</span>,
-                                  net_loss_function <span class="op">=</span> <span class="va">net_loss_map</span>,
-                                  half_life <span class="op">=</span> <span class="va">half_life</span><span class="op">)</span>,
-         anpcd_exp <span class="op">=</span> <span class="fu"><a href="../reference/crop_to_distribution.html">crop_to_distribution</a></span><span class="op">(</span><span class="va">npc</span>,
-                                  distribution_freq <span class="op">=</span> <span class="va">distribution_freq</span>,
-                                  net_loss_function <span class="op">=</span> <span class="va">net_loss_exp</span>,
-                                  half_life <span class="op">=</span> <span class="fl">5</span> <span class="op">*</span> <span class="fl">365</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">select</span><span class="op">(</span><span class="va">usage</span>, <span class="va">anpcd_map</span>, <span class="va">anpcd_exp</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">pivot_longer</span><span class="op">(</span>cols <span class="op">=</span> <span class="op">-</span><span class="va">usage</span>, names_to <span class="op">=</span> <span class="st">"model"</span>, values_to <span class="op">=</span> <span class="st">"annual_percapita_nets_distributed"</span>, names_prefix <span class="op">=</span> <span class="st">"anpcd_"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># First, we specify some general parameters</span></span>
+<span><span class="va">input</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>usage <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="fl">0.1</span><span class="op">)</span>,</span>
+<span>                    half_life <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_halflife_data.html">get_halflife_data</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">half_life</span><span class="op">)</span>,</span>
+<span>                    usage_rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_usage_rate_data.html">get_usage_rate_data</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">usage_rate</span><span class="op">)</span>,</span>
+<span>                    distribution_freq <span class="op">=</span> <span class="fl">365</span> <span class="op">*</span> <span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Next we can follow the conversion chain to move between different bed net measures</span></span>
+<span><span class="va">output</span> <span class="op">&lt;-</span> <span class="va">input</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>access <span class="op">=</span> <span class="fu"><a href="../reference/usage_to_access.html">usage_to_access</a></span><span class="op">(</span><span class="va">usage</span>, <span class="va">usage_rate</span><span class="op">)</span>,</span>
+<span>         npc <span class="op">=</span> <span class="fu"><a href="../reference/access_to_crop.html">access_to_crop</a></span><span class="op">(</span><span class="va">access</span><span class="op">)</span>,</span>
+<span>         anpcd_map <span class="op">=</span> <span class="fu"><a href="../reference/crop_to_distribution.html">crop_to_distribution</a></span><span class="op">(</span><span class="va">npc</span>,</span>
+<span>                                  distribution_freq <span class="op">=</span> <span class="va">distribution_freq</span>,</span>
+<span>                                  net_loss_function <span class="op">=</span> <span class="va">net_loss_map</span>,</span>
+<span>                                  half_life <span class="op">=</span> <span class="va">half_life</span><span class="op">)</span>,</span>
+<span>         anpcd_exp <span class="op">=</span> <span class="fu"><a href="../reference/crop_to_distribution.html">crop_to_distribution</a></span><span class="op">(</span><span class="va">npc</span>,</span>
+<span>                                  distribution_freq <span class="op">=</span> <span class="va">distribution_freq</span>,</span>
+<span>                                  net_loss_function <span class="op">=</span> <span class="va">net_loss_exp</span>,</span>
+<span>                                  half_life <span class="op">=</span> <span class="fl">5</span> <span class="op">*</span> <span class="fl">365</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">usage</span>, <span class="va">anpcd_map</span>, <span class="va">anpcd_exp</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">pivot_longer</span><span class="op">(</span>cols <span class="op">=</span> <span class="op">-</span><span class="va">usage</span>, names_to <span class="op">=</span> <span class="st">"model"</span>, values_to <span class="op">=</span> <span class="st">"annual_percapita_nets_distributed"</span>, names_prefix <span class="op">=</span> <span class="st">"anpcd_"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Plot relationship between net usage and nets distributed for the 2 net loss assumptions</span>
-<span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">output</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">usage</span>, y <span class="op">=</span> <span class="va">annual_percapita_nets_distributed</span>, col <span class="op">=</span> <span class="va">model</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Population net usage"</span>, y <span class="op">=</span> <span class="st">"Nets distributed per person-year"</span>, colour <span class="op">=</span> <span class="st">"Net loss function"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme_classic</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Plot relationship between net usage and nets distributed for the 2 net loss assumptions</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">output</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">usage</span>, y <span class="op">=</span> <span class="va">annual_percapita_nets_distributed</span>, col <span class="op">=</span> <span class="va">model</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Population net usage"</span>, y <span class="op">=</span> <span class="st">"Nets distributed per person-year"</span>, colour <span class="op">=</span> <span class="st">"Net loss function"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme_classic</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="overview_files/figure-html/unnamed-chunk-11-1.png" width="480"></p>
 </div>
 <div class="section level3">
@@ -1248,7 +1248,7 @@ NA
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer>
