@@ -18,9 +18,6 @@ test_that("usage fitting works", {
   expect_error(fit_usage(tu, tut, dt, distribution_upper = c(0.1, 0.1)),
                "distribution_timesteps, distribution_lower and distribution_upper must have equal lengths")
   
-  expect_error(fit_usage(tu, tut, dt, timesteps = 10),
-               "Set timesteps to simulate to be greater than the maximum target usage timestep and distribution_timestep")
-  
   expect_error(fit_usage(tu, c(tut, tut), dt),
                "Target usage and target usage timesteps must be the same length")
   
@@ -28,11 +25,8 @@ test_that("usage fitting works", {
                          distribution_timesteps = 1,
                          target_usage = 0,
                          target_usage_timesteps = 1,
-                         population = 100,
-                         net_loss = rep(0, 10),
-                         timesteps = 10,
-                         rho = 0.5, 
-                         seed = 1234), 0)
+                         half_life = 365 * 5,
+                         timesteps = 10), 0)
   
   fit1 <- fit_usage(target_usage = 0,
             target_usage_timesteps = 1, 

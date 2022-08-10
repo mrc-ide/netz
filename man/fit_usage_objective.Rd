@@ -9,11 +9,8 @@ fit_usage_objective(
   distribution_timesteps,
   target_usage,
   target_usage_timesteps,
-  population,
-  net_loss,
-  timesteps,
-  rho,
-  seed
+  half_life,
+  timesteps
 )
 }
 \arguments{
@@ -25,15 +22,9 @@ fit_usage_objective(
 
 \item{target_usage_timesteps}{Target usage time points}
 
-\item{population}{Population}
+\item{half_life}{Net retention half life}
 
-\item{net_loss}{Net loss function}
-
-\item{timesteps}{Timesteps}
-
-\item{rho}{betwen round correlation parameters}
-
-\item{seed}{Seed - the output of population_usage is stochastic.}
+\item{timesteps}{Net loss vector}
 }
 \value{
 Sum of squared difference between proposed usage and target usage
