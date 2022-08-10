@@ -3,33 +3,25 @@
 \name{population_usage}
 \alias{population_usage}
 \title{Estimate the time series of population-level bed net usage from a vector of
-bed net distributions.}
+bed net distributions. This is fixed for an exponentially distributed net
+retention, as implemented in malariasimulation}
 \usage{
-population_usage(
-  net_loss,
-  population,
-  timesteps,
-  distribution,
-  distribution_timesteps,
-  rho = 0
-)
+population_usage(distribution, distribution_timesteps, timesteps, half_life)
 }
 \arguments{
-\item{net_loss}{A vector of the probability of still having a net over time}
-
-\item{population}{Population size}
-
-\item{timesteps}{Timesteps}
-
 \item{distribution}{A vector of distribution \%s}
 
 \item{distribution_timesteps}{A vector of time steps for distributions}
 
-\item{rho}{The between-round correlation parameter}
+\item{timesteps}{Timesteps}
+
+\item{half_life}{The half life of the exponentially decaying net loss function (days)}
 }
 \value{
 Usage time series vector
 }
 \description{
-Note: This is stochastic output
+Estimate the time series of population-level bed net usage from a vector of
+bed net distributions. This is fixed for an exponentially distributed net
+retention, as implemented in malariasimulation
 }

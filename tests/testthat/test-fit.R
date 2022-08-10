@@ -25,11 +25,8 @@ test_that("usage fitting works", {
                          distribution_timesteps = 1,
                          target_usage = 0,
                          target_usage_timesteps = 1,
-                         population = 100,
-                         net_loss = rep(0, 10),
-                         timesteps = 10,
-                         rho = 0.5, 
-                         seed = 1234), 0)
+                         half_life = 365 * 5,
+                         timesteps = 10), 0)
   
   fit1 <- fit_usage(target_usage = 0,
             target_usage_timesteps = 1, 
