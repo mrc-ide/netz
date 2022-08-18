@@ -18,8 +18,7 @@ access_to_crop <- function(access, type = "loess"){
   if(!type %in% c("loess", "loess_extrapolate", "linear")){
     stop("type must be one of: loess, loess_extrapolate or linear")
   }
-  npc_fits <- get("npc_fits")
-  smooth <- npc_fits[[type]]
+  smooth <- netz::npc_fits[[type]]
   pred <- unname(stats::predict(smooth, newdata = data.frame(access_mean = access)))
   return(pred)
 }
@@ -35,8 +34,7 @@ crop_to_access <- function(crop, type = "loess"){
   if(!type %in% c("loess", "loess_extrapolate", "linear")){
     stop("type must be one of: loess, loess_extrapolate or linear")
   }
-  npc_fits <- get("npc_fits")
-  smooth <- npc_fits[[type]]
+  smooth <- netz::npc_fits[[type]]
   access <- seq(0, 1, 0.001)
   pred <- access_to_crop(access, type)
   access_out <- stats::approx(x = pred, y = access, xout = crop)$y
