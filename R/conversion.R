@@ -100,9 +100,11 @@ crop_to_distribution <- function(crop, distribution_freq, half_life, net_loss_fu
     stop("half_life must be > 0")
   }
   
-  crop * mapply(function(distribution_freq, half_life){
-    mean(net_loss_function(t = seq(0, distribution_freq, 1), half_life = half_life, ...))
-  }, distribution_freq = distribution_freq, half_life = half_life)
+  crop / ((distribution_freq / 365) * mapply(function(distribution_freq, half_life){
+    nl <- net_loss_function(t = 0:(100*365), half_life = half_life, ...)
+    index <- 1:length(nl) %% distribution_freq
+    mean(tapply(nl, index, sum))
+  }, distribution_freq = distribution_freq, half_life = half_life))
 }
 
 #' Convert annual nets per capital delivered to nets per capita
@@ -123,7 +125,9 @@ distribution_to_crop <- function(distribution, distribution_freq, half_life, net
     stop("half_life must be > 0")
   }
   
-  distribution / mapply(function(distribution_freq, half_life){
-    mean(net_loss_function(t = seq(0, distribution_freq, 1), half_life = half_life, ...))
+  distribution * (distribution_freq / 365) * mapply(function(distribution_freq, half_life){
+    nl <- net_loss_function(t = 0:(100*365), half_life = half_life, ...)
+    index <- 1:length(nl) %% distribution_freq
+    mean(tapply(nl, index, sum))
   }, distribution_freq = distribution_freq, half_life = half_life)
 }
