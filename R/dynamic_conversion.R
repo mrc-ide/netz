@@ -113,5 +113,6 @@ dynamic_opti <- function (target, target_t,
                  lower = x_lower, upper = x_upper, 
                  xt = xt, target = target, 
                  target_t = target_t, timesteps = timesteps, 
-                 loss_function = loss_function, ...)
+                 loss_function = loss_function,
+                 ...)
 }

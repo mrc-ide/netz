@@ -86,3 +86,25 @@ test_that("Test shifted", {
   o1 <- c(rep(0, 10), l)
   expect_equal(s1, o1)
 })
+
+test_that("Conversion is consistent both ways", {
+  
+  dist <- c(0.1, 0.2, 0.3, 0.1)
+  c1 <- distribution_to_crop_dynamic(distribution = dist,
+                                     net_loss_function = net_loss_map,
+                                     half_life = 365 * 2)
+  d1 <- crop_to_distribution_dynamic(crop = c1,
+                                     net_loss_function = net_loss_map,
+                                     half_life = 365 * 2)
+  expect_true(all(round(d1, 1) == dist))
+  
+  crop <- c(0.2, 0.4, 0.6, 0.5)
+  d1 <- crop_to_distribution_dynamic(crop = crop,
+                                     net_loss_function = net_loss_map,
+                                     half_life = 365 * 2)
+  c1 <- distribution_to_crop_dynamic(distribution = d1,
+                                     net_loss_function = net_loss_map,
+                                     half_life = 365 * 2)
+  expect_true(all(round(c1, 1) == crop))
+})
+  
