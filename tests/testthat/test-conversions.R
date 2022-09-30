@@ -76,7 +76,7 @@ test_that("distribution_to_crop works", {
 
 test_that("access_to_crop works", {
   expect_equal(access_to_crop(1), NA_real_)
-  expect_equal(access_to_crop(0), NA_real_)
+  expect_equal(access_to_crop(0), 0)
   
   expect_error(access_to_crop(-1), "access must be between 0 and 1")
   expect_error(access_to_crop(2), "access must be between 0 and 1")

@@ -20,6 +20,7 @@ access_to_crop <- function(access, type = "loess"){
   }
   smooth <- netz::npc_fits[[type]]
   pred <- unname(stats::predict(smooth, newdata = data.frame(access_mean = access)))
+  pred[access == 0] <- 0
   return(pred)
 }
 
@@ -38,7 +39,8 @@ crop_to_access <- function(crop, type = "loess"){
   access <- seq(0, 1, 0.001)
   pred <- access_to_crop(access, type)
   access_out <- stats::approx(x = pred, y = access, xout = crop)$y
-  access_out
+  access_out[crop == 0] <- 0
+  return(access_out)
 }
 
 #' Convert usage to access
@@ -58,6 +60,8 @@ usage_to_access <- function(usage, use_rate){
     warning("Target usage(s) cannot be achieved with input usage_rates - return NA")
     access[access > 1] <- NA
   }
+  
+  access[usage == 0] <- 0
   return(access)
 }
 
@@ -74,6 +78,9 @@ access_to_usage <- function(access, use_rate){
   }
   
   usage <- access * use_rate
+  
+  usage[access == 0] <- 0
+  
   return(usage)
 }
 
@@ -100,11 +107,14 @@ crop_to_distribution <- function(crop, distribution_freq, half_life, net_loss_fu
     stop("half_life must be > 0")
   }
   
-  crop / ((distribution_freq / 365) * mapply(function(distribution_freq, half_life){
+  dist <- crop / ((distribution_freq / 365) * mapply(function(distribution_freq, half_life){
     nl <- net_loss_function(t = 0:(100*365), half_life = half_life, ...)
     index <- 1:length(nl) %% distribution_freq
     mean(tapply(nl, index, sum))
   }, distribution_freq = distribution_freq, half_life = half_life))
+  
+  dist[crop == 0] <- 0
+  return(dist)
 }
 
 #' Convert annual nets per capital delivered to nets per capita
@@ -125,9 +135,13 @@ distribution_to_crop <- function(distribution, distribution_freq, half_life, net
     stop("half_life must be > 0")
   }
   
-  distribution * (distribution_freq / 365) * mapply(function(distribution_freq, half_life){
+  crop <- distribution * (distribution_freq / 365) * mapply(function(distribution_freq, half_life){
     nl <- net_loss_function(t = 0:(100*365), half_life = half_life, ...)
     index <- 1:length(nl) %% distribution_freq
     mean(tapply(nl, index, sum))
   }, distribution_freq = distribution_freq, half_life = half_life)
+  
+  crop[distribution == 0] <- 0
+  return(crop)
+  
 }
