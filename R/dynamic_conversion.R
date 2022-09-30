@@ -15,7 +15,9 @@ crop_to_distribution_dynamic <- function(crop, net_loss_function, ...){
   xt <- 365 *  1:years - 364
   # Assume target measured at the mid point of the year
   target_t <- xt + 182
-  dynamic_opti(target = crop, target_t = target_t, xt = xt, loss_function = net_loss_function, ...)$par
+  dist <- dynamic_opti(target = crop, target_t = target_t, xt = xt, loss_function = net_loss_function, ...)$par
+  dist[crop == 0] <- 0
+  return(dist)
 }
 
 #' Dynamic distribution to crop estimation
