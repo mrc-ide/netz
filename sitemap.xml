@@ -34,7 +34,19 @@
     <loc>/reference/crop_to_distribution.html</loc>
   </url>
   <url>
+    <loc>/reference/crop_to_distribution_dynamic.html</loc>
+  </url>
+  <url>
     <loc>/reference/distribution_to_crop.html</loc>
+  </url>
+  <url>
+    <loc>/reference/distribution_to_crop_dynamic.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dynamic_crop.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dynamic_opti.html</loc>
   </url>
   <url>
     <loc>/reference/exp_loss_equilibrium.html</loc>
@@ -67,7 +79,13 @@
     <loc>/reference/npc_fits.html</loc>
   </url>
   <url>
+    <loc>/reference/objective.html</loc>
+  </url>
+  <url>
     <loc>/reference/population_usage.html</loc>
+  </url>
+  <url>
+    <loc>/reference/shifted.html</loc>
   </url>
   <url>
     <loc>/reference/usage_to_access.html</loc>
