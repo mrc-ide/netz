@@ -36,7 +36,7 @@ are randomly correlated and net rentention is exponentially distributed.
 Let's start with a simple distribution model:
 
 * Distribution cycle: A mass distribution once every 3 years
-* Distribution size: 70% of the population covered
+* Distribution size: 30% of the population covered
 * Net retention: Assume net retention decays exponentially with a half life of 5 years
 
 ```{r, fig.width = 7, fig.height = 4}
