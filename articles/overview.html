@@ -130,8 +130,10 @@ capita.</p>
 <span>  <span class="fu">mutate</span><span class="op">(</span>access <span class="op">=</span> <span class="fu"><a href="../reference/usage_to_access.html">usage_to_access</a></span><span class="op">(</span><span class="va">usage</span>, <span class="va">usage_rate</span><span class="op">)</span>,</span>
 <span>         npc <span class="op">=</span> <span class="fu"><a href="../reference/access_to_crop.html">access_to_crop</a></span><span class="op">(</span><span class="va">access</span><span class="op">)</span>,</span>
 <span>         anpcd <span class="op">=</span> <span class="fu"><a href="../reference/crop_to_distribution.html">crop_to_distribution</a></span><span class="op">(</span><span class="va">npc</span>, distribution_freq <span class="op">=</span> <span class="va">distribution_freq</span>, net_loss_function <span class="op">=</span> <span class="va">net_loss_map</span>, half_life <span class="op">=</span> <span class="va">half_life</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in usage_to_access(usage, usage_rate): Target usage(s) cannot be</span></span>
-<span><span class="co">#&gt; achieved with input usage_rates - return NA</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning: There was 1 warning in `mutate()`.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> In argument: `access = usage_to_access(usage, usage_rate)`.</span></span>
+<span><span class="co">#&gt; Caused by warning in `usage_to_access()`:</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Target usage(s) cannot be achieved with input usage_rates - return NA</span></span></code></pre></div>
 <p>Note that the usage that can be achieved in a given country depends
 on its use rate. Where a target_usage exceeds the country-specific use
 rate, a warning is printed and NA is returned for the annual nets
@@ -916,8 +918,10 @@ half life observed across Africa.</p>
 <span>  <span class="fu">mutate</span><span class="op">(</span>access <span class="op">=</span> <span class="fu"><a href="../reference/usage_to_access.html">usage_to_access</a></span><span class="op">(</span><span class="va">usage</span>, <span class="va">usage_rate</span><span class="op">)</span>,</span>
 <span>         npc <span class="op">=</span> <span class="fu"><a href="../reference/access_to_crop.html">access_to_crop</a></span><span class="op">(</span><span class="va">access</span><span class="op">)</span>,</span>
 <span>         anpcd <span class="op">=</span> <span class="fu"><a href="../reference/crop_to_distribution.html">crop_to_distribution</a></span><span class="op">(</span><span class="va">npc</span>, distribution_freq <span class="op">=</span> <span class="va">distribution_freq</span>, net_loss_function <span class="op">=</span> <span class="va">net_loss_map</span>, half_life <span class="op">=</span> <span class="va">half_life</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in usage_to_access(usage, usage_rate): Target usage(s) cannot be</span></span>
-<span><span class="co">#&gt; achieved with input usage_rates - return NA</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning: There was 1 warning in `mutate()`.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> In argument: `access = usage_to_access(usage, usage_rate)`.</span></span>
+<span><span class="co">#&gt; Caused by warning in `usage_to_access()`:</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Target usage(s) cannot be achieved with input usage_rates - return NA</span></span></code></pre></div>
 <table class="table table" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:right;">
