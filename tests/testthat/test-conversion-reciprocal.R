@@ -15,10 +15,10 @@ test_that("usage_to_access access_to_usage", {
 })
 
 test_that("crop_to_distribution distribution_to_crop", {
-  expect_equal(distribution_to_crop(crop_to_distribution(c(0, 0.1, 0.5), 365 * 3, 1000), 365 * 3, 1000), c(0, 0.1, 0.5))
-  expect_equal(distribution_to_crop(crop_to_distribution(c(0, 0.1, 0.5), 365 * 3, 1000, net_loss_exp), 365 * 3, 1000, net_loss_exp), c(0, 0.1, 0.5))
+  expect_equal(distribution_to_crop(crop_to_distribution(c(0, 0.1, 0.5), 365 * 3, half_life = 1000), 365 * 3, half_life = 1000), c(0, 0.1, 0.5))
+  expect_equal(distribution_to_crop(crop_to_distribution(c(0, 0.1, 0.5), 365 * 3, mean_retention = 1000, net_loss_exp), 365 * 3, mean_retention = 1000, net_loss_exp), c(0, 0.1, 0.5))
   
-  expect_equal(crop_to_distribution(distribution_to_crop(c(0, 0.1, 0.5), 365 * 3, 1000), 365 * 3, 1000), c(0, 0.1, 0.5))
-  expect_equal(crop_to_distribution(distribution_to_crop(c(0, 0.1, 0.5), 365 * 3, 1000, net_loss_exp), 365 * 3, 1000, net_loss_exp), c(0, 0.1, 0.5))
+  expect_equal(crop_to_distribution(distribution_to_crop(c(0, 0.1, 0.5), 365 * 3, half_life = 1000), 365 * 3, half_life = 1000), c(0, 0.1, 0.5))
+  expect_equal(crop_to_distribution(distribution_to_crop(c(0, 0.1, 0.5), 365 * 3, mean_retention = 1000, net_loss_exp), 365 * 3, mean_retention = 1000, net_loss_exp), c(0, 0.1, 0.5))
   
 })

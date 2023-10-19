@@ -3,38 +3,55 @@
 #'
 #' @param distribution The % of the population who are distributed a net
 #' @param distribution_frequency The frequency of the distribution cycle (days)
-#' @param net_loss_hl The half life of the exponentially decaying net loss function (days)
+#' @param mean_retention The average duration of net retention (days)
 #'
 #' @return The equilibrium population-level net usage
 #' @export
-exp_loss_equilibrium <- function(distribution, distribution_frequency, net_loss_hl){
-  distribution * net_loss_hl / distribution_frequency * (1 - exp(-distribution_frequency / net_loss_hl))
+exp_loss_equilibrium <- function(distribution, distribution_frequency, mean_retention){
+  distribution * mean_retention / distribution_frequency * (1 - exp(-distribution_frequency / mean_retention))
 }
 
-#' Estimate the time series of population-level bed net usage from a vector of
-#' bed net distributions. This is fixed for an exponentially distributed net
-#' retention, as implemented in malariasimulation
+#' Estimate the population-level bed net usage at given times for a set of
+#' bed net distributions at given times. This assumes a constant rate of net loss
+#' (as in malariasimulation) and that recipients of multiple rounds are random.
 #' 
-#' @param half_life The half life of the exponentially decaying net loss function (days)
-#' @param timesteps Timesteps
-#' @param distribution A vector of distribution %s
-#' @param distribution_timesteps A vector of time steps for distributions
+#' @param target_timesteps The half life of the exponentially decaying net loss function (days)
+#' @param distribution A vector of distribution, must be between 0 and 1
+#' @param distribution_timesteps A vector of time steps for distributions (days)
+#' @param mean_retention The average duration of net retention (days)
 #'
-#' @return Usage time series vector
+#' @return Usage estimates at timepoints
 #' @export
-population_usage <- function(
-  distribution,
-  distribution_timesteps,
-  timesteps,
-  half_life){
+population_usage_t <- function(
+    timesteps,
+    distribution,
+    distribution_timesteps,
+    mean_retention = 365 * 5
+){
+  loss_rate <- 1 / mean_retention
   
-  t <- 0:timesteps
-  net_loss <- net_loss_exp(t = t, half_life = half_life)
-  
-  use <- rep(0, timesteps)
-  for(i in seq_along(distribution)){
-    cur_dist <- c(rep(0, distribution_timesteps[i] - 1), distribution[i] * net_loss)[1:timesteps]
-    use <- use + (cur_dist * (1 - use[distribution_timesteps[i]]))
+  # Estimate the cumulative usage at distribution time points
+  cumulative_usage <- distribution[1]
+  if(length(distribution_timesteps) > 1){
+    for(t in 2:length(distribution_timesteps)){
+      time_offset <- distribution_timesteps[t] - distribution_timesteps[t - 1]
+      remaining <- cumulative_usage[t - 1] * exp(-loss_rate * time_offset)
+      cumulative_usage[t] <- 1 - (1 - remaining) * (1 - distribution[t])
+    }
   }
-  return(use)
+  
+  # Estimate the usage at target time points
+  usage <- c()
+  for(t in seq_along(timesteps)){
+    time_offset <- timesteps[t] - distribution_timesteps
+    if(max(time_offset) < 0){
+      usage[t] <- 0
+    } else {
+      nearest <- min(time_offset[time_offset >= 0])
+      index <- which(time_offset == nearest)
+      usage[t] <- cumulative_usage[index] * exp(-loss_rate * time_offset[index])
+    }
+  }
+  return(usage)
 }
+

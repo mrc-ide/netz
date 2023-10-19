@@ -88,7 +88,6 @@ access_to_usage <- function(access, use_rate){
 #'
 #' @param crop Nets per capita
 #' @param distribution_freq A single distribution frequency of nets in days. Default = 3*365 (3 years).
-#' @param half_life Net loss half life (days)
 #' @param net_loss_function Option to choose between exponential net loss (net_loss_exp) or
 #' the smooth-compact net loss function from Bertozzi-Villa, Amelia, et al.
 #' Nature communications 12.1 (2021): 1-12 (net_loss_map). Default = net_loss_map.
@@ -96,22 +95,19 @@ access_to_usage <- function(access, use_rate){
 #' 
 #' @return Annual nets per capita delivered
 #' @export
-crop_to_distribution <- function(crop, distribution_freq, half_life, net_loss_function = net_loss_map, ...){
+crop_to_distribution <- function(crop, distribution_freq, net_loss_function = net_loss_map, ...){
   if(any(crop < 0, na.rm = TRUE)){
     stop("crop must be > 0")
   }
   if(any(distribution_freq < 0, na.rm = TRUE)){
     stop("distribution_freq must be > 0")
   }
-  if(any(half_life < 0, na.rm = TRUE)){
-    stop("half_life must be > 0")
-  }
   
-  dist <- crop / ((distribution_freq / 365) * mapply(function(distribution_freq, half_life){
-    nl <- net_loss_function(t = 0:(100*365), half_life = half_life, ...)
+  dist <- crop / ((distribution_freq / 365) * mapply(function(distribution_freq, ...){
+    nl <- net_loss_function(t = 0:(100*365), ...)
     index <- 1:length(nl) %% distribution_freq
     mean(tapply(nl, index, sum))
-  }, distribution_freq = distribution_freq, half_life = half_life))
+  }, distribution_freq = distribution_freq, ...))
   
   dist[crop == 0] <- 0
   return(dist)
@@ -124,22 +120,19 @@ crop_to_distribution <- function(crop, distribution_freq, half_life, net_loss_fu
 #' 
 #' @return Nets per capita
 #' @export
-distribution_to_crop <- function(distribution, distribution_freq, half_life, net_loss_function = net_loss_map, ...){
+distribution_to_crop <- function(distribution, distribution_freq, net_loss_function = net_loss_map, ...){
   if(any(distribution < 0, na.rm = TRUE)){
     stop("distribution must be > 0")
   }
   if(any(distribution_freq < 0, na.rm = TRUE)){
     stop("distribution_freq must be > 0")
   }
-  if(any(half_life < 0, na.rm = TRUE)){
-    stop("half_life must be > 0")
-  }
   
-  crop <- distribution * (distribution_freq / 365) * mapply(function(distribution_freq, half_life){
-    nl <- net_loss_function(t = 0:(100*365), half_life = half_life, ...)
+  crop <- distribution * (distribution_freq / 365) * mapply(function(distribution_freq, ...){
+    nl <- net_loss_function(t = 0:(100*365), ...)
     index <- 1:length(nl) %% distribution_freq
     mean(tapply(nl, index, sum))
-  }, distribution_freq = distribution_freq, half_life = half_life)
+  }, distribution_freq = distribution_freq, ...)
   
   crop[distribution == 0] <- 0
   return(crop)

@@ -25,53 +25,53 @@ test_that("access_to_usage works", {
 test_that("crop_to_distribution works", {
   distribution_frequency <- 365 * 3
   half_life <- 1000
+  mean_retention <- 1000
   
   nl <- net_loss_map(0:(100*365), 1000)
   index <- 1:length(nl) %% distribution_frequency
   snl <- mean(tapply(nl, index, sum))
   
   crop <- c(1, 0.5, 0)
-  expect_equal(crop_to_distribution(crop, distribution_frequency, half_life), crop / ((distribution_frequency / 365) * snl))
+  expect_equal(crop_to_distribution(crop, distribution_frequency, half_life = half_life), crop / ((distribution_frequency / 365) * snl))
   
   nl <- net_loss_exp(0:(100*365), 1000)
   index <- 1:length(nl) %% distribution_frequency
   snl <- mean(tapply(nl, index, sum))
   
-  expect_equal(crop_to_distribution(crop, distribution_frequency, half_life, net_loss_exp), crop / ((distribution_frequency / 365) * snl))
+  expect_equal(crop_to_distribution(crop, distribution_frequency, mean_retention = mean_retention, net_loss_exp), crop / ((distribution_frequency / 365) * snl))
   
   # Increasing half life should decrease required distribution
-  expect_gt(crop_to_distribution(1, distribution_frequency, half_life, net_loss_exp),
-            crop_to_distribution(1, distribution_frequency, half_life * 2, net_loss_exp))
+  expect_gt(crop_to_distribution(1, distribution_frequency, mean_retention = mean_retention, net_loss_exp),
+            crop_to_distribution(1, distribution_frequency, mean_retention = mean_retention * 2, net_loss_exp))
   
   expect_error(crop_to_distribution(-1, 365 * 3, 1000), "crop must be > 0")
   expect_error(crop_to_distribution(0.5, -1, 1000), "distribution_freq must be > 0")
-  expect_error(crop_to_distribution(0.5, 200, -1), "half_life must be > 0")
 })
 
 test_that("distribution_to_crop works", {
   distribution_frequency <- 365 * 3
   half_life <- 1000
+  mean_retention <- 1000
   
   nl <- net_loss_map(0:(100*365), 1000)
   index <- 1:length(nl) %% distribution_frequency
   snl <- mean(tapply(nl, index, sum))
   
   dist <- c(1, 0.5, 0)
-  expect_equal(distribution_to_crop(dist, distribution_frequency, half_life), dist * ((distribution_frequency / 365) * snl))
+  expect_equal(distribution_to_crop(dist, distribution_frequency, half_life = half_life), dist * ((distribution_frequency / 365) * snl))
   
   nl <- net_loss_exp(0:(100*365), 1000)
   index <- 1:length(nl) %% distribution_frequency
   snl <- mean(tapply(nl, index, sum))
   
-  expect_equal(distribution_to_crop(dist, distribution_frequency, half_life, net_loss_exp), dist * ((distribution_frequency / 365) * snl))
+  expect_equal(distribution_to_crop(dist, distribution_frequency, mean_retention = mean_retention, net_loss_exp), dist * ((distribution_frequency / 365) * snl))
   
   # Increasing half life should increase resulting crop 
-  expect_gt(distribution_to_crop(1, distribution_frequency, half_life * 2, net_loss_exp),
-            distribution_to_crop(1, distribution_frequency, half_life , net_loss_exp))
+  expect_gt(distribution_to_crop(1, distribution_frequency, mean_retention = mean_retention * 2, net_loss_exp),
+            distribution_to_crop(1, distribution_frequency, mean_retention = mean_retention , net_loss_exp))
   
   expect_error(distribution_to_crop(-1, 365 * 3, 1000), "distribution must be > 0")
   expect_error(distribution_to_crop(0.5, -1, 1000), "distribution_freq must be > 0")
-  expect_error(distribution_to_crop(0.5, 200, -1), "half_life must be > 0")
 })
 
 test_that("access_to_crop works", {
