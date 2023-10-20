@@ -15,7 +15,7 @@ exp_loss_equilibrium <- function(distribution, distribution_frequency, mean_rete
 #' bed net distributions at given times. This assumes a constant rate of net loss
 #' (as in malariasimulation) and that recipients of multiple rounds are random.
 #' 
-#' @param target_timesteps The half life of the exponentially decaying net loss function (days)
+#' @param timesteps The half life of the exponentially decaying net loss function (days)
 #' @param distribution A vector of distribution, must be between 0 and 1
 #' @param distribution_timesteps A vector of time steps for distributions (days)
 #' @param mean_retention The average duration of net retention (days)

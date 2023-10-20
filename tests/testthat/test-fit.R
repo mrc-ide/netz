@@ -21,16 +21,22 @@ test_that("usage fitting works", {
   expect_error(fit_usage(tu, c(tut, tut), dt),
                "Target usage and target usage timesteps must be the same length")
   
-  expect_equal(fit_usage_objective(distribution = 0,
-                         distribution_timesteps = 1,
-                         target_usage = 0,
-                         target_usage_timesteps = 1,
-                         half_life = 365 * 5,
-                         timesteps = 10), 0)
+  expect_equal(
+    fit_usage_objective(
+      distribution = 0,
+      distribution_timesteps = 1,
+      target_usage = 0,
+      target_usage_timesteps = 1,
+      mean_retention = 365 * 5), 
+    0
+  )
   
-  fit1 <- fit_usage(target_usage = 0,
-            target_usage_timesteps = 1, 
-            distribution_timesteps = 1)
+  fit1 <- fit_usage(
+    target_usage = 0,
+    target_usage_timesteps = 1, 
+    distribution_timesteps = 1,
+    mean_retention = 365 * 5
+  )
   expect_equal(fit1$par, 0)
   
 })

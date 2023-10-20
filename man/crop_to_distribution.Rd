@@ -7,7 +7,6 @@
 crop_to_distribution(
   crop,
   distribution_freq,
-  half_life,
   net_loss_function = net_loss_map,
   ...
 )
@@ -16,8 +15,6 @@ crop_to_distribution(
 \item{crop}{Nets per capita}
 
 \item{distribution_freq}{A single distribution frequency of nets in days. Default = 3*365 (3 years).}
-
-\item{half_life}{Net loss half life (days)}
 
 \item{net_loss_function}{Option to choose between exponential net loss (net_loss_exp) or
 the smooth-compact net loss function from Bertozzi-Villa, Amelia, et al.

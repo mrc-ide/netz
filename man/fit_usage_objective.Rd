@@ -9,8 +9,7 @@ fit_usage_objective(
   distribution_timesteps,
   target_usage,
   target_usage_timesteps,
-  half_life,
-  timesteps
+  mean_retention
 )
 }
 \arguments{
@@ -22,9 +21,7 @@ fit_usage_objective(
 
 \item{target_usage_timesteps}{Target usage time points}
 
-\item{half_life}{Net retention half life}
-
-\item{timesteps}{Net loss vector}
+\item{mean_retention}{The average duration of net retention (days)}
 }
 \value{
 Sum of squared difference between proposed usage and target usage

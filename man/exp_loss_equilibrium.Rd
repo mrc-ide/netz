@@ -4,14 +4,14 @@
 \alias{exp_loss_equilibrium}
 \title{Estimate average population usage given at equilibrium}
 \usage{
-exp_loss_equilibrium(distribution, distribution_frequency, net_loss_hl)
+exp_loss_equilibrium(distribution, distribution_frequency, mean_retention)
 }
 \arguments{
 \item{distribution}{The \% of the population who are distributed a net}
 
 \item{distribution_frequency}{The frequency of the distribution cycle (days)}
 
-\item{net_loss_hl}{The half life of the exponentially decaying net loss function (days)}
+\item{mean_retention}{The average duration of net retention (days)}
 }
 \value{
 The equilibrium population-level net usage

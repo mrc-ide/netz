@@ -195,7 +195,7 @@ nets_retained_map <- net_loss_map(
 # Calculate proportion of nets retained assuming exponential net loss
 nets_retained_exp <- net_loss_exp(
   t = distribution_cycle_timesteps,
-  half_life = 1.64 * 365
+  mean_retention = 1.64 * 365
 )
 
 # Plot curve
@@ -233,7 +233,7 @@ output <- input %>%
          anpcd_exp = crop_to_distribution(npc,
                                   distribution_freq = distribution_freq,
                                   net_loss_function = net_loss_exp,
-                                  half_life = 5 * 365)) %>%
+                                  mean_retention = 5 * 365)) %>%
   select(usage, anpcd_map, anpcd_exp) %>%
   pivot_longer(cols = -usage, names_to = "model", values_to = "annual_percapita_nets_distributed", names_prefix = "anpcd_")
 

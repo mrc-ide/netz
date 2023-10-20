@@ -10,6 +10,8 @@
 #' @param distribution_lower Lower bound on distributions (default = 0)
 #' @param distribution_upper Upper bound on distribution (default = 1)
 #' @param mean_retention The average duration of net retention (days)
+#' 
+#' @export
 fit_usage_sequential <- function(
     target_usage,
     target_usage_timesteps,
@@ -55,7 +57,7 @@ fit_usage_objective <- function(
   pu <- population_usage_t(
     timesteps = target_usage_timesteps,
     distribution = distribution,
-    distribution_timsteps = distribution_timesteps,
+    distribution_timesteps = distribution_timesteps,
     mean_retention = mean_retention
   )
   sum((pu - target_usage) ^ 2)
@@ -72,7 +74,7 @@ fit_usage_objective <- function(
 #' @param distribution_lower Lower bound on distributions (default = 0)
 #' @param distribution_upper Upper bound on distribution (default = 1)
 #' @param timesteps Net loss vector
-#' @param half_life Net retention half life
+#' @param mean_retention The average duration of net retention (days)
 #' @param ... Further arguments to pass to the \link[nloptr]{cobyla}
 #' 
 #' 
@@ -86,7 +88,7 @@ fit_usage <- function(
     distribution_lower = rep(0, length(distribution_timesteps)),
     distribution_upper = rep(1, length(distribution_timesteps)),
     timesteps = max(c(target_usage_timesteps, distribution_timesteps)),
-    half_life = 5 * 365,
+    mean_retention = 5 * 365,
     ...
 ){
   

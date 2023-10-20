@@ -138,7 +138,7 @@ pu <- population_usage_t(
   distribution = distribution4,
   distribution_timesteps = distribution_timesteps4,
   mean_retention = mean_retention
-  )
+)
 
 pd <- data.frame(t = 1:timesteps, usage = pu)
 
@@ -170,7 +170,7 @@ distribution <- fit_usage_sequential(
 )
 
 pu <- population_usage_t(
-  target_timesteps = 1:timesteps,
+  timesteps = 1:timesteps,
   distribution = distribution,
   distribution_timesteps = distribution_tt,
   mean_retention = 365 * 5
@@ -195,7 +195,7 @@ followed by top-up distributions on the second and third year:
 ```{r, fig.width = 7, fig.height = 4}
 timesteps <- 12 * 365
 # Target usage associated time points
-target <- seq(0.1, 0.8, length.out = 10) * c(1, 0.8, 0.5, 1, 0.8, 0.5, 1, 0.8, 0.5, 1)
+target <- seq(0.1, 0.8, length.out = 10) * c(1, 0.8, 0.5, 1, 0.8, 0.6, 1, 0.8, 0.6, 1)
 target_tt <- (1:10) * 365
 # Time points at which distribution will occur
 distribution_tt <- ((0:9) * 365) + 1
@@ -211,7 +211,7 @@ distribution <- fit_usage_sequential(
 )
 
 pu <- population_usage_t(
-  target_timesteps = 1:timesteps,
+  timesteps = 1:timesteps,
   distribution = distribution,
   distribution_timesteps = distribution_tt,
   mean_retention = 365 * 5
@@ -222,6 +222,63 @@ pd2 <- data.frame(target = target, target_tt = target_tt)
 
 ggplot() +
   geom_line(data = pd, aes(x = t, y = usage)) +
+  geom_point(dat = pd2, aes(x = target_tt, y = target), col = "cornflowerblue", size = 3) +
+  ylim(0, 1) +
+  theme_bw()
+```
+
+In some cases, the sequential fitting algorithm may struggle to fit the observations 
+well. This may especially be the case if we are uncertain about bed net parameters,
+such as the rate of net loss, or if early data points are spurious. `netz` also 
+offers a non-linear optimised fit, which is  slower, but in some circumstances 
+may be a useful alternative option for matching model distributions to bed net use data. 
+
+```{r, fig.width = 7, fig.height = 4}
+# Make a spurious early data point
+target <- seq(0.1, 0.8, length.out = 10) * c(5, 0.8, 0.5, 1, 0.8, 0.6, 1, 0.8, 0.6, 1)
+
+# Fit - with sequential
+distribution_seq <- fit_usage_sequential(
+  target_usage = target,
+  target_usage_timesteps = target_tt,
+  distribution_timesteps = distribution_tt,
+  distribution_upper = distribution_upper, 
+  mean_retention = 365 * 5
+)
+
+# Fit - with optimiser
+distribution_optim <- fit_usage(
+  target_usage = target,
+  target_usage_timesteps = target_tt,
+  distribution_timesteps = distribution_tt,
+  distribution_upper = distribution_upper, 
+  mean_retention = 365 * 5
+)
+
+pu_seq <- population_usage_t(
+  timesteps = 1:timesteps,
+  distribution = distribution_seq,
+  distribution_timesteps = distribution_tt,
+  mean_retention = 365 * 5
+)
+pu_optim <- population_usage_t(
+  timesteps = 1:timesteps,
+  distribution = distribution_optim$par,
+  distribution_timesteps = distribution_tt,
+  mean_retention = 365 * 5
+)
+
+pd <- do.call(
+  rbind, 
+  list(
+    data.frame(t = 1:timesteps, usage = pu_seq, method = "Sequential"),
+    data.frame(t = 1:timesteps, usage = pu_optim, method = "Optimiser")
+  )
+)
+pd2 <- data.frame(target = target, target_tt = target_tt)
+
+ggplot() +
+  geom_line(data = pd, aes(x = t, y = usage, col = method, lty = method)) +
   geom_point(dat = pd2, aes(x = target_tt, y = target), col = "cornflowerblue", size = 3) +
   ylim(0, 1) +
   theme_bw()
