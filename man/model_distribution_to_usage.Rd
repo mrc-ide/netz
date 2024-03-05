@@ -14,13 +14,13 @@ model_distribution_to_usage(
 )
 }
 \arguments{
-\item{distribution}{A vector of distribution, must be between 0 and 1}
+\item{usage_timesteps}{Target usage time points}
 
-\item{distribution_timesteps}{A vector of time steps for distributions (days)}
+\item{distribution}{Vector of model distribution (\% of total population)}
+
+\item{distribution_timesteps}{A vector of distribution time steps}
 
 \item{mean_retention}{The average duration of net retention (days)}
-
-\item{timesteps}{The half life of the exponentially decaying net loss function (days)}
 }
 \value{
 Usage estimates at timepoints

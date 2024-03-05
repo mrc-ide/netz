@@ -25,6 +25,10 @@ crop_to_distribution(
 the smooth-compact net loss function from Bertozzi-Villa, Amelia, et al.
 Nature communications 12.1 (2021): 1-12 (net_loss_map). Default = net_loss_map.}
 
+\item{min_distribution}{Vector of optional minimum bounds on distributions}
+
+\item{max_distribution}{Vector of optional maximum bounds on distributions}
+
 \item{...}{additional arguments for the net_loss_function}
 }
 \value{

@@ -4,10 +4,9 @@
 #' @param type The npc to access model to use. This may be:
 #' \itemize{
 #'  \item{"loess"}{: a loess fit to observed access-npc data}
-#'  \item{"loess_extrapolate"}{: a loess fit to observed access-npc data with trends extrapolated above and below 
-#'  observed values.}
 #'  \item{"linear"}{: a linear fit to the observed access-npc data, fitted to the trend for observeation with access < 0.5}
 #' }
+#' @param people_per_net Assumed number of people who can use 1 net if type = "linear"
 #'
 #' @return Predicted nets per capita
 #' @export
@@ -92,6 +91,8 @@ access_to_usage <- function(access, use_rate){
 #'
 #' @param crop Vector of nets per capita
 #' @param crop_timesteps Timesteps of crop estimates
+#' @param min_distribution Vector of optional minimum bounds on distributions
+#' @param max_distribution Vector of optional maximum bounds on distributions
 #' @inheritParams distribution_to_crop
 #' 
 #' @return Annual nets per capita delivered

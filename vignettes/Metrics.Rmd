@@ -160,3 +160,48 @@ ggplot() +
   labs(x = "Nets per capita", y = "Access (proportion)", colour = "") +
   theme_classic()
 ```
+
+### Assumptions about the net loss function
+
+The default option in these metric conversions assumes that nets are lost according
+to a smooth-compact function (net_loss_function = net_loss_map). This in line
+with the paper by Bertozzi-Villa et al.
+
+An alternative option is to assume exponential net loss (`net_loss_function = net_loss_exp`), 
+which corresponds to the assumption in malariasimulation. 
+
+The proportion of nets retained over time are visualised for both options below, 
+for a 3 year distribution cycle and a net half life of 1.64 years.
+
+
+```{r message = FALSE, warning = FALSE, fig.width=6, fig.height=5}
+t <- seq(0, 5 * 365, 1)
+
+# Calculate proportion of nets retained assuming smooth-compact net loss
+nets_retained_map <- net_loss_map(
+  t = t,
+  k = 20,
+  half_life = 1.64 * 365
+)
+# k is a fixed rate parameter based on which net half lives were estimated in the paper
+
+# Calculate proportion of nets retained assuming exponential net loss
+nets_retained_exp <- net_loss_exp(
+  t = t,
+  mean_retention = 1.64 * 365
+)
+
+# Plot curve
+ggplot() +
+  geom_line(aes(
+    x = t / 365, y = nets_retained_map,
+    colour = "Smooth-compact"
+  )) +
+  geom_line(aes(
+    x = t / 365, y = nets_retained_exp,
+    colour = "Exponential"
+  )) +
+  ylim(0, 1) +
+  labs(x = "Years", y = "Proportion of bednets retained", colour = "") +
+  theme_classic()
+```

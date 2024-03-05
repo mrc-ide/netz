@@ -8,7 +8,7 @@ get_halflife <- function(iso3c = NA){
   hld <- netz::halflife
   
   if(is.na(iso3c)){
-    half_life <- median(hld$half_life)
+    half_life <- stats::median(hld$half_life)
   } else {
     if(!iso3c %in% hld$iso3c){
       stop("ISO code not found")
@@ -29,7 +29,7 @@ get_usage_rate <- function(iso3c = NA){
   ur <- netz::usage_rate
   
   if(is.na(iso3c)){
-    usage_rate <- median(ur$usage_rate)
+    usage_rate <- stats::median(ur$usage_rate)
   } else {
     if(!iso3c %in% ur$iso3c){
       stop("ISO code not found")

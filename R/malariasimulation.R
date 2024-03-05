@@ -57,10 +57,8 @@ usage_to_model_distribution <- function(
 #' bed net distributions at given times. This assumes a constant rate of net loss
 #' (as in malariasimulation) and that recipients of multiple rounds are random.
 #' 
-#' @param timesteps The half life of the exponentially decaying net loss function (days)
-#' @param distribution A vector of distribution, must be between 0 and 1
-#' @param distribution_timesteps A vector of time steps for distributions (days)
-#' @param mean_retention The average duration of net retention (days)
+#' @inheritParams usage_to_model_distribution
+#' @param distribution Vector of model distribution (% of total population)
 #'
 #' @return Usage estimates at timepoints
 #' @export
