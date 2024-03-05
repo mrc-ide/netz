@@ -4,7 +4,7 @@
 \alias{crop_to_access}
 \title{Predict the access nets associated with a given nets per capita}
 \usage{
-crop_to_access(crop, type = "loess")
+crop_to_access(crop, type = "loess", people_per_net = 1.66856)
 }
 \arguments{
 \item{crop}{A single or vector of nets per capita}

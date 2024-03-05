@@ -2,15 +2,15 @@
 title: "Converting measures of net coverage and number"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{overview}
+%\VignetteIndexEntry{overview}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
----
-
-```{r, include = FALSE}
+  ---
+  
+  ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+collapse = TRUE,
+comment = "#>"
 )
 ```
 
@@ -37,25 +37,71 @@ net distributions and net access in the population, based on the work and data i
 
 The conversion from net usage to annual nets distributed per capita occurs in the following steps:
 
-* convert net usage to net access using the observed (country-specific) use rate. By definition, net use rate = net usage/net access.
-* convert net access to nets per capita using a Loess curve fitted to the observed relationship between the two across Africa.
-* convert nets per capita to annual nets distributed per capita accounting for net distributions and net loss over time.
+* Convert net usage to net access using the observed (country-specific) use rate. By definition, net use rate = net usage/net access.
+* Convert net access to the crop (nets per capita circulating in the popualtion)
+using a Loess curve fitted to the observed relationship between the two across Africa.
+* convert nets per capita to nets distributed per capita accounting for net distributions and net loss over time.
 
 For a full definition of metric relating to net coverage, refer to the original paper (Bertozzi-Villaet al., 2021). 
 
 ## Quick example: usage to annual nets distributed conversion for specific countries
 
-In its most simple form, only 2 steps are required: preparing the default datasets that inform country-specific net variables, and converting the desired usage to the annual nets distributed per capita.
 
 
 ```{r}
-# First, we specify the coutry iso codes and target usages
-input <- expand_grid(iso3 = c("AGO", "BEN", "NGA"),
-                     usage = seq(0.1, 0.9, 0.1))
+iso3c <- "NGA"
+years <- 2000:2003
+usage <- c(0.1, 0.2, 0.6, 0.5)
+
+usage_rate <- get_usage_rate(iso3c)
+half_life <- get_halflife(iso3c)
+output <- 
+  data.frame(
+    year = years,
+    iso3c = iso3c,
+    usage = usage
+  )
+output$access <- usage_to_access(output$usage, usage_rate)
+output$crop <- access_to_crop(output$access)
+output$distribution <- crop_to_distribution(
+  crop = output$crop,
+  crop_timesteps = (output$year + 0.5) * 365,
+  distribution_timesteps = (output$year) * 365,
+  half_life = half_life
+)
+
+output
+```
+
+We can also reverse this process:
+
+```{r}
+
+output$predicted_crop <- distribution_to_crop(
+  distribution = output$distribution,
+  distribution_timesteps = (output$year) * 365,
+  crop_timesteps = (output$year + 0.5) * 365,
+  half_life = half_life
+)
+output$predicted_access <- crop_to_access(
+  crop = output$predicted_crop
+)
+output$predicted_usage = round(access_to_usage(output$predicted_access, usage_rate), 2)
+
+output
+```
+
+
+
+
+output <- do.call("rbind", output)
+
+input <- expand.grid(iso3 = c("AGO", "BEN", "NGA"),
+                     usage = )
 
 # We can link these to half life, usage rates and distribution frequencies
 input <- input %>%
-  left_join(get_halflife_data(), by = "iso3") %>%
+  dplyr::left_join(get_halflife_data(), by = "iso3") %>%
   left_join(get_usage_rate_data(), by = "iso3") %>%
   mutate(distribution_freq = 365 * 3)
 
@@ -227,13 +273,13 @@ output <- input %>%
   mutate(access = usage_to_access(usage, usage_rate),
          npc = access_to_crop(access),
          anpcd_map = crop_to_distribution(npc,
-                                  distribution_freq = distribution_freq,
-                                  net_loss_function = net_loss_map,
-                                  half_life = half_life),
+                                          distribution_freq = distribution_freq,
+                                          net_loss_function = net_loss_map,
+                                          half_life = half_life),
          anpcd_exp = crop_to_distribution(npc,
-                                  distribution_freq = distribution_freq,
-                                  net_loss_function = net_loss_exp,
-                                  mean_retention = 5 * 365)) %>%
+                                          distribution_freq = distribution_freq,
+                                          net_loss_function = net_loss_exp,
+                                          mean_retention = 5 * 365)) %>%
   select(usage, anpcd_map, anpcd_exp) %>%
   pivot_longer(cols = -usage, names_to = "model", values_to = "annual_percapita_nets_distributed", names_prefix = "anpcd_")
 

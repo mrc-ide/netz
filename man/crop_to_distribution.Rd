@@ -6,15 +6,20 @@
 \usage{
 crop_to_distribution(
   crop,
-  distribution_freq,
-  net_loss_function = net_loss_map,
+  crop_timesteps,
+  distribution_timesteps,
+  net_loss_function = netz::net_loss_map,
+  min_distribution = NULL,
+  max_distribution = NULL,
   ...
 )
 }
 \arguments{
-\item{crop}{Nets per capita}
+\item{crop}{Vector of nets per capita}
 
-\item{distribution_freq}{A single distribution frequency of nets in days. Default = 3*365 (3 years).}
+\item{crop_timesteps}{Timesteps of crop estimates}
+
+\item{distribution_timesteps}{Timesteps of distributions}
 
 \item{net_loss_function}{Option to choose between exponential net loss (net_loss_exp) or
 the smooth-compact net loss function from Bertozzi-Villa, Amelia, et al.

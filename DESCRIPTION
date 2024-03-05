@@ -1,6 +1,6 @@
 Package: netz
 Title: All Things Bed Nets
-Version: 0.3.0
+Version: 1.0.0
 Authors@R: c(
     person(
       given = "Pete",
@@ -20,8 +20,8 @@ Authors@R: c(
       role = "aut"
     )
     )
-Description: Helper functionality to set up bed nets for use in malariasimulation. 
-  Also used to cost bed net programmes.
+Description: Helper functionality to set up bed nets for use in malariasimulation,
+  convert between use, access, crop and distribution and to cost bed net programmes.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -39,6 +39,4 @@ Config/testthat/edition: 3
 Depends: 
     R (>= 2.10)
 VignetteBuilder: knitr
-Imports: 
-    nloptr,
-    stats
+

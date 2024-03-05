@@ -1,24 +1,29 @@
-test_that("get_halflife_data works", {
-  d <- get_halflife_data()
-  expect_type(d, "list")
-  expect_equal(dim(d), c(40, 2))
-  expect_named(d, c("iso3", "half_life"))
+test_that("get_halflife works", {
+  expect_equal(
+    get_halflife(),
+    median(halflife_data$half_life)
+  )
+  expect_equal(
+    get_halflife("NGA"),
+    median(halflife_data[halflife_data$iso3c == "NGA", "half_life"])
+  )
+  expect_error(
+    get_halflife("IND"),
+    "ISO code not found"
+  )
 })
 
-test_that("get_usage_rate_data works", {
-  d <- get_usage_rate_data()
-  expect_type(d, "list")
-  expect_equal(dim(d), c(40, 2))
-  expect_named(d, c("iso3", "usage_rate"))
-})
-
-
-test_that("get_npc_data works", {
-  d <- get_npc_data()
-  expect_type(d, "list")
-  expect_equal(dim(d), c(480, 11))
-  expect_named(d, c("iso3", "country_name", "year", "month", "time",
-                    "access_mean", "access_lower", "access_upper",
-                    "percapita_nets_mean",  "percapita_nets_lower",
-                    "percapita_nets_upper"))
+test_that("get_usage_rate works", {
+  expect_equal(
+    get_usage_rate(),
+    median(usage_rate_data$usage_rate)
+  )
+  expect_equal(
+    get_usage_rate("NGA"),
+    median(usage_rate_data[usage_rate_data$iso3c == "NGA", "usage_rate"])
+  )
+  expect_error(
+    get_usage_rate("IND"),
+    "ISO code not found"
+  )
 })

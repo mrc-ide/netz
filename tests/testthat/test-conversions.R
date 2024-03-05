@@ -23,67 +23,104 @@ test_that("access_to_usage works", {
 })
 
 test_that("crop_to_distribution works", {
-  distribution_frequency <- 365 * 3
-  half_life <- 1000
-  mean_retention <- 1000
+  expect_equal(
+    crop_to_distribution(
+      crop = 1,
+      crop_timesteps = 1,
+      distribution_timesteps = 1,
+      half_life = 700
+    ),
+    1
+  )
   
-  nl <- net_loss_map(0:(100*365), 1000)
-  index <- 1:length(nl) %% distribution_frequency
-  snl <- mean(tapply(nl, index, sum))
+  expect_equal(
+    crop_to_distribution(
+      crop = 0,
+      crop_timesteps = 1,
+      distribution_timesteps = 1,
+      half_life = 700
+    ),
+    0
+  )
   
-  crop <- c(1, 0.5, 0)
-  expect_equal(crop_to_distribution(crop, distribution_frequency, half_life = half_life), crop / ((distribution_frequency / 365) * snl))
+  expect_equal(
+    crop_to_distribution(
+      crop = 1,
+      crop_timesteps = 1,
+      distribution_timesteps = 1,
+      max_distribution = 0.5,
+      half_life = 700
+    ),
+    0.5
+  )
   
-  nl <- net_loss_exp(0:(100*365), 1000)
-  index <- 1:length(nl) %% distribution_frequency
-  snl <- mean(tapply(nl, index, sum))
+  expect_equal(
+    crop_to_distribution(
+      crop = 0,
+      crop_timesteps = 1,
+      distribution_timesteps = 1,
+      min_distribution = 0.5,
+      half_life = 700
+    ),
+    0.5
+  )
   
-  expect_equal(crop_to_distribution(crop, distribution_frequency, mean_retention = mean_retention, net_loss_exp), crop / ((distribution_frequency / 365) * snl))
+  expect_error(
+    crop_to_distribution(
+      crop = 0,
+      crop_timesteps = 1,
+      distribution_timesteps = 1,
+      min_distribution = c(0.5, 0.5),
+      half_life = 700
+    ),
+    "min and max distribution vectors must be of length(distribution_timesteps)",
+    fixed = TRUE
+  )
   
-  # Increasing half life should decrease required distribution
-  expect_gt(crop_to_distribution(1, distribution_frequency, mean_retention = mean_retention, net_loss_exp),
-            crop_to_distribution(1, distribution_frequency, mean_retention = mean_retention * 2, net_loss_exp))
-  
-  expect_error(crop_to_distribution(-1, 365 * 3, 1000), "crop must be > 0")
-  expect_error(crop_to_distribution(0.5, -1, 1000), "distribution_freq must be > 0")
+  expect_error(
+    crop_to_distribution(
+      crop = 0,
+      crop_timesteps = 1,
+      distribution_timesteps = 1,
+      max_distribution = c(0.5, 0.5),
+      half_life = 700
+    ),
+    "min and max distribution vectors must be of length(distribution_timesteps)",
+    fixed = TRUE
+  )
 })
 
 test_that("distribution_to_crop works", {
-  distribution_frequency <- 365 * 3
-  half_life <- 1000
-  mean_retention <- 1000
+  expect_equal(
+    distribution_to_crop(
+      distribution = 1,
+      distribution_timesteps = 1,
+      crop_timesteps = 1,
+      half_life = 700
+    ),
+    1
+  )
   
-  nl <- net_loss_map(0:(100*365), 1000)
-  index <- 1:length(nl) %% distribution_frequency
-  snl <- mean(tapply(nl, index, sum))
-  
-  dist <- c(1, 0.5, 0)
-  expect_equal(distribution_to_crop(dist, distribution_frequency, half_life = half_life), dist * ((distribution_frequency / 365) * snl))
-  
-  nl <- net_loss_exp(0:(100*365), 1000)
-  index <- 1:length(nl) %% distribution_frequency
-  snl <- mean(tapply(nl, index, sum))
-  
-  expect_equal(distribution_to_crop(dist, distribution_frequency, mean_retention = mean_retention, net_loss_exp), dist * ((distribution_frequency / 365) * snl))
-  
-  # Increasing half life should increase resulting crop 
-  expect_gt(distribution_to_crop(1, distribution_frequency, mean_retention = mean_retention * 2, net_loss_exp),
-            distribution_to_crop(1, distribution_frequency, mean_retention = mean_retention , net_loss_exp))
-  
-  expect_error(distribution_to_crop(-1, 365 * 3, 1000), "distribution must be > 0")
-  expect_error(distribution_to_crop(0.5, -1, 1000), "distribution_freq must be > 0")
+  expect_equal(
+    distribution_to_crop(
+      distribution = 0,
+      distribution_timesteps = 1,
+      crop_timesteps = 1,
+      half_life = 700
+    ),
+    0
+  )
 })
 
 test_that("access_to_crop works", {
-  expect_equal(access_to_crop(1), NA_real_)
   expect_equal(access_to_crop(0), 0)
   
   expect_error(access_to_crop(-1), "access must be between 0 and 1")
   expect_error(access_to_crop(2), "access must be between 0 and 1")
   
-  expect_error(access_to_crop(0.5, "wrong"), "type must be one of: loess, loess_extrapolate or linear")
+  expect_error(access_to_crop(0.5, "wrong"), "type must be one of: loess, linear")
 })
 
 test_that("crop_to_access works", {
-  expect_error(crop_to_access(0.5, "wrong"), "type must be one of: loess, loess_extrapolate or linear")
+  expect_error(crop_to_access(0.5, "wrong"), "type must be one of: loess, linear")
 })

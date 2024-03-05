@@ -33,7 +33,7 @@ as:
 
 * **Crop**: The number of nets in the population. Always expressed as nets per capita.
 
-* **Distribution**: The number of nets distributed. Always expressed as nets per capita per year.
+* **Distribution**: The number of nets distributed. Always expressed as nets per capita.
 
 Broadly, distribution will relate to the cost of the programme and usage the impact.
 
