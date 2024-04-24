@@ -1,6 +1,6 @@
 Package: netz
 Title: All Things Bed Nets
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(
     person(
       given = "Pete",

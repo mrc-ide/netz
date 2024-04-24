@@ -65,6 +65,17 @@ test_that("crop_to_distribution works", {
     0.5
   )
   
+  # Check behaviour if distirbution timestep is after last crop timestep
+  expect_equal(
+    crop_to_distribution(
+      crop = 0.1,
+      crop_timesteps = 1,
+      distribution_timesteps = 2,
+      half_life = 700
+    ),
+    NA
+  )
+  
   expect_error(
     crop_to_distribution(
       crop = 0,

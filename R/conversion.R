@@ -136,6 +136,10 @@ crop_to_distribution <- function(
     distribution_t <- distribution_timesteps[i]
     # Find the next crop data point after the current distribution day
     target_t <- crop_timesteps[crop_timesteps >= distribution_t][1]
+    # Finish if no more crop estimates available
+    if(is.na(target_t)){
+      break
+    }
     target_index <- which(crop_timesteps == target_t)
     
     current <- rowSums(crop_matrix)[target_t]
