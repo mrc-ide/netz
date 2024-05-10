@@ -4,12 +4,14 @@
 \alias{usage_to_access}
 \title{Convert usage to access}
 \usage{
-usage_to_access(usage, use_rate)
+usage_to_access(usage, use_rate, max_access_value = 1)
 }
 \arguments{
 \item{usage}{A single value or vector of desired target usages to model.}
 
 \item{use_rate}{A single value or vector of usage rates.}
+
+\item{max_access_value}{Value to use if resulting access > 1}
 }
 \value{
 Access

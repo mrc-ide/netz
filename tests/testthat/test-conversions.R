@@ -5,7 +5,8 @@ test_that("usage_to_access works", {
   # Increasing the usage rate will decrease access
   expect_gt(usage_to_access(0.1, 0.5), usage_to_access(0.1, 1))
   
-  expect_warning(usage_to_access(0.3, 0.01), "Target usage(s) cannot be achieved with input usage_rates - return NA", fixed = TRUE)
+  expect_equal(usage_to_access(0.3, 0.01), 1)
+  expect_equal(usage_to_access(0.3, 0.01, NA), NA_real_)
   expect_error(usage_to_access(-1), "usage must be between 0 and 1")
   expect_error(usage_to_access(2), "usage must be between 0 and 1")
 })

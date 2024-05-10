@@ -51,20 +51,18 @@ crop_to_access <- function(crop, type = "loess", people_per_net = 1.66856){
 #'
 #' @param usage A single value or vector of desired target usages to model.
 #' @param use_rate A single value or vector of usage rates.
+#' @param max_access_value Value to use if resulting access > 1
 #'
 #' @return Access
 #' @export
-usage_to_access <- function(usage, use_rate){
+usage_to_access <- function(usage, use_rate, max_access_value = 1){
   if(any(usage < 0 | usage > 1, na.rm = TRUE)){
     stop("usage must be between 0 and 1")
   }
   
   access <- usage / use_rate
-  if(any(access > 1, na.rm = TRUE)){
-    warning("Target usage(s) cannot be achieved with input usage_rates - return NA")
-    access[access > 1] <- NA
-  }
-  
+  access[access > 1] <- max_access_value
+
   access[usage == 0] <- 0
   return(access)
 }
