@@ -4,10 +4,16 @@
 \alias{get_halflife}
 \title{Get half life}
 \usage{
-get_halflife(iso3c = NA)
+get_halflife(iso3c, not_found_fn = stats::median, ...)
 }
 \arguments{
-\item{iso3c}{ISO3c code. If NA will return median half life estimate}
+\item{iso3c}{ISO3c code.}
+
+\item{not_found_fn}{A function to summarise across all
+available half-life estimates to produce an estimate
+for countries not in the dataset}
+
+\item{...}{Further arguments passed to not_found_fn}
 }
 \value{
 Half life
