@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# netz <img src="man/figures/hex.png" align="right" width=30% height=30% />
+# netz <img src="man/figures/Netz.png" align="right" width=30% height=30% />
 
 <!-- badges: start -->
 
@@ -26,17 +26,17 @@ One of the key features of the netz package is to help conversions
 between the different metrics of net coverage and net numbers. These are
 defined throughout as:
 
--   **Usage**: The proportion of the population with a net who slept
-    under it.
+- **Usage**: The proportion of the population with a net who slept under
+  it.
 
--   **Access**: The proportion of the population who live in a household
-    where they could sleep under a bed net.
+- **Access**: The proportion of the population who live in a household
+  where they could sleep under a bed net.
 
--   **Crop**: The number of nets in the population. Always expressed as
-    nets per capita.
+- **Crop**: The number of nets in the population. Always expressed as
+  nets per capita.
 
--   **Distribution**: The number of nets distributed. Always expressed
-    as nets per capita per year.
+- **Distribution**: The number of nets distributed. Always expressed as
+  nets per capita per year.
 
 Broadly, distribution will relate to the cost of the programme and usage
 the impact.
