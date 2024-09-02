@@ -1,93 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/overview.html</loc>
-  </url>
-  <url>
-    <loc>/articles/population_usage.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/access_to_crop.html</loc>
-  </url>
-  <url>
-    <loc>/reference/access_to_usage.html</loc>
-  </url>
-  <url>
-    <loc>/reference/crop_to_access.html</loc>
-  </url>
-  <url>
-    <loc>/reference/crop_to_distribution.html</loc>
-  </url>
-  <url>
-    <loc>/reference/crop_to_distribution_dynamic.html</loc>
-  </url>
-  <url>
-    <loc>/reference/distribution_to_crop.html</loc>
-  </url>
-  <url>
-    <loc>/reference/distribution_to_crop_dynamic.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dynamic_crop.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dynamic_opti.html</loc>
-  </url>
-  <url>
-    <loc>/reference/exp_loss_equilibrium.html</loc>
-  </url>
-  <url>
-    <loc>/reference/fit_usage.html</loc>
-  </url>
-  <url>
-    <loc>/reference/fit_usage_objective.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_halflife_data.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_npc_data.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_usage_rate_data.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/net_loss_exp.html</loc>
-  </url>
-  <url>
-    <loc>/reference/net_loss_map.html</loc>
-  </url>
-  <url>
-    <loc>/reference/npc_fits.html</loc>
-  </url>
-  <url>
-    <loc>/reference/objective.html</loc>
-  </url>
-  <url>
-    <loc>/reference/population_usage.html</loc>
-  </url>
-  <url>
-    <loc>/reference/shifted.html</loc>
-  </url>
-  <url>
-    <loc>/reference/usage_to_access.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE-text.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/overview.html</loc></url>
+<url><loc>/articles/population_usage.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/access_to_crop.html</loc></url>
+<url><loc>/reference/access_to_usage.html</loc></url>
+<url><loc>/reference/crop_to_access.html</loc></url>
+<url><loc>/reference/crop_to_distribution.html</loc></url>
+<url><loc>/reference/crop_to_distribution_dynamic.html</loc></url>
+<url><loc>/reference/distribution_to_crop.html</loc></url>
+<url><loc>/reference/distribution_to_crop_dynamic.html</loc></url>
+<url><loc>/reference/dynamic_crop.html</loc></url>
+<url><loc>/reference/dynamic_opti.html</loc></url>
+<url><loc>/reference/exp_loss_equilibrium.html</loc></url>
+<url><loc>/reference/fit_usage.html</loc></url>
+<url><loc>/reference/fit_usage_objective.html</loc></url>
+<url><loc>/reference/get_halflife_data.html</loc></url>
+<url><loc>/reference/get_npc_data.html</loc></url>
+<url><loc>/reference/get_usage_rate_data.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/net_loss_exp.html</loc></url>
+<url><loc>/reference/net_loss_map.html</loc></url>
+<url><loc>/reference/npc_fits.html</loc></url>
+<url><loc>/reference/objective.html</loc></url>
+<url><loc>/reference/population_usage.html</loc></url>
+<url><loc>/reference/shifted.html</loc></url>
+<url><loc>/reference/usage_to_access.html</loc></url>
 </urlset>
+
