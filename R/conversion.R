@@ -4,24 +4,29 @@
 #' @param type The npc to access model to use. This may be:
 #' \itemize{
 #'  \item{"loess"}{: a loess fit to observed access-npc data}
-#'  \item{"loess_extrapolate"}{: a loess fit to observed access-npc data with trends extrapolated above and below 
-#'  observed values.}
 #'  \item{"linear"}{: a linear fit to the observed access-npc data, fitted to the trend for observeation with access < 0.5}
 #' }
+#' @param people_per_net Assumed number of people who can use 1 net if type = "linear"
 #'
 #' @return Predicted nets per capita
 #' @export
-access_to_crop <- function(access, type = "loess"){
+access_to_crop <- function(access, type = "loess", people_per_net = 1.66856){
   if(any(access < 0 | access > 1, na.rm = TRUE)){
     stop("access must be between 0 and 1")
   }
-  if(!type %in% c("loess", "loess_extrapolate", "linear")){
-    stop("type must be one of: loess, loess_extrapolate or linear")
+  if(!type %in% c("loess", "linear")){
+    stop("type must be one of: loess, linear")
   }
-  smooth <- netz::npc_fits[[type]]
-  pred <- unname(stats::predict(smooth, newdata = data.frame(access_mean = access)))
-  pred[access == 0] <- 0
-  return(pred)
+  
+  if(type == "linear"){
+    crop <- access / people_per_net
+  } else {
+    smooth <- netz::npc_fits[["loess"]]
+    crop <- unname(stats::predict(smooth, newdata = data.frame(access_mean = access)))
+    crop[access < 0.4] <- access[access < 0.4] / 1.66856
+  }
+  
+  return(crop)
 }
 
 #' Predict the access nets associated with a given nets per capita
@@ -31,36 +36,33 @@ access_to_crop <- function(access, type = "loess"){
 #'
 #' @return Predicted access
 #' @export
-crop_to_access <- function(crop, type = "loess"){
-  if(!type %in% c("loess", "loess_extrapolate", "linear")){
-    stop("type must be one of: loess, loess_extrapolate or linear")
+crop_to_access <- function(crop, type = "loess", people_per_net = 1.66856){
+  if(!type %in% c("loess", "linear")){
+    stop("type must be one of: loess, linear")
   }
-  smooth <- netz::npc_fits[[type]]
-  access <- seq(0, 1, 0.001)
-  pred <- access_to_crop(access, type)
-  access_out <- stats::approx(x = pred, y = access, xout = crop)$y
-  access_out[crop == 0] <- 0
-  return(access_out)
+  access_search <- seq(0, 1, 0.001)
+  pred <- access_to_crop(access = access_search, type = type, people_per_net = people_per_net)
+  access <- stats::approx(x = pred, y = access_search, xout = crop)$y
+  access[crop == 0] <- 0
+  return(access)
 }
 
 #' Convert usage to access
 #'
 #' @param usage A single value or vector of desired target usages to model.
 #' @param use_rate A single value or vector of usage rates.
+#' @param max_access_value Value to use if resulting access > 1
 #'
 #' @return Access
 #' @export
-usage_to_access <- function(usage, use_rate){
+usage_to_access <- function(usage, use_rate, max_access_value = 1){
   if(any(usage < 0 | usage > 1, na.rm = TRUE)){
     stop("usage must be between 0 and 1")
   }
   
   access <- usage / use_rate
-  if(any(access > 1, na.rm = TRUE)){
-    warning("Target usage(s) cannot be achieved with input usage_rates - return NA")
-    access[access > 1] <- NA
-  }
-  
+  access[access > 1] <- max_access_value
+
   access[usage == 0] <- 0
   return(access)
 }
@@ -78,7 +80,6 @@ access_to_usage <- function(access, use_rate){
   }
   
   usage <- access * use_rate
-  
   usage[access == 0] <- 0
   
   return(usage)
@@ -86,62 +87,114 @@ access_to_usage <- function(access, use_rate){
 
 #' Convert nets per capita to annual nets per capital delivered
 #'
-#' @param crop Nets per capita
-#' @param distribution_freq A single distribution frequency of nets in days. Default = 3*365 (3 years).
-#' @param half_life Net loss half life (days)
+#' @param crop Vector of nets per capita
+#' @param crop_timesteps Timesteps of crop estimates
+#' @param min_distribution Vector of optional minimum bounds on distributions
+#' @param max_distribution Vector of optional maximum bounds on distributions
+#' @inheritParams distribution_to_crop
+#' 
+#' @return Annual nets per capita delivered
+#' @export
+crop_to_distribution <- function(
+    crop,
+    crop_timesteps,
+    distribution_timesteps,
+    net_loss_function = netz::net_loss_map,
+    min_distribution = NULL,
+    max_distribution = NULL,
+    ...){
+  
+  max_time <- max(crop_timesteps)
+  n_distributions <- length(distribution_timesteps)
+  if(is.null(min_distribution)){
+    min_distribution <- rep(0, n_distributions) 
+  }
+  if(is.null(max_distribution)){
+    max_distribution <- rep(2, n_distributions) 
+  }
+  if(length(min_distribution) != n_distributions | length(max_distribution) != n_distributions){
+    stop("min and max distribution vectors must be of length(distribution_timesteps)")
+  }
+  
+  
+  decay <- net_loss_function(
+    t = 0:max_time,
+    ...
+  )
+  
+  crop_matrix <- matrix(
+    data = 0,
+    nrow = max_time,
+    ncol = n_distributions
+  )
+  
+  distribution <- rep(NA, n_distributions)
+  
+  for(i in 1:n_distributions){
+    distribution_t <- distribution_timesteps[i]
+    # Find the next crop data point after the current distribution day
+    target_t <- crop_timesteps[crop_timesteps >= distribution_t][1]
+    # Finish if no more crop estimates available
+    if(is.na(target_t)){
+      break
+    }
+    target_index <- which(crop_timesteps == target_t)
+    
+    current <- rowSums(crop_matrix)[target_t]
+    target <- crop[target_index]
+    # Need to account for some nets replacing others (randomly)
+    # delta <- 1 - ((1 - target) / (1 - current))
+    delta <- target - current
+    # Adjust for the target day and distribution day being different
+    delta <- delta * (decay[1] / decay[target_t - distribution_t + 1])
+    delta <- max(delta, min_distribution[i])
+    delta <- min(delta, max_distribution[i])
+    distribution[i] <- delta
+    
+    dist_decay <- (delta * decay)
+    crop_matrix[distribution_t:max_time,i] <- dist_decay[1:(max_time - distribution_t + 1)]
+  }
+  return(distribution)
+}
+
+#' Convert annual nets per capital delivered to nets per capita
+#'
+#' @param distribution Nets per capital delivered
+#' @param distribution_timesteps Timesteps of distributions
+#' @param crop_timesteps Timesteps to return crop estimates
 #' @param net_loss_function Option to choose between exponential net loss (net_loss_exp) or
 #' the smooth-compact net loss function from Bertozzi-Villa, Amelia, et al.
 #' Nature communications 12.1 (2021): 1-12 (net_loss_map). Default = net_loss_map.
 #' @param ... additional arguments for the net_loss_function
 #' 
-#' @return Annual nets per capita delivered
-#' @export
-crop_to_distribution <- function(crop, distribution_freq, half_life, net_loss_function = net_loss_map, ...){
-  if(any(crop < 0, na.rm = TRUE)){
-    stop("crop must be > 0")
-  }
-  if(any(distribution_freq < 0, na.rm = TRUE)){
-    stop("distribution_freq must be > 0")
-  }
-  if(any(half_life < 0, na.rm = TRUE)){
-    stop("half_life must be > 0")
-  }
-  
-  dist <- crop / ((distribution_freq / 365) * mapply(function(distribution_freq, half_life){
-    nl <- net_loss_function(t = 0:(100*365), half_life = half_life, ...)
-    index <- 1:length(nl) %% distribution_freq
-    mean(tapply(nl, index, sum))
-  }, distribution_freq = distribution_freq, half_life = half_life))
-  
-  dist[crop == 0] <- 0
-  return(dist)
-}
-
-#' Convert annual nets per capital delivered to nets per capita
-#'
-#' @param distribution Annual nets per capital delivered
-#' @inheritParams crop_to_distribution
-#' 
 #' @return Nets per capita
 #' @export
-distribution_to_crop <- function(distribution, distribution_freq, half_life, net_loss_function = net_loss_map, ...){
-  if(any(distribution < 0, na.rm = TRUE)){
-    stop("distribution must be > 0")
-  }
-  if(any(distribution_freq < 0, na.rm = TRUE)){
-    stop("distribution_freq must be > 0")
-  }
-  if(any(half_life < 0, na.rm = TRUE)){
-    stop("half_life must be > 0")
-  }
+distribution_to_crop <- function(
+    distribution,
+    distribution_timesteps,
+    crop_timesteps,
+    net_loss_function = netz::net_loss_map,
+    ...){
   
-  crop <- distribution * (distribution_freq / 365) * mapply(function(distribution_freq, half_life){
-    nl <- net_loss_function(t = 0:(100*365), half_life = half_life, ...)
-    index <- 1:length(nl) %% distribution_freq
-    mean(tapply(nl, index, sum))
-  }, distribution_freq = distribution_freq, half_life = half_life)
+  max_time <- max(crop_timesteps)
+  n_distributions <- length(distribution_timesteps)
   
-  crop[distribution == 0] <- 0
+  crop_matrix <- matrix(
+    data = 0,
+    nrow = max_time,
+    ncol = n_distributions
+  )
+  
+  decay <- net_loss_function(
+    t = 0:max_time,
+    ...
+  )
+  
+  for(i in 1:n_distributions){
+    distribution_t <- distribution_timesteps[i]
+    dist_decay <- (distribution[i] * decay)
+    crop_matrix[distribution_t:max_time,i] <- dist_decay[1:(max_time - distribution_t + 1)]
+  }
+  crop <- rowSums(crop_matrix)[crop_timesteps]
   return(crop)
-  
 }

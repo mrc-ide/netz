@@ -5,12 +5,12 @@
 \title{Function of net loss over time from malariasimulation
 Net loss is exponential.}
 \usage{
-net_loss_exp(t, half_life)
+net_loss_exp(t, mean_retention)
 }
 \arguments{
 \item{t}{Single value or vector of timesteps in days.}
 
-\item{half_life}{(Country-specific) half-life of nets in days.}
+\item{mean_retention}{(Country-specific) average duration of net retention in days.}
 }
 \value{
 The proportion of nets retained over time.

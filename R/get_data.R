@@ -1,55 +1,48 @@
-#' Reading in and formatting half life datasets
+#' Get half life
 #'
-#' @param path Link to dataset.
+#' @param iso3c ISO3c code.
+#' @param not_found_fn A function to summarise across all
+#' available half-life estimates to produce an estimate
+#' for countries not in the dataset
+#' @param ... Further arguments passed to not_found_fn
 #'
 #' @export
-#' @return Half life dataset
-get_halflife_data <- function(path = paste0("https://raw.github.com/",
-                                            "bertozzivill/map-itn-cube/",
-                                            "publication-2021/paper_figures/",
-                                            "figure_data/fig_5_llin_half_lives.csv")){
-  # estimates of net half lives (median retention times) in years
-  halflife_data <- utils::read.csv(path)
+#' @return Half life
+get_halflife <- function(iso3c, not_found_fn = stats::median, ...){
+  hld <- netz::halflife
   
-  # Convert half lives into days
-  halflife_data <- halflife_data[, c("iso3", "half_life")]
-  halflife_data$half_life <- halflife_data$half_life * 365
+  iso_in_dataset <- iso3c %in% hld$iso3c
   
-  return(halflife_data)
+  if(iso_in_dataset){
+    half_life <- hld[hld$iso3c == iso3c, "half_life"]
+  } else {
+    half_life <- not_found_fn(hld$half_life, ...)
+  }
+  
+  return(half_life)
 }
 
-#' Function for reading in and formatting usage rate datasets
+#' Get usage rate
 #'
-#' @param path Link to dataset.
+#' @param iso3c ISO3c code.
+#' @param not_found_fn A function to summarise across all
+#' available half-life estimates to produce an estimate
+#' for countries not in the dataset
+#' @param ... Further arguments passed to not_found_fn
 #' 
 #' @export
-#' @return Dataset of use rate by country
-get_usage_rate_data <- function(path = paste0("https://raw.github.com/",
-                                             "bertozzivill/map-itn-gts/",
-                                             "master/data/coverage_metrics/",
-                                             "aggregated_predictions_2019.csv")){
-  # estimates of net half lives (median retention times) in years
-  usage_rate_data <- utils::read.csv(path)
+#' @return Usage rate
+get_usage_rate <- function(iso3c, not_found_fn = stats::median, ...){
+  ur <- netz::usage_rate
   
-  # Convert half lives into days
-  usage_rate_data <- usage_rate_data[usage_rate_data$variable == "use_rate", ]
-  usage_rate_data <- usage_rate_data[!usage_rate_data$iso3 == "AFR",]
-  usage_rate_data <- usage_rate_data[is.na(usage_rate_data$month),]
-  usage_rate_data <- usage_rate_data[, c("iso3", "mean")]
-  colnames(usage_rate_data) <- c("iso3", "usage_rate")
-
-  return(usage_rate_data)
+  iso_in_dataset <- iso3c %in% ur$iso3c
+  
+  if(iso_in_dataset){
+    usage_rate <- ur[ur$iso3c == iso3c, "usage_rate"]
+  } else {
+    usage_rate <- not_found_fn(ur$usage_rate, ...)
+  }
+  
+  return(usage_rate)
 }
 
-#' Function for reading in and access and npc data
-#'
-#' @param path Link to dataset.
-#' 
-#' @export
-#' @return Dataset of use rate by country
-get_npc_data <- function(path = paste0("https://raw.github.com/",
-                                       "bertozzivill/map-itn-cube/",
-                                       "publication-2021/paper_figures/",
-                                       "figure_data/fig_4_access_npc.csv")){
-  utils::read.csv(path)
-}

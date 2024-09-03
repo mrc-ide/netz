@@ -8,7 +8,9 @@
 #' @return The proportion of nets retained over time.
 #' @export
 net_loss_map <- function(t, half_life, k = 20) {
-
+  if(half_life <= 0){
+    stop("half_life must be > 0")
+  }
   # Convert half life into the time at which no nets are retained (nets=0) in days:
   l <- half_life / sqrt(1 - k / (k - log(0.5)))
 
@@ -20,11 +22,15 @@ net_loss_map <- function(t, half_life, k = 20) {
 #' Function of net loss over time from malariasimulation
 #' Net loss is exponential.
 #' @param t Single value or vector of timesteps in days.
-#' @param half_life (Country-specific) half-life of nets in days.
+#' @param mean_retention (Country-specific) average duration of net retention in days.
 #'
 #' @return The proportion of nets retained over time.
 #' @export
-net_loss_exp <- function(t, half_life) {
-  prop_retained <- exp(-(1 / half_life) * t)
+net_loss_exp <- function(t, mean_retention) {
+  if(mean_retention <= 0){
+    stop("mean_retention must be > 0")
+  }
+  loss_rate <- 1 / mean_retention
+  prop_retained <- exp(-loss_rate * t)
   return(prop_retained)
 }
