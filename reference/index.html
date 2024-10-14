@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">netz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,8 +18,8 @@
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/overview.html">Converting measures of net coverage and number</a></li>
-    <li><a class="dropdown-item" href="../articles/population_usage.html">Estimating population usage from input distribution</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/malariasimulation.html">Bed nets in malariasimulation</a></li>
+    <li><a class="dropdown-item" href="../articles/Metrics.html">Converting between bed net metrics</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -59,6 +59,12 @@
         <dd>Convert access to usage</dd>
       </dl><dl><dt>
 
+          <code><a href="crop_data.html">crop_data</a></code>
+
+        </dt>
+        <dd>Crop data.</dd>
+      </dl><dl><dt>
+
           <code><a href="crop_to_access.html">crop_to_access()</a></code>
 
         </dt>
@@ -71,70 +77,34 @@
         <dd>Convert nets per capita to annual nets per capital delivered</dd>
       </dl><dl><dt>
 
-          <code><a href="crop_to_distribution_dynamic.html">crop_to_distribution_dynamic()</a></code>
-
-        </dt>
-        <dd>Dynamic crop to distribution estimation</dd>
-      </dl><dl><dt>
-
           <code><a href="distribution_to_crop.html">distribution_to_crop()</a></code>
 
         </dt>
         <dd>Convert annual nets per capital delivered to nets per capita</dd>
       </dl><dl><dt>
 
-          <code><a href="distribution_to_crop_dynamic.html">distribution_to_crop_dynamic()</a></code>
+          <code><a href="get_halflife.html">get_halflife()</a></code>
 
         </dt>
-        <dd>Dynamic distribution to crop estimation</dd>
+        <dd>Get half life</dd>
       </dl><dl><dt>
 
-          <code><a href="dynamic_crop.html">dynamic_crop()</a></code>
+          <code><a href="get_usage_rate.html">get_usage_rate()</a></code>
 
         </dt>
-        <dd>Cumulative crop</dd>
+        <dd>Get usage rate</dd>
       </dl><dl><dt>
 
-          <code><a href="dynamic_opti.html">dynamic_opti()</a></code>
+          <code><a href="halflife.html">halflife</a></code>
 
         </dt>
-        <dd>Optimise distribution</dd>
+        <dd>Retention half life estimates.</dd>
       </dl><dl><dt>
 
-          <code><a href="exp_loss_equilibrium.html">exp_loss_equilibrium()</a></code>
+          <code><a href="model_distribution_to_usage.html">model_distribution_to_usage()</a></code>
 
         </dt>
-        <dd>Estimate average population usage given at equilibrium</dd>
-      </dl><dl><dt>
-
-          <code><a href="fit_usage.html">fit_usage()</a></code>
-
-        </dt>
-        <dd>Fit distribution to match target usage using non-linear optimisation. This assumes an exponentially distributed net loss function and randomly correlated net distribution.</dd>
-      </dl><dl><dt>
-
-          <code><a href="fit_usage_objective.html">fit_usage_objective()</a></code>
-
-        </dt>
-        <dd>Internal objective function for least-squares non-linear fitting of target usage</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_halflife_data.html">get_halflife_data()</a></code>
-
-        </dt>
-        <dd>Reading in and formatting half life datasets</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_npc_data.html">get_npc_data()</a></code>
-
-        </dt>
-        <dd>Function for reading in and access and npc data</dd>
-      </dl><dl><dt>
-
-          <code><a href="get_usage_rate_data.html">get_usage_rate_data()</a></code>
-
-        </dt>
-        <dd>Function for reading in and formatting usage rate datasets</dd>
+        <dd>Estimate the population-level bed net usage at given times for a set of bed net distributions at given times. This assumes a constant rate of net loss (as in malariasimulation) and that recipients of multiple rounds are random.</dd>
       </dl><dl><dt>
 
           <code><a href="net_loss_exp.html">net_loss_exp()</a></code>
@@ -155,28 +125,22 @@
         <dd>Loess and linear model fits to npc access data.</dd>
       </dl><dl><dt>
 
-          <code><a href="objective.html">objective()</a></code>
+          <code><a href="usage_rate.html">usage_rate</a></code>
 
         </dt>
-        <dd>Cumu objetive function</dd>
-      </dl><dl><dt>
-
-          <code><a href="population_usage.html">population_usage()</a></code>
-
-        </dt>
-        <dd>Estimate the time series of population-level bed net usage from a vector of bed net distributions. This is fixed for an exponentially distributed net retention, as implemented in malariasimulation</dd>
-      </dl><dl><dt>
-
-          <code><a href="shifted.html">shifted()</a></code>
-
-        </dt>
-        <dd>Shift the net loss function</dd>
+        <dd>Usage rate estimates</dd>
       </dl><dl><dt>
 
           <code><a href="usage_to_access.html">usage_to_access()</a></code>
 
         </dt>
         <dd>Convert usage to access</dd>
+      </dl><dl><dt>
+
+          <code><a href="usage_to_model_distribution.html">usage_to_model_distribution()</a></code>
+
+        </dt>
+        <dd>Estimate the malaraisimulation input distribution from usage assumes an exponentially distributed net loss function and randomly correlated net distribution.</dd>
       </dl></div>
   </main></div>
 
@@ -186,7 +150,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>
