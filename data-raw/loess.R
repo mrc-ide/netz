@@ -18,8 +18,7 @@ cube_nat_level_linear <- cube_nat_level_extrapolate %>%
 
 # Create loess fits object
 npc_fits <- list(
-  loess = loess(percapita_nets_mean ~ access_mean, data = cube_nat_level),
-  loess_extrapolate = loess(percapita_nets_mean ~ access_mean, data = cube_nat_level_extrapolate),
+  loess = loess(percapita_nets_mean ~ access_mean, data = cube_nat_level_extrapolate),
   linear = lm(percapita_nets_mean ~ 0 +  access_mean, data = cube_nat_level_linear)
 )
 
@@ -27,7 +26,6 @@ npc_fits <- list(
 access = seq(0, 1, 0.01)
 plot(cube_nat_level_extrapolate)
 lines(predict(npc_fits$loess, newdata = data.frame(access_mean = access)) ~ access, col =  "red")
-lines(predict(npc_fits$loess_extrapolate, newdata = data.frame(access_mean = access)) ~ access, col = "blue", lty = 2)
 lines(predict(npc_fits$linear, newdata = data.frame(access_mean = access)) ~ access, col =  "orange")
 
 usethis::use_data(npc_fits, overwrite = TRUE)

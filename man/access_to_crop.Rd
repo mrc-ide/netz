@@ -4,7 +4,7 @@
 \alias{access_to_crop}
 \title{Predict the nets per capita associated witha given access}
 \usage{
-access_to_crop(access, type = "loess")
+access_to_crop(access, type = "loess", people_per_net = 1.66856)
 }
 \arguments{
 \item{access}{A single or vector of access values}
@@ -12,10 +12,10 @@ access_to_crop(access, type = "loess")
 \item{type}{The npc to access model to use. This may be:
 \itemize{
 \item{"loess"}{: a loess fit to observed access-npc data}
-\item{"loess_extrapolate"}{: a loess fit to observed access-npc data with trends extrapolated above and below
-observed values.}
 \item{"linear"}{: a linear fit to the observed access-npc data, fitted to the trend for observeation with access < 0.5}
 }}
+
+\item{people_per_net}{Assumed number of people who can use 1 net if type = "linear"}
 }
 \value{
 Predicted nets per capita
