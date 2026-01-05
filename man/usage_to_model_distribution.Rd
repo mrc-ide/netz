@@ -2,8 +2,8 @@
 % Please edit documentation in R/malariasimulation.R
 \name{usage_to_model_distribution}
 \alias{usage_to_model_distribution}
-\title{Estimate the malaraisimulation input distribution from usage
-assumes an exponentially distributed net loss function and randomly
+\title{Estimate the malariasimulation input distribution from usage
+assumes a specified net loss function and randomly
 correlated net distribution.}
 \usage{
 usage_to_model_distribution(
@@ -12,7 +12,8 @@ usage_to_model_distribution(
   distribution_timesteps,
   distribution_lower = rep(0, length(distribution_timesteps)),
   distribution_upper = rep(1, length(distribution_timesteps)),
-  mean_retention = 365 * 5
+  net_loss_function = net_loss_exp,
+  ...
 )
 }
 \arguments{
@@ -26,10 +27,14 @@ usage_to_model_distribution(
 
 \item{distribution_upper}{Upper bound on distribution (default = 1)}
 
-\item{mean_retention}{The average duration of net retention (days)}
+\item{net_loss_function}{Function to calculate net retention over time.
+Should take time as first argument and return proportion retained.
+Defaults to net_loss_exp for backward compatibility.}
+
+\item{...}{Additional arguments passed to net_loss_function}
 }
 \description{
-Estimate the malaraisimulation input distribution from usage
-assumes an exponentially distributed net loss function and randomly
+Estimate the malariasimulation input distribution from usage
+assumes a specified net loss function and randomly
 correlated net distribution.
 }

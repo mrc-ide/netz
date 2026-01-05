@@ -168,7 +168,7 @@ to a smooth-compact function (net_loss_function = net_loss_map). This in line
 with the paper by Bertozzi-Villa et al.
 
 An alternative option is to assume exponential net loss (`net_loss_function = net_loss_exp`), 
-which corresponds to the assumption in malariasimulation. 
+which corresponds to the default assumption in malariasimulation. 
 
 The proportion of nets retained over time are visualised for both options below, 
 for a 3 year distribution cycle and a net half life of 1.64 years.

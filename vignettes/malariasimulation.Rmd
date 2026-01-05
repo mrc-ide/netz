@@ -73,7 +73,7 @@ simparams <- get_parameters(
     coverages = data$model_input,
     retention = 700,
     dn0 = matrix(rep(0.533, 10), nrow = 10, ncol = 1),
-    rn = matrix(rep(0.56, 10), nrow = 10, ncol = 1),
+    rn = matrix(rep(0.36, 10), nrow = 10, ncol = 1),
     rnm = matrix(rep(0.24, 10), nrow = 10, ncol = 1),
     gamman = rep(2.64 * 365, 10)
   )

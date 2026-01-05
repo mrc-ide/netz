@@ -3,14 +3,15 @@
 \name{model_distribution_to_usage}
 \alias{model_distribution_to_usage}
 \title{Estimate the population-level bed net usage at given times for a set of
-bed net distributions at given times. This assumes a constant rate of net loss
-(as in malariasimulation) and that recipients of multiple rounds are random.}
+bed net distributions at given times. This assumes a specified rate of net loss
+and that recipients of multiple rounds are random.}
 \usage{
 model_distribution_to_usage(
   usage_timesteps,
   distribution,
   distribution_timesteps,
-  mean_retention = 365 * 5
+  net_loss_function = net_loss_exp,
+  ...
 )
 }
 \arguments{
@@ -20,13 +21,16 @@ model_distribution_to_usage(
 
 \item{distribution_timesteps}{A vector of distribution time steps}
 
-\item{mean_retention}{The average duration of net retention (days)}
+\item{net_loss_function}{Function to calculate net retention over time.
+Should take time as first argument and return proportion retained.}
+
+\item{...}{Additional arguments passed to net_loss_function}
 }
 \value{
 Usage estimates at timepoints
 }
 \description{
 Estimate the population-level bed net usage at given times for a set of
-bed net distributions at given times. This assumes a constant rate of net loss
-(as in malariasimulation) and that recipients of multiple rounds are random.
+bed net distributions at given times. This assumes a specified rate of net loss
+and that recipients of multiple rounds are random.
 }
