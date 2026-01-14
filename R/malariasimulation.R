@@ -87,6 +87,14 @@ model_distribution_to_usage <- function(
   net_loss_function = net_loss_exp,
   ...
 ) {
+  # Deal with zero distributions in inputs
+  zero_dists <- distribution == 0
+  distribution <- distribution[!zero_dists]
+  distribution_timesteps <- distribution_timesteps[!zero_dists]
+  if (length(distribution) == 0) {
+    return(rep(0, length(usage_timesteps)))
+  }
+
   # Estimate the cumulative usage at distribution time points
   cumulative_usage <- distribution[1]
   if (length(distribution_timesteps) > 1) {

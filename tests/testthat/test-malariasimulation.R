@@ -284,3 +284,13 @@ test_that("population_usage", {
 
   expect_equal(pu[dt], rep(1, length(dt)))
 })
+
+test_that("zero distributions are dealt with correctly", {
+  zero_dist <- model_distribution_to_usage(
+    usage_timesteps = 1:3,
+    distribution = c(0, 0),
+    distribution_timesteps = c(1, 2),
+    mean_retention = 5 * 365
+  )
+  expect_equal(zero_dist, c(0, 0, 0))
+})
