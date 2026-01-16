@@ -13,6 +13,11 @@
 #'   Defaults to net_loss_exp for backward compatibility.
 #' @param... Additional arguments passed to net_loss_function
 #'
+#' @details Note, the estimation works sequentially in time order, so if there
+#' are multiple distribution steps specified between target usage timestep they will
+#' be inferred sequentially. You can mange this behaviour with the `distribution_lower` and
+#' `distribution_upper` arguments.
+#'
 #' @export
 usage_to_model_distribution <- function(
   usage,
@@ -55,7 +60,8 @@ usage_to_model_distribution <- function(
     # Find next target usage
     time_offset <- usage_timesteps - distribution_timesteps[t]
     if (max(time_offset) < 0) {
-      distribution[t] <- NA
+      distribution[t:length(distribution_timesteps)] <- NA
+      break
     } else {
       nearest <- min(time_offset[time_offset >= 0])
       index <- which(time_offset == nearest)

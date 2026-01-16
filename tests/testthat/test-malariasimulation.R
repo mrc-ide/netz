@@ -294,3 +294,17 @@ test_that("zero distributions are dealt with correctly", {
   )
   expect_equal(zero_dist, c(0, 0, 0))
 })
+
+
+test_that("Input distribution estimation deals with 
+  input timepoints after final target use timepoint elegantly", {
+  usage_to_model_distribution(
+    usage = 0.1,
+    usage_timesteps = 1,
+    distribution_timesteps = 1:3,
+    distribution_lower = rep(0, 3),
+    distribution_upper = rep(1, 3),
+    net_loss_function = net_loss_map,
+    half_life = 300
+  )
+})

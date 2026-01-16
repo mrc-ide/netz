@@ -38,3 +38,8 @@ Estimate the malariasimulation input distribution from usage
 assumes a specified net loss function and randomly
 correlated net distribution.
 }
+\details{
+Note, the estimation works sequentially in time order, so if there
+are multiple distribution steps specified between target usage timestep they will
+be inferred sequentially.
+}
