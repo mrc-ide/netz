@@ -1,0 +1,76 @@
+# netz ![](reference/figures/Netz.png)
+
+Netz is here to help setup bed nets in
+[malariasimulation](https://mrc-ide.github.io/malariasimulation/).
+
+Much of the functionality within this package is based on the excellent
+bed net model by [Bertozzi-Villa, Amelia, et al. Nature communications
+12.1 (2021): 1-12](https://www.nature.com/articles/s41467-021-23707-7),
+please check it out and make sure to cite appropriately if you use this
+package.
+
+One of the key features of the netz package is to help conversions
+between the different metrics of net coverage and net numbers. These are
+defined throughout as:
+
+- **Usage**: The proportion of the population with a net who slept under
+  it.
+
+- **Access**: The proportion of the population who live in a household
+  where they could sleep under a bed net.
+
+- **Crop**: The number of nets in the population. Always expressed as
+  nets per capita.
+
+- **Distribution**: The number of nets distributed. Always expressed as
+  nets per capita per year.
+
+Broadly, distribution will relate to the cost of the programme and usage
+the impact.
+
+Not all of the metrics above are modelled within
+[malariasimulation](https://mrc-ide.github.io/malariasimulation/). We
+therefore need to be careful that out model inputs match our desired
+target usage when specifying bed nets. The schematic below will help in
+understanding how each of these elements relate to one another
+
+![](reference/figures/Schematic.png)
+
+# Package index
+
+## All functions
+
+- [`access_to_crop()`](access_to_crop.md) : Predict the nets per capita
+  associated witha given access
+- [`access_to_usage()`](access_to_usage.md) : Convert access to usage
+- [`crop_data`](crop_data.md) : Crop data.
+- [`crop_to_access()`](crop_to_access.md) : Predict the access nets
+  associated with a given nets per capita
+- [`crop_to_distribution()`](crop_to_distribution.md) : Convert nets per
+  capita to annual nets per capital delivered
+- [`distribution_to_crop()`](distribution_to_crop.md) : Convert annual
+  nets per capital delivered to nets per capita
+- [`get_halflife()`](get_halflife.md) : Get half life
+- [`get_usage_rate()`](get_usage_rate.md) : Get usage rate
+- [`halflife`](halflife.md) : Retention half life estimates.
+- [`model_distribution_to_usage()`](model_distribution_to_usage.md) :
+  Estimate the population-level bed net usage at given times for a set
+  of bed net distributions at given times. This assumes a specified rate
+  of net loss and that recipients of multiple rounds are random.
+- [`net_loss_exp()`](net_loss_exp.md) : Function of net loss over time
+  from malariasimulation Net loss is exponential.
+- [`net_loss_map()`](net_loss_map.md) : Function of net loss over time.
+- [`npc_fits`](npc_fits.md) : Loess and linear model fits to npc access
+  data.
+- [`usage_rate`](usage_rate.md) : Usage rate estimates
+- [`usage_to_access()`](usage_to_access.md) : Convert usage to access
+- [`usage_to_model_distribution()`](usage_to_model_distribution.md) :
+  Estimate the malariasimulation input distribution from usage assumes a
+  specified net loss function and randomly correlated net distribution.
+
+# Articles
+
+### All vignettes
+
+- [Bed nets in malariasimulation](malariasimulation.md):
+- [Converting between bed net metrics](Metrics.md):

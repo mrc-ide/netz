@@ -1,0 +1,4 @@
+# License
+
+    YEAR: 2026
+    COPYRIGHT HOLDER: YMRC Centre for Outbreak Analysis and Modelling
