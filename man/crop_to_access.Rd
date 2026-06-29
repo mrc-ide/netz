@@ -10,7 +10,7 @@ crop_to_access(crop, type = "loess", people_per_net = 1.66856)
 \item{crop}{A single or vector of nets per capita}
 
 \item{type}{The npc to access model to use. This may be:
-\itemize{
+\describe{
 \item{"loess"}{: a loess fit to observed access-npc data}
 \item{"linear"}{: a linear fit to the observed access-npc data, fitted to the trend for observeation with access < 0.5}
 }}
