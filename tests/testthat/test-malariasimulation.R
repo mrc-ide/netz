@@ -97,7 +97,7 @@ test_that("malariasimulation usage fitting works - exponential model", {
       distribution_lower = c(0.1, 0.1),
       mean_retention = 5 * 365
     ),
-    "distribution_timesteps, distribution_lower and distribution_upper must have equal lengths"
+    "distribution timesteps, lower bounds and upper bounds must have same length"
   )
   expect_error(
     usage_to_model_distribution(
@@ -107,7 +107,7 @@ test_that("malariasimulation usage fitting works - exponential model", {
       distribution_upper = c(0.1, 0.1),
       mean_retention = 5 * 365
     ),
-    "distribution_timesteps, distribution_lower and distribution_upper must have equal lengths"
+    "distribution timesteps, lower bounds and upper bounds must have same length"
   )
 
   expect_error(
@@ -236,7 +236,7 @@ test_that("malariasimulation usage fitting works - MAP model", {
       net_loss_function = net_loss_map,
       half_life = 2 * 365
     ),
-    "distribution_timesteps, distribution_lower and distribution_upper must have equal lengths"
+    "distribution timesteps, lower bounds and upper bounds must have same length"
   )
   expect_error(
     usage_to_model_distribution(
@@ -247,7 +247,7 @@ test_that("malariasimulation usage fitting works - MAP model", {
       net_loss_function = net_loss_map,
       half_life = 2 * 365
     ),
-    "distribution_timesteps, distribution_lower and distribution_upper must have equal lengths"
+    "distribution timesteps, lower bounds and upper bounds must have same length"
   )
 
   expect_error(
@@ -295,16 +295,93 @@ test_that("zero distributions are dealt with correctly", {
   expect_equal(zero_dist, c(0, 0, 0))
 })
 
-
 test_that("Input distribution estimation deals with 
   input timepoints after final target use timepoint elegantly", {
-  usage_to_model_distribution(
-    usage = 0.1,
-    usage_timesteps = 1,
-    distribution_timesteps = 1:3,
-    distribution_lower = rep(0, 3),
-    distribution_upper = rep(1, 3),
-    net_loss_function = net_loss_map,
-    half_life = 300
+  expect_equal(
+    usage_to_model_distribution(
+      usage = 0.1,
+      usage_timesteps = 1,
+      distribution_timesteps = 1:3,
+      distribution_lower = rep(0, 3),
+      distribution_upper = rep(1, 3),
+      net_loss_function = net_loss_map,
+      half_life = 300
+    ),
+    c(0.1, NA, NA)
+  )
+})
+
+test_that("Updated forward problem runs correctly", {
+  net_retention <- function(t) net_loss_map(t, half_life = 600)
+  d1 <- 0.5
+  d2 <- 0.4
+  expect_equal(
+    model_distribution_to_usage(
+      usage_timesteps = 500,
+      distribution = c(d1, d2),
+      distribution_timesteps = c(0, 365),
+      net_loss_function = net_loss_map,
+      half_life = 600
+    ),
+    d2 * net_retention(500 - 365) + (1 - d2) * d1 * net_retention(500)
+  )
+})
+
+
+test_that("Updated inverse problem runs correctly", {
+  net_retention <- function(t) net_loss_map(t, half_life = 300)
+  u1 <- 0.4
+  u2 <- 0.6
+
+  d1 <- u1 / net_retention(100)
+  previous_usage <- d1 * net_retention(300)
+  d2 <- (u2 - previous_usage) / (net_retention(100) - previous_usage)
+
+  expect_equal(
+    usage_to_model_distribution(
+      usage = c(u1, u2),
+      usage_timesteps = c(100, 300),
+      distribution_timesteps = c(0, 200),
+      net_loss_function = net_loss_map,
+      half_life = 300
+    ),
+    c(d1, d2)
+  )
+})
+
+
+test_that("Usage to distribution to usage recovers initial usage (MAP)", {
+  usage <- c(0.5, 0.6, 0.6, 0.7)
+  distribution_timesteps <- c(1, 201, 401, 601)
+  usage_timesteps <- distribution_timesteps + 100
+
+  distribution <- usage_to_model_distribution(
+    usage, usage_timesteps, distribution_timesteps,
+    net_loss_function = net_loss_map, half_life = 200
+  )
+  expect_equal(
+    model_distribution_to_usage(
+      usage_timesteps, distribution, distribution_timesteps,
+      net_loss_function = net_loss_map, half_life = 200
+    ),
+    usage
+  )
+})
+
+test_that("Usage to distribution to usage recovers initial usage (exp)", {
+  usage <- c(0.5, 0.6, 0.6, 0.7)
+  distribution_timesteps <- c(1, 201, 401, 601)
+  usage_timesteps <- distribution_timesteps + 100
+
+  distribution <- usage_to_model_distribution(
+    usage, usage_timesteps, distribution_timesteps,
+    net_loss_function = net_loss_exp, mean_retention = 400
+  )
+  expect_equal(
+    model_distribution_to_usage(
+      usage_timesteps, distribution, distribution_timesteps,
+      net_loss_function = net_loss_exp, mean_retention = 400
+    ),
+    usage
   )
 })

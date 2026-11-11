@@ -28,48 +28,72 @@ usage_to_model_distribution <- function(
   net_loss_function = net_loss_exp,
   ...
 ) {
-  if (any(distribution_lower < 0) | any(distribution_lower > 1)) {
+  if (is.unsorted(distribution_timesteps)) {
+    stop("Distribution timesteps must be increasing")
+  }
+  if (is.unsorted(usage_timesteps)) {
+    stop("Usage timesteps must be increasing")
+  }
+  if (any(usage < 0 | usage > 1)) {
+    stop("Usage must be between 0 and 1")
+  }
+  if (any(distribution_lower < 0) || any(distribution_lower > 1)) {
     stop("All distribution lower values must be between 0 and 1")
   }
-  if (any(distribution_upper < 0) | any(distribution_upper > 1)) {
+  if (any(distribution_upper < 0) || any(distribution_upper > 1)) {
     stop("All distribution upper values must be between 0 and 1")
   }
   if (
-    length(distribution_lower) != length(distribution_timesteps) |
+    length(distribution_lower) != length(distribution_timesteps) ||
       length(distribution_upper) != length(distribution_timesteps)
   ) {
-    stop(
-      "distribution_timesteps, distribution_lower and distribution_upper must have equal lengths"
-    )
+    stop("distribution timesteps, lower bounds and upper bounds must have same length")
   }
   if (length(usage) != length(usage_timesteps)) {
     stop("Usage and usage timesteps must be the same length")
   }
 
   distribution <- rep(0, length(distribution_timesteps))
-  for (t in 1:length(distribution_timesteps)) {
-    # Usage at time point of next distribution
-    put <- model_distribution_to_usage(
-      usage_timesteps = distribution_timesteps[t],
-      distribution = distribution,
-      distribution_timesteps = distribution_timesteps,
-      net_loss_function = net_loss_function,
-      ...
-    )
+  prop_kept <- rep(0, length(distribution_timesteps))
 
-    # Find next target usage
-    time_offset <- usage_timesteps - distribution_timesteps[t]
-    if (max(time_offset) < 0) {
-      distribution[t:length(distribution_timesteps)] <- NA
+  for (t in seq_along(distribution_timesteps)) {
+    index <- which(usage_timesteps >= distribution_timesteps[t])[1]
+    if (is.na(index)) {
+      distribution[t:length(distribution)] <- NA
       break
-    } else {
-      nearest <- min(time_offset[time_offset >= 0])
-      index <- which(time_offset == nearest)
-      start_point <- usage[index] / net_loss_function(time_offset[index], ...)
-      distribution[t] <- 1 - (1 - start_point) / (1 - put)
-      distribution[t] <- min(distribution_upper[t], distribution[t])
-      distribution[t] <- max(distribution_lower[t], distribution[t])
     }
+    net_age <- usage_timesteps[index] - distribution_timesteps
+    prev_dist <- seq_len(t - 1)
+
+    previous_usage <- sum(prop_kept[prev_dist] * net_loss_function(net_age[prev_dist], ...))
+    retained <- net_loss_function(net_age[t], ...)
+
+    # Solving usage = (1-dist)*previous_usage + dist * retained for dist 
+    delta_usage <- usage[index] - previous_usage
+    delta_denom <- retained - previous_usage
+
+    if (delta_denom <= 0) {
+      distribution[t] <- distribution_lower[t]
+    } else {
+      distribution[t] <- delta_usage / delta_denom
+    }
+
+    if (distribution_upper[t] < distribution[t]) {
+      warning(sprintf("At distribution %d required coverage (%.2f) is greater than upper limit (%.2f)",
+        t, distribution[t], distribution_upper[t]
+      ))
+    }
+    if (distribution_lower[t] > distribution[t]) {
+      warning(sprintf("At distribution %d required coverage (%.2f) is less than lower limit (%.2f)",
+        t, distribution[t], distribution_upper[t]
+      ))
+    }
+
+    distribution[t] <- min(distribution_upper[t], distribution[t])
+    distribution[t] <- max(distribution_lower[t], distribution[t])
+
+    prop_kept <- prop_kept * (1 - distribution[t])
+    prop_kept[t] <- distribution[t]
   }
   return(distribution)
 }
@@ -93,36 +117,24 @@ model_distribution_to_usage <- function(
   net_loss_function = net_loss_exp,
   ...
 ) {
-  # Deal with zero distributions in inputs
-  zero_dists <- distribution == 0
-  distribution <- distribution[!zero_dists]
-  distribution_timesteps <- distribution_timesteps[!zero_dists]
-  if (length(distribution) == 0) {
-    return(rep(0, length(usage_timesteps)))
+  if (is.unsorted(distribution_timesteps)) {
+    stop("Distribution timesteps must be increasing")
   }
-
-  # Estimate the cumulative usage at distribution time points
-  cumulative_usage <- distribution[1]
-  if (length(distribution_timesteps) > 1) {
-    for (t in 2:length(distribution_timesteps)) {
-      time_offset <- distribution_timesteps[t] - distribution_timesteps[t - 1]
-      remaining <- cumulative_usage[t - 1] * net_loss_function(time_offset, ...)
-      cumulative_usage[t] <- 1 - (1 - remaining) * (1 - distribution[t])
-    }
+  if (is.unsorted(usage_timesteps)) {
+    stop("Usage timesteps must be increasing")
   }
+  usage <- rep(0, length(usage_timesteps))
 
-  # Estimate the usage at target time points
-  usage <- c()
-  for (t in seq_along(usage_timesteps)) {
-    time_offset <- usage_timesteps[t] - distribution_timesteps
-    if (max(time_offset) < 0) {
-      usage[t] <- 0
-    } else {
-      nearest <- min(time_offset[time_offset >= 0])
-      index <- which(time_offset == nearest)
-      usage[t] <- cumulative_usage[index] *
-        net_loss_function(time_offset[index], ...)
+  for (t in seq_along(usage_timesteps)){
+    prev_dist <- which(distribution_timesteps <= usage_timesteps[t])
+    net_age <- usage_timesteps[t] - distribution_timesteps
+
+    prop_kept <-  rep(0, length(distribution_timesteps))
+    for (i in prev_dist) {
+      prop_kept <- prop_kept * (1 - distribution[i])
+      prop_kept[i] <- distribution[i]
     }
+    usage[t] <- sum(prop_kept[prev_dist] * net_loss_function(net_age[prev_dist], ...))
   }
   return(usage)
 }
