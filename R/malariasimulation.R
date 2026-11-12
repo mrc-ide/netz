@@ -85,7 +85,7 @@ usage_to_model_distribution <- function(
     }
     if (distribution_lower[t] > distribution[t]) {
       warning(sprintf("At distribution %d required coverage (%.2f) is less than lower limit (%.2f)",
-        t, distribution[t], distribution_upper[t]
+        t, distribution[t], distribution_lower[t]
       ))
     }
 
